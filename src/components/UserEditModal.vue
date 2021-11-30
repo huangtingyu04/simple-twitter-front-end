@@ -7,21 +7,23 @@
             class="modal-close"
             data-bs-dismiss="modal"
             aria-label="Close"
-          ></div>
+          >X</div>
           <div class="modal-header-title">編輯個人資料
           </div>
           <button class="btn-save" :disabled="savable">儲存</button>
         </div>
         <div class="modal-body">
           <div class="modal-body-bg">
+            <img src="https://i.imgur.com/ifqzNgs.png" alt="" class="modal-body-bg-photo">
             <div class="modal-body-bg-option">
-              <div class="modal-body-bg-option-edit"></div>
-              <div class="modal-body-bg-option-delete"></div>
+              <img src="https://i.imgur.com/OCJg3AO.png" alt="" class="modal-body-bg-option-edit">
+              <img src="https://i.imgur.com/qF89t4v.png" alt="" class="modal-body-bg-option-delete">
             </div>
           </div>
           <div class="modal-body-header">
-            <div class="modal-body-header-photo">
-               <div class="modal-body-header-photo-edit"></div>
+            <img src="https://i.imgur.com/RGxqLdu.png" alt="" class="modal-body-header-photo">
+            <div class="modal-body-header-edit">
+               <img src="https://i.imgur.com/OCJg3AO.png" alt="" class="modal-body-header-edit-photo">
             </div>
           </div>
           <div class="modal-body-form">
@@ -87,3 +89,7 @@ export default {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+@import '../styles/_modal'
+</style>

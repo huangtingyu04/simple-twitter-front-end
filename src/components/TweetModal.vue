@@ -40,6 +40,5 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import "../styles/_variables"
 @import '../styles/_modal'
 </style>

@@ -1,10 +1,11 @@
+@import '../styles/_variables'
 .modal
   border-radius: 14px
 .modal-header
   height: 54px
 .modal-body
-  height: 245px
   padding: 15px
+  
 
 .modal-body-tweet-icon
   width: 50px
@@ -14,7 +15,7 @@
   margin-right: 10px
 .modal-body-tweet
   display: flex
-  height: 100%
+  height: 215px
   form 
     flex: 1
     padding-top: 12px
@@ -36,3 +37,52 @@
     background: $mainColor
     color: $light
     font-size: 18px
+
+.modal-body-post
+  display: flex
+  height: 138px
+  padding-top: 3px
+  margin-bottom: 10px
+  .modal-body-post-head
+    .modal-body-post-head-icon
+      width: 50px
+      height: 50px
+      border-radius: 50%
+      background: $input-label
+      border: none
+    .modal-body-post-head-connect
+      width: 2px
+      height: 80px
+      background: $modal-connect
+      margin-top: 5px
+      margin-left: 25px
+  .modal-body-post-body
+    flex: 1
+    margin-left: 10px
+    height: 100%
+    .modal-body-post-body-head
+      display: flex
+      .modal-body-post-body-head-name
+        font-size: 15px
+        font-weight: 700
+        color: $text-content
+        margin-right: 5px
+      .modal-body-post-body-head-account, .modal-body-post-body-head-time
+        font-size: 15px
+        font-weight: 500
+        color: $input-label
+    .modal-body-post-body-content
+      margin-top: 4px
+      font-size: 15px
+      font-weight: 500
+      color: $text-content
+      text-align: start
+    .modal-body-post-body-foot
+      margin-top: 10px
+      font-size: 13px
+      font-weight: 500
+      text-align: start
+      .modal-body-post-body-foot-reply
+        color: $input-label
+      .modal-body-post-body-foot-account
+        color: $mainColor 

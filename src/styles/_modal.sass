@@ -3,9 +3,24 @@
   border-radius: 14px
 .modal-header
   height: 54px
+  .modal-header-title
+    flex: 1
+    text-align: start
+    padding-left: 40px
+    font-size: 17px
+    font-weight: 500
+  button
+    width: 66px
+    height: 28px
+    font-size: 15px
+    font-weight: 500
+    border-radius: 100px
+    border: none
+    background: $mainColor
+    color: $light
 .modal-body
-  padding: 15px
-  
+  padding: 0
+  position: relative
 
 .modal-body-tweet-icon
   width: 50px
@@ -14,6 +29,7 @@
   background: $input-label
   margin-right: 10px
 .modal-body-tweet
+  padding: 15px 15px 15px 15px
   display: flex
   height: 215px
   form 
@@ -39,10 +55,10 @@
     font-size: 18px
 
 .modal-body-post
+  margin-top: 15px
+  padding: 3px 15px 0 15px
   display: flex
   height: 138px
-  padding-top: 3px
-  margin-bottom: 10px
   .modal-body-post-head
     .modal-body-post-head-icon
       width: 50px
@@ -86,3 +102,116 @@
         color: $input-label
       .modal-body-post-body-foot-account
         color: $mainColor 
+
+.modal-body-bg
+  width: 100%
+  position: absolute
+  height: 200px
+  display: flex
+  justify-content: center
+  align-items: center
+  .modal-body-bg-photo
+    width: 100%
+    height: 200px
+    opacity: 60%
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 0
+    background: $input-label
+  .modal-body-bg-option
+    width: 78px
+    display: flex
+    justify-content: space-between
+    z-index: 1
+    .modal-body-bg-option-edit
+      width: 24px
+      height: 24px
+    .modal-body-bg-option-delete
+      width: 24px
+      height: 24px
+
+.modal-body-header
+  margin-top: 140px
+  text-align: start
+  position: relative
+  z-index: 1
+  padding-left: 14px
+  .modal-body-header-photo
+    position: absolute
+    width: 120px
+    height: 120px
+    border-radius: 50%
+    object-fit: cover
+    border: 4px solid $light
+  .modal-body-header-edit
+    width: 120px
+    height: 120px
+    display: flex
+    justify-content: center
+    align-items: center
+    position: relative
+    z-index: 1
+    .modal-body-header-edit-photo
+      width: 24px
+      height: 24px
+
+.modal-body-form
+  padding: 20px 15px 20px 15px
+  form
+    .form-label-group
+      background: $input-bg
+      margin-bottom: 30px
+      border-radius: 4px
+      text-align: start
+      label
+        font-size: 15px
+        font-weight: 500
+        color: $input-label
+        margin-top: 5px
+        margin-left: 10px
+      input
+        width: 100%
+        border: none
+        border-bottom: 2px solid $input-label
+        outline: none
+        border-radius: 0
+        background: transparent
+        padding-left: 15px
+        font-size: 19px
+        font-weight: 500
+        &:hover, &:focus
+          border-bottom: 2px solid $input-active
+      textarea
+        width: 100%
+        height: 125px
+        border: none
+        outline: none
+        resize: none
+        background: transparent
+        border-bottom: 2px solid $input-label
+        padding: 0 0 0 15px
+        &:hover, &:focus
+          border-bottom: 2px solid $input-active
+      .modal-body-form-limit
+        display: flex
+        justify-content: end
+        background: $light
+        .modal-body-form-limit-alert
+          font-size: 15px
+          font-weight: 500
+          color: $input-alert
+        .modal-body-form-limit-count
+          flex: 1
+          text-align: end
+    #modal-intro
+        height: 150px      
+
+
+
+
+      
+      
+
+
+

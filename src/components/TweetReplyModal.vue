@@ -55,3 +55,8 @@ export default {
   name: "TweetReplyModal",
 }
 </script>
+
+<style lang="sass" scoped>
+.modal
+  
+</style>

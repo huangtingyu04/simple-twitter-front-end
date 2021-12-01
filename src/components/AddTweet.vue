@@ -31,7 +31,7 @@ export default {
   width: 100%
   height: 130px
   padding: 10px 15px 10px 15px
-  border-bottom: 1px solid $input border
+  border-bottom: 1px solid $input-border
   display: flex
   .addTweet-icon
     width: 50px

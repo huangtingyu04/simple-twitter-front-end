@@ -1,31 +1,37 @@
 <template>
-  <div class="addTweet">
-    <img src="" alt="" class="addTweet-icon">
-    <form action="" class="addTweet-form">
-      <textarea
-        name="tweet"
-        id="tweet"
-        cols="30"
-        rows="10"
-        placeholder="有什麼新鮮事?"
-      ></textarea>
-      <button
-        class="btn-addTweet"
-      >
-        推文
-      </button>
-    </form>
+  <div>
+    <div class="top">首頁</div>
+    <div class="addTweet">
+      <img src="" alt="" class="addTweet-icon" />
+      <form action="" class="addTweet-form">
+        <textarea
+          name="tweet"
+          id="tweet"
+          cols="30"
+          rows="10"
+          placeholder="有什麼新鮮事?"
+        ></textarea>
+        <button class="btn-addTweet">推文</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AddTweet'
-}
+  name: "AddTweet",
+};
 </script>
 
 <style lang="sass" scoped>
 @import '../styles/global'
+
+.top
+  padding: 15px
+  font-size: 18px
+  font-weight: 700
+  color: $text-content
+  border-bottom: 1px solid $input-border
 
 .addTweet
   width: 100%

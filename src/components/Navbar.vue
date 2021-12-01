@@ -1,32 +1,38 @@
 <template>
-    <nav class="nav">
+    <nav class="navbox">
        <div class="logo">
            <img src="./../../public/images/Logo.png">
        </div>
        <ul>
            <li>
-               <a href="javascript:;">.
+               <a href="javascript:;" class="link">
                    <img class="img" src="./../../public/images/icon_index.png">
                    <img class="img-hover" src="./../../public/images/icon_index_hover.png">
-                   首頁
+                   <span>首頁</span>
                 </a>
            </li>
            <li>
-                <img class="img" src="./../../public/images/icon_user.png">
-                <img class="img-hover" src="./../../public/images/icon_user_hover.png">
-               <a href="javascript:;">個人資料</a>
+               <a href="javascript:;" class="link">
+                    <img class="img" src="./../../public/images/icon_user.png">
+                    <img class="img-hover" src="./../../public/images/icon_user_hover.png">
+                    <span>個人資料</span>
+               </a>
            </li>
            <li>
-               <a href="javascript:;">
+               <a href="javascript:;" class="link">
                     <img class="img" src="./../../public/images/icon_setting.png">
                     <img class="img-hover" src="./../../public/images/icon_setting_hover.png">
-                   設定
+                   <span>設定</span>
                 </a>
            </li>
        </ul>
        <button type="button" class="tweet-btn">推文</button>
        <div class="logout">
-           <a href="javascript:;">登出</a>
+           <a href="javascript:;" class="link">
+               <img class="img" src="./../../public/images/icon_logout.png">
+                <img class="img-hover" src="./../../public/images/icon_logout.png">
+               登出
+            </a>
        </div>
     </nav>
 </template>

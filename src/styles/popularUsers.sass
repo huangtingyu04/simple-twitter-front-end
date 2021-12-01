@@ -1,0 +1,72 @@
+.popular-container
+    position: relative
+    padding: 15px 82px 0 30px
+    margin: 0 82px 0 30px
+
+    &::before
+        content: ''
+        position: absolute
+        width: 1px
+        height: 100vh
+        background: $input-border
+        top: 0
+
+    .popular-box
+        width: 462px
+        max-width: 432px
+        background: $input-border
+        border-radius: 14px
+
+    .popular-title
+        padding: 10px 15px
+        font-family: Noto Sans TC
+        font-weight: bold
+        font-size: 18px
+        line-height: 26px
+        color: $text-content
+
+    .popluar-item
+        display: flex
+        justify-content: space-between
+
+        .user-info
+            display: flex
+
+            .user-img
+                width: 50px
+                height: 50px
+                border-radius: 50%
+                background: #C4C4C4
+
+                img
+                    width: 100%
+                    height: 100%
+
+            .user-content
+                flex: 1
+
+                .name
+                    font-weight: bold
+                    font-size: 15px
+                    line-height: 15px
+                    color: $text-content
+
+                .link
+                    text-decoration: none
+                    font-weight: bold
+                    font-size: 15px
+                    line-height: 15px
+                    color: $input-label
+
+        .follow-btn
+            font-weight: bold
+            font-size: 15px
+            line-height: 15px
+            color: $mainColor
+            border-radius: 100px
+            border: 1px solid $input-border
+            background: $light
+
+            &.active
+                color: $light
+                background: $mainColor

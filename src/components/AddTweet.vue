@@ -27,6 +27,7 @@ export default {
 @import '../styles/global'
 
 .top
+  height: 55px
   padding: 15px
   font-size: 18px
   font-weight: 700

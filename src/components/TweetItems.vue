@@ -10,7 +10,7 @@
           <span> · </span>
           <div class="tweet-body-head-time">{{ tweet.createdAt }}</div>
         </div>
-        <a href="" class="tweet-body-content">{{ tweet.text }}</a>
+        <router-link to="/tweets/1" class="tweet-body-content">{{ tweet.text }}</router-link>
         <div class="tweet-body-foot">
           <div class="tweet-body-foot-comment">
             <img

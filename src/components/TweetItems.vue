@@ -1,5 +1,5 @@
 <template>
-  <div class="tweets main">
+  <div class="tweets">
     <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
       <div class="tweet-icon">
         <img :src="tweet.User.image" alt="user-icon" class="tweet-icon-photo" />
@@ -21,9 +21,7 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">{{
-              tweet.Comments.length
-            }}</span>
+            <span class="tweet-body-foot-comment-count">2</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img
@@ -38,9 +36,7 @@
               v-else
               class="tweet-body-foot-liked-icon"
             />
-            <span class="tweet-body-foot-liked-count">{{
-              tweet.Likes.length
-            }}</span>
+            <span class="tweet-body-foot-liked-count">3</span>
           </div>
         </div>
       </div>
@@ -70,7 +66,8 @@ const dummyData = {
         createdAt: "2021-11-23T07:25:29.000Z",
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
-      LikeUsers: [],
+      LikeUsers: [{}, {}, {}],
+      Comments: [{}, {}],
       isLiked: false,
     },
     {

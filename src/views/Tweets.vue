@@ -1,14 +1,13 @@
 <template>
-    <div>
-        <Navbar />
-        <div class="wide-container">
-            <div class="main">
-                
-                <TweetItems />
-            </div>
-            <PopularUsersCard />
-        </div>
+  <div>
+    <Navbar />
+    <div class="wide-container">
+      <div class="main">
+        <TweetItems />
+      </div>
+      <PopularUsersCard />
     </div>
+  </div>
 </template>
 
 <script>

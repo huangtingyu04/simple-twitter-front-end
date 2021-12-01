@@ -11,7 +11,6 @@
     <TweetReplyModal />
   </div>
 </template>
-
 <script>
 import TweetModal from '../components/TweetModal.vue'
 import TweetReplyModal from '../components/TweetReplyModal.vue'

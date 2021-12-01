@@ -1,0 +1,59 @@
+@import '../styles/global'
+
+.tweet
+  width: 100%
+  height: 146px
+  padding: 10px 15px 10px 15px
+  border-bottom: 1px solid $input-border
+  display: flex
+  .tweet-icon
+    width: 50px
+    height: 50px
+    margin-top: 3px
+    .tweet-icon-photo
+      object-fit: cover
+      width: 50px
+      height: 50px
+      border-radius: 50%
+  .tweet-body
+    flex: 1
+    padding-left: 10px
+    .tweet-body-head
+      display: flex
+      .tweet-body-head-name
+        font-size: 15px
+        font-weight: 700
+        color: $text-content
+        margin-right: 5px
+      .tweet-body-head-account, .tweet-body-head-time
+        font-size: 15px
+        font-weight: 500
+        color: $input-label
+    .tweet-body-content
+      margin-top: 4px
+      font-size: 15px
+      font-weight: 500
+      color: $text-content
+    .tweet-body-footer
+      margin-top: 10px
+      color: $input-label
+      font-size: 13px
+      font-weight: 500
+      display: flex
+      justify-content: space-between
+      .tweet-body-footer-comment
+        display: flex
+        align-items: center
+        .tweet-body-footer-comment-icon
+          width: 12.34px
+          height: 12.34px
+          cursor: pointer
+          margin-right: 11.35px
+      .tweet-body-footer-liked
+        display: flex
+        align-items: center
+        .tweet-body-footer-liked-icon
+          width: 12.56px
+          height: 11.82px
+          cursor: pointer
+          margin-right: 11.35px

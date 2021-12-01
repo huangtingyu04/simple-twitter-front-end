@@ -3,7 +3,7 @@
         <Navbar />
         <div class="wide-container">
             <div class="main">
-                <AddTweet />
+                
                 <TweetItems />
             </div>
             <PopularUsersCard />
@@ -12,20 +12,18 @@
 </template>
 
 <script>
-import Navbar from './../components/Navbar'
-import PopularUsersCard from './../components/PopularUsersCard'
-import AddTweet from './../components/AddTweet.vue'
-import TweetItems from './../components/TweetContent.vue'
+import Navbar from "./../components/Navbar";
+import TweetItems from "./../components/TweetItems";
+import PopularUsersCard from "./../components/PopularUsersCard";
 
 export default {
-    name: 'Tweets',
-    components: {
-        Navbar,
-        PopularUsersCard,
-        AddTweet,
-        TweetItems
-    }
-}
+  name: "Tweets",
+  components: {
+    Navbar,
+    TweetItems,
+    PopularUsersCard,
+  },
+};
 </script>
 
 

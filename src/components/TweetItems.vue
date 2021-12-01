@@ -1,35 +1,50 @@
 <template>
-  <div class="tweets">
+  <div class="tweets main">
     <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
       <div class="tweet-icon">
-        <img :src="tweet.User.image" alt="user-icon" class="tweet-icon-photo">
+        <img :src="tweet.User.image" alt="user-icon" class="tweet-icon-photo" />
       </div>
       <div class="tweet-body">
         <div class="tweet-body-head">
-          <div class="tweet-body-head-account">@{{tweet.User.account}}</div>
+          <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
           <span> · </span>
-          <div class="tweet-body-head-time">{{tweet.createdAt}}</div>
+          <div class="tweet-body-head-time">{{ tweet.createdAt }}</div>
         </div>
-        <a href="" class="tweet-body-content">{{tweet.text}}</a>
+        <a href="" class="tweet-body-content">{{ tweet.text }}</a>
         <div class="tweet-body-foot">
           <div class="tweet-body-foot-comment">
-            <img 
-              src="../../public/images/icon_message_2x" 
-              alt="tweet-comment"  
+            <img
+              src="../../public/images/icon_message_2x.png"
+              alt="tweet-comment"
               class="tweet-body-foot-comment-icon"
               data-bs-toggle="modal"
               data-bs-target="#tweet-reply-modal"
-              @click.prevent.stop ="toggleTweetReply(tweet.id)">
-            <span class="tweet-body-foot-comment-count">{{tweet.Comments.length}}</span>
+              @click.prevent.stop="toggleTweetReply(tweet.id)"
+            />
+            <span class="tweet-body-foot-comment-count">{{
+              tweet.Comments.length
+            }}</span>
           </div>
           <div class="tweet-body-foot-liked">
-            <img src="../../public/images/icon_like_2x" alt="tweet-liKed-icon" v-if="!tweet.isLiked" class="tweet-body-foot-liked-icon">
-            <img src="../../public/images/icon_like_fill_2x" alt="tweet-isLiked-icon" v-else class="tweet-body-foot-liked-icon">
-            <span class="tweet-body-foot-liked-count">{{tweet.Likes.length}}</span>
+            <img
+              src="../../public/images/icon_like_2x.png"
+              alt="tweet-liKed-icon"
+              v-if="!tweet.isLiked"
+              class="tweet-body-foot-liked-icon"
+            />
+            <img
+              src="../../public/images/icon_like_fill_2x.png"
+              alt="tweet-isLiked-icon"
+              v-else
+              class="tweet-body-foot-liked-icon"
+            />
+            <span class="tweet-body-foot-liked-count">{{
+              tweet.Likes.length
+            }}</span>
           </div>
         </div>
       </div>
-      <TweetReplyModal :tweet-item="tweetItem"/>
+      <TweetReplyModal :tweet-item="tweetItem" />
     </div>
   </div>
 </template>
@@ -46,7 +61,7 @@ const dummyData = {
       User: {
         id: 1,
         name: "user1",
-        account: 'user1',
+        account: "user1",
         email: "user1@example.com",
         password:
           "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
@@ -56,7 +71,7 @@ const dummyData = {
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
       LikeUsers: [],
-      isLiked: false
+      isLiked: false,
     },
     {
       id: 2,
@@ -67,7 +82,7 @@ const dummyData = {
       User: {
         id: 1,
         name: "user1",
-        account: 'user1',
+        account: "user1",
         email: "user1@example.com",
         password:
           "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
@@ -77,7 +92,7 @@ const dummyData = {
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
       LikeUsers: [{}, {}],
-      isLiked: true
+      isLiked: true,
     },
     {
       id: 3,
@@ -88,7 +103,7 @@ const dummyData = {
       User: {
         id: 2,
         name: "user2",
-        account: 'user2',
+        account: "user2",
         email: "user2@example.com",
         password:
           "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
@@ -98,11 +113,11 @@ const dummyData = {
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
       LikeUsers: [{}, {}, {}],
-      isLiked: true
+      isLiked: true,
     },
   ],
 };
-import TweetReplyModal from './TweetReplyModal.vue'
+import TweetReplyModal from "./TweetReplyModal.vue";
 export default {
   name: "TweetItems",
   components: {
@@ -110,22 +125,21 @@ export default {
   },
   data() {
     return {
-      tweets:[],
-      tweetItem: {}
-    }
+      tweets: [],
+      tweetItem: {},
+    };
   },
   created() {
-    this.fetchTweets()
+    this.fetchTweets();
   },
   methods: {
     fetchTweets() {
-      this.tweets = dummyData.tweets
+      this.tweets = dummyData.tweets;
     },
     toggleTweetReply(tweetId) {
-      this.tweetItem = this.tweets.filter(tweet => tweet.id === tweetId)
-    }
-  }
-  
+      this.tweetItem = this.tweets.filter((tweet) => tweet.id === tweetId);
+    },
+  },
 };
 </script>
 

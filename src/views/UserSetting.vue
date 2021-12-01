@@ -34,7 +34,7 @@
                 <div class="alert-limit">8/50</div>
               </div>
             </div>
-            <button class="btn-main">儲存</button>
+            <a href="javascript:;" class="btn-main">儲存</a>
           </form>
         </div>
       </div>

@@ -91,5 +91,5 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import '../styles/_modal'
+  @import '../styles/_modal.sass'
 </style>

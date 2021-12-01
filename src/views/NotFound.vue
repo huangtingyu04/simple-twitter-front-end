@@ -5,10 +5,3 @@
     <div class="test">test</div>
   </div>
 </template>
-
-<style scoped lang="sass">
-@import "../styles/notfound.sass"
-
-h1
-    color: red
-</style>

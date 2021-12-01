@@ -1,21 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import NotFound from '../views/NotFound.vue'
-import signIn from '../views/SignIn.vue'
+import SignIn from '../views/SignIn.vue'
+import Tweets from '../views/Tweets.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'root',
+    redirect: '/tweets'
   },
   {
     path: '/signin',
     name: 'sing-in',
-    component: signIn
+    component: SignIn
+  },
+  {
+    path: '/tweets',
+    name: 'tweets',
+    component: Tweets
   },
   {
     path: '/signup',

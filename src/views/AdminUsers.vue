@@ -14,7 +14,6 @@ import Navbar from "./../components/Navbar";
 import AdminUserCards from "./../components/AdminUserCards";
 
 export default {
-  name: "Tweets",
   components: {
     Navbar,
     AdminUserCards,

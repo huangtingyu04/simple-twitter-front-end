@@ -1,8 +1,10 @@
 <template>
     <div>
         <Navbar />
-        tweets page
-        <PopularUsersCard />
+        <div class="wide-container">
+            <div class="main">tweets page</div>
+            <PopularUsersCard />
+        </div>
     </div>
 </template>
 

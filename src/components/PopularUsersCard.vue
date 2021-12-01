@@ -1,5 +1,5 @@
 <template>
-    <div class="test">
+    <div class="popular-container">
         456
     </div>
 </template>

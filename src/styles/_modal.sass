@@ -1,7 +1,11 @@
-@import '../styles/_variables'
+@import '../styles/global'
 
 .modal
   border-radius: 14px
+
+  +breakpoint(pad-landscape)
+    border-radius: 50px
+
 .modal-header
   height: 54px
   .modal-header-title

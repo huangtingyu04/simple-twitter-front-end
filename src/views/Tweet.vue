@@ -13,13 +13,10 @@ import Navbar from './../components/Navbar'
 import PopularUsersCard from './../components/PopularUsersCard'
 
 export default {
-    name: 'Tweets',
+    name: 'Tweet',
     components: {
         Navbar,
         PopularUsersCard
     }
 }
 </script>
-
-
-

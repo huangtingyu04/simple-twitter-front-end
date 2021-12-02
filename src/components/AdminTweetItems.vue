@@ -1,23 +1,31 @@
 <template>
-  <div class="tweets">
-    <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
-      <div class="tweet-icon">
-        <img :src="tweet.User.image" alt="user-icon" class="tweet-icon-photo">
-      </div>
-      <div class="tweet-body">
-        <div class="tweet-body-head">
-          <div class="tweet-body-head-account">@{{tweet.User.account}}</div>
-          <span> · </span>
-          <div class="tweet-body-head-time">{{tweet.createdAt}}</div>
+  <div class="">
+    <div class="top">推文清單</div>
+    <div class="tweets">
+      <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
+        <div class="tweet-icon">
+          <img
+            :src="tweet.User.image"
+            alt="user-icon"
+            class="tweet-icon-photo"
+          />
         </div>
-        <a href="" class="tweet-body-content">{{tweet.text}}</a>
-      </div>
-      <div class="tweet-delete">
-        <img 
-          src="../../public/images/Logo" 
-          alt="tweet-delete" 
-          class="tweet-delete-icon"
-          @click.stop.prevent="deleteTweet(tweet.id)">
+        <div class="tweet-body">
+          <div class="tweet-body-head">
+            <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
+            <span> · </span>
+            <div class="tweet-body-head-time">{{ tweet.createdAt }}</div>
+          </div>
+          <a href="" class="tweet-body-content">{{ tweet.text }}</a>
+        </div>
+        <div class="tweet-delete">
+          <img
+            src="../../public/images/icon_close_admin.png"
+            alt="tweet-delete"
+            class="tweet-delete-icon"
+            @click.stop.prevent="deleteTweet(tweet.id)"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -35,7 +43,7 @@ const dummyData = {
       User: {
         id: 1,
         name: "user1",
-        account: 'user1',
+        account: "user1",
         email: "user1@example.com",
         password:
           "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
@@ -45,7 +53,7 @@ const dummyData = {
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
       LikeUsers: [],
-      isLiked: false
+      isLiked: false,
     },
     {
       id: 2,
@@ -56,7 +64,7 @@ const dummyData = {
       User: {
         id: 1,
         name: "user1",
-        account: 'user1',
+        account: "user1",
         email: "user1@example.com",
         password:
           "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
@@ -66,7 +74,7 @@ const dummyData = {
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
       LikeUsers: [{}, {}],
-      isLiked: true
+      isLiked: true,
     },
     {
       id: 3,
@@ -77,7 +85,7 @@ const dummyData = {
       User: {
         id: 2,
         name: "user2",
-        account: 'user2',
+        account: "user2",
         email: "user2@example.com",
         password:
           "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
@@ -87,7 +95,7 @@ const dummyData = {
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
       LikeUsers: [{}, {}, {}],
-      isLiked: true
+      isLiked: true,
     },
   ],
 };
@@ -96,24 +104,32 @@ export default {
   name: "AdminTweetItems",
   data() {
     return {
-      tweets:[],
-    }
+      tweets: [],
+    };
   },
   created() {
-    this.fetchTweets()
+    this.fetchTweets();
   },
   methods: {
     fetchTweets() {
-      this.tweets = dummyData.tweets
+      this.tweets = dummyData.tweets;
     },
     deleteTweet(tweetId) {
-      this.tweets = this.tweets.filter(tweet => tweet.id !== tweetId)
-    }
-  }
-  
+      this.tweets = this.tweets.filter((tweet) => tweet.id !== tweetId);
+    },
+  },
 };
 </script>
 
 <style lang="sass" scoped>
 @import '../styles/_tweet'
+
+.top
+  height: 55px
+  padding: 15px
+  font-size: 18px
+  font-weight: 700
+  color: $text-content
+  border-bottom: 1px solid $input-border
+  
 </style>

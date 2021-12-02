@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <img src="" alt="" class="top-back" />
+      <img src="./../../public/images/icon_back.png" alt="" class="top-back" @click="$router.back()"/>
       <p class="top-title">推文</p>
     </div>
     <div class="content">
@@ -179,6 +179,11 @@ export default {
   display: flex
   border-bottom: 1px solid $input-border
   .top-back
+    width: 24px
+    height: 24px
+    object-fit: cover
+    margin-right: 5%
+    cursor: pointer
   .top-title
     margin: 0
     font-size: 18px

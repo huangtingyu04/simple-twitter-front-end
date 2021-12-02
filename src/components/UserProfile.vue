@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <div class="top">
-      <img src="../../public/images/icon_back.png" alt="" class="top-back">
+      <img src="../../public/images/icon_back.png" alt="" class="top-back" @click="$router.back()">
       <div class="top-title">
         <div class="top-title-name">John Doe</div>
         <div class="top-title-tweet">25<span class="top-title-tweet-count">推文</span></div>
@@ -74,6 +74,7 @@ export default {
     height: 24px
     object-fit: cover
     margin-right: 5%
+    cursor: pointer
   .top-title
     .top-title-name
       font-size: 19px

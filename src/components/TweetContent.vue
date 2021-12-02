@@ -46,6 +46,7 @@
           @click.stop.prevent="addLike(tweet.id)"
         />
         <img
+          v-else
           src="./../../public/images/icon_like_fill_2x.png"
           alt=""
           class="content-action-liked"
@@ -53,6 +54,7 @@
         />
       </div>
     </div>
+    <TweetReplyModal />
   </div>
 </template>
 
@@ -115,8 +117,13 @@ const dummyData = {
   },
 };
 
+import TweetReplyModal from '../components/TweetReplyModal.vue'
+
 export default {
   name: "TweetContent",
+  components: {
+    TweetReplyModal
+  },
   data() {
     return {
       tweet: {
@@ -153,13 +160,13 @@ export default {
     },
     addLike(tweetId) {
       console.log(tweetId);
-      this.isLiked = true;
-      this.likeLength = this.likeLength + 1;
+      this.tweet.isLiked = true;
+      this.tweet.likeLength = this.tweet.likeLength + 1;
     },
     deleteLike(tweetId) {
       console.log(tweetId);
-      this.isLiked = false;
-      this.likeLength = this.likeLength - 1;
+      this.tweet.isLiked = false;
+      this.tweet.likeLength = this.tweet.likeLength - 1;
     },
   },
 };
@@ -241,7 +248,9 @@ export default {
       width: 24.69px
       height: 24.69px
       margin-right: 40%
+      cursor: pointer
     .content-action-liked
       width: 25.12px
       height: 23.64px
+      cursor: pointer
 </style>

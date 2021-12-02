@@ -2,10 +2,7 @@
   <div>
     <Navbar />
     <div class="wide-container">
-      <div class="main">
-        <UserProfile />
-        <TweetItems />
-      </div>
+      <div class="main"></div>
       <PopularUsersCard />
     </div>
   </div>
@@ -13,16 +10,11 @@
 
 <script>
 import Navbar from './../components/Navbar'
-import UserProfile from '../components/UserProfile.vue'
-import TweetItems from '../components/TweetItems.vue'
 import PopularUsersCard from './../components/PopularUsersCard'
-
 export default {
-  name: 'User',
+  name: 'UserFollowers',
   components: {
     Navbar,
-    UserProfile,
-    TweetItems,
     PopularUsersCard
   }
 }

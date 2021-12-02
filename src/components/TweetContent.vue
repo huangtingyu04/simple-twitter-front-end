@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <img src="" alt="" class="top-backIcon" />
+      <img src="" alt="" class="top-back" />
       <p class="top-title">推文</p>
     </div>
     <div class="content">
@@ -178,7 +178,7 @@ export default {
   padding: 15px
   display: flex
   border-bottom: 1px solid $input-border
-  .top-backIcon
+  .top-back
   .top-title
     margin: 0
     font-size: 18px

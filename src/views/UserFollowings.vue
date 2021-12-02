@@ -13,7 +13,7 @@ import Navbar from './../components/Navbar'
 import PopularUsersCard from './../components/PopularUsersCard'
 
 export default {
-    name: 'UserFollows',
+    name: 'UserFollowings',
     components: {
         Navbar,
         PopularUsersCard

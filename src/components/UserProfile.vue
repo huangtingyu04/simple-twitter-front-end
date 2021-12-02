@@ -43,21 +43,7 @@
         </div>
       </div>
       <div class="user-navPill">
-        <ul class="nav nav-pills">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/user/tweets">推文</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/user/replies"
-              >推文與回覆</router-link
-            >
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/user/likes"
-              >喜歡的內容</router-link
-            >
-          </li>
-        </ul>
+        <UserNavPills />
       </div>
     </div>
     <UserEditModal />
@@ -66,10 +52,12 @@
 
 <script>
 import UserEditModal from '../components/UserEditModal.vue'
+import UserNavPills from '../components/UserNavPills.vue'
 export default {
   name: "UserProfile",
   components: {
-    UserEditModal
+    UserEditModal,
+    UserNavPills
   }
 };
 </script>
@@ -166,23 +154,4 @@ export default {
       .user-info-feat-unit
         color: $input-label
         font-weight: 400
-  .user-navPill
-    margin-top: 20px
-    height: 52px
-    font-size: 15px
-    font-weight: 700
-    +breakpoint(zone-nb)
-      margin-top: 15px
-      height: 40px
-      font-size: 13px
-    ul
-      height: 100%
-    .nav-item
-      .nav-link
-        height: 100%
-        color: $input-label
-        border-radius: 0
-        &:hover
-          color: $mainColor
-          border-bottom: 2px solid $mainColor         
 </style>

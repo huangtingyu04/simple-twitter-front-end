@@ -2,7 +2,9 @@
     <div>
         <Navbar />
         <div class="wide-container">
-            <div class="main">tweets page</div>
+            <div class="main">
+                <TweetContent />
+            </div>
             <PopularUsersCard />
         </div>
     </div>
@@ -11,11 +13,12 @@
 <script>
 import Navbar from './../components/Navbar'
 import PopularUsersCard from './../components/PopularUsersCard'
-
+import TweetContent from './../components/TweetContent.vue'
 export default {
     name: 'Tweet',
     components: {
         Navbar,
+        TweetContent,
         PopularUsersCard
     }
 }

@@ -35,7 +35,14 @@
         </a>
       </li>
     </ul>
-    <button type="button" class="tweet-btn">推文</button>
+    <button
+      type="button"
+      class="tweet-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#tweet-modal"
+    >
+      推文
+    </button>
     <div class="logout">
       <a href="javascript:;" class="link">
         <img class="img" src="../../public/images/icon_logout.png" />
@@ -43,8 +50,19 @@
         登出
       </a>
     </div>
+    <TweetModal :modal-append-to-body="false"/>
   </nav>
 </template>
+
+<script>
+import TweetModal from "../components/TweetModal.vue";
+export default {
+  name: "Navbar",
+  components: {
+    TweetModal,
+  },
+};
+</script>
 
 <style scoped lang="sass">
 @import '../styles/navbar'

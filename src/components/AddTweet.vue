@@ -2,7 +2,7 @@
   <div>
     <div class="top">首頁</div>
     <div class="addTweet">
-      <img src="" alt="" class="addTweet-icon" />
+      <img :src="currentUser.image" alt="" class="addTweet-icon" />
       <form action="" class="addTweet-form">
         <textarea
           name="tweet"
@@ -20,6 +20,12 @@
 <script>
 export default {
   name: "AddTweet",
+  props: {
+    currentUser: {
+      type: Object,
+      required: true
+    }
+  },
 };
 </script>
 

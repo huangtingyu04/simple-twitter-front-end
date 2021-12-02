@@ -16,14 +16,14 @@
           <div class="modal-body-bg">
             <img src="https://i.imgur.com/ifqzNgs.png" alt="" class="modal-body-bg-photo">
             <div class="modal-body-bg-option">
-              <img src="https://i.imgur.com/OCJg3AO.png" alt="" class="modal-body-bg-option-edit">
-              <img src="https://i.imgur.com/qF89t4v.png" alt="" class="modal-body-bg-option-delete">
+              <img src="../../public/images/icon_uploadPhoto.png" alt="" class="modal-body-bg-option-edit">
+              <img src="../../public/images/icon_delete.png" alt="" class="modal-body-bg-option-delete">
             </div>
           </div>
           <div class="modal-body-header">
             <img src="https://i.imgur.com/RGxqLdu.png" alt="" class="modal-body-header-photo">
             <div class="modal-body-header-edit">
-               <img src="https://i.imgur.com/OCJg3AO.png" alt="" class="modal-body-header-edit-photo">
+               <img src="../../public/images/icon_uploadPhoto.png" alt="" class="modal-body-header-edit-photo">
             </div>
           </div>
           <div class="modal-body-form">

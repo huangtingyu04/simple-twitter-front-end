@@ -17,7 +17,7 @@
           <button
             class="btn-edit"
             data-bs-toggle="modal"
-            data-bs-target="#user-setting-edit"
+            data-bs-target="#user-edit-modal"
           >
             編輯個人資料
           </button>
@@ -60,12 +60,17 @@
         </ul>
       </div>
     </div>
+    <UserEditModal />
   </div>
 </template>
 
 <script>
+import UserEditModal from '../components/UserEditModal.vue'
 export default {
   name: "UserProfile",
+  components: {
+    UserEditModal
+  }
 };
 </script>
 

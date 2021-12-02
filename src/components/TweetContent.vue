@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top">
-      <img src="" alt="" class="top-backIcon">
+      <img src="" alt="" class="top-backIcon" />
       <p class="top-title">推文</p>
     </div>
     <div class="content">
@@ -31,9 +31,13 @@
         </div>
       </div>
       <div class="content-action">
-        <img src="./../../public/images/icon_message_2x.png" alt="" class="content-action-reply"
+        <img
+          src="./../../public/images/icon_message_2x.png"
+          alt=""
+          class="content-action-reply"
           data-bs-toggle="modal"
-          data-bs-target="#tweet-reply-modal">
+          data-bs-target="#tweet-reply-modal"
+        />
         <img
           v-if="!tweet.isLiked"
           src="./../../public/images/icon_like_2x.png"
@@ -42,6 +46,7 @@
           @click.stop.prevent="addLike(tweet.id)"
         />
         <img
+          v-else
           src="./../../public/images/icon_like_fill_2x.png"
           alt=""
           class="content-action-liked"
@@ -49,6 +54,7 @@
         />
       </div>
     </div>
+    <TweetReplyModal />
   </div>
 </template>
 
@@ -71,14 +77,53 @@ const dummyData = {
       createdAt: "2021-11-23T07:25:29.000Z",
       updatedAt: "2021-11-26T04:22:35.000Z",
     },
-    Replies: [{}, {}, {}],
+    Replies: [
+      {
+        id: 1,
+        UserId: 1,
+        User: {
+          name: "Mary Jane",
+          account: "@mjjane",
+          image: "https://i.imgur.com/MRdy9z2.png",
+        },
+        createdAt: "2019-06-22T09:00:43.000Z",
+        text: "Great~",
+      },
+      {
+        id: 2,
+        UserId: 221,
+        User: {
+          name: "Squishy Tom",
+          account: "@sushiTom",
+          image: "https://i.imgur.com/a0BP98T.png",
+        },
+        createdAt: "2019-06-22T09:00:43.000Z",
+        text: "Good Job!",
+      },
+      {
+        id: 3,
+        UserId: 13,
+        User: {
+          name: "Moter Forker",
+          account: "@moterforker",
+          image: "https://i.imgur.com/RGxqLdu.png",
+        },
+        createdAt: "2019-06-22T09:00:43.000Z",
+        text: "Moter Forker!",
+      },
+    ],
     Likes: [{}, {}],
     isLiked: true,
   },
 };
 
+import TweetReplyModal from '../components/TweetReplyModal.vue'
+
 export default {
   name: "TweetContent",
+  components: {
+    TweetReplyModal
+  },
   data() {
     return {
       tweet: {
@@ -115,20 +160,19 @@ export default {
     },
     addLike(tweetId) {
       console.log(tweetId);
-      this.isLiked = true;
-      this.likeLength = this.likeLength + 1;
+      this.tweet.isLiked = true;
+      this.tweet.likeLength = this.tweet.likeLength + 1;
     },
     deleteLike(tweetId) {
       console.log(tweetId);
-      this.isLiked = false;
-      this.likeLength = this.likeLength - 1;
+      this.tweet.isLiked = false;
+      this.tweet.likeLength = this.tweet.likeLength - 1;
     },
   },
 };
 </script>
 
 <style lang="sass" scoped>
-
 .top
   height: 55px
   padding: 15px
@@ -140,7 +184,7 @@ export default {
     font-size: 18px
     font-weight: 700
     color: $text-content
-    
+
 .content
   padding: 15px
   border-bottom: 1px solid $input-border
@@ -204,7 +248,9 @@ export default {
       width: 24.69px
       height: 24.69px
       margin-right: 40%
-    .content-action-liked 
+      cursor: pointer
+    .content-action-liked
       width: 25.12px
-      height: 23.64px   
+      height: 23.64px
+      cursor: pointer
 </style>

@@ -30,12 +30,12 @@
       <div class="user-info">
         <div class="user-info-content">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. </div>
         <div class="user-info-feat">
-          <router-link :to="{name: 'user-follows', params: 1}" class="user-info-feat-following">
+          <router-link :to="{name: 'user-followings', params: 1}" class="user-info-feat-following">
             34 個<span class="user-info-feat-unit"
               >跟隨中</span
             >
           </router-link>
-          <router-link :to="{name: 'user-follows', params: 1}"  class="user-info-feat-follower">
+          <router-link :to="{name: 'user-followers', params: 1}"  class="user-info-feat-follower">
             59 位<span class="user-info-feat-unit"
               >跟隨者</span
             >

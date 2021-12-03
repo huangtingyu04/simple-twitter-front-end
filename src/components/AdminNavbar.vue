@@ -28,7 +28,7 @@
     <div class="logout">
       <a href="javascript:;" class="link">
         <img class="img" src="../../public/images/icon_logout.png" />
-        <img class="img-hover" src="../../public/images/icon_logout.png" />
+        <img class="img-hover" src="../../public/images/icon_logout_hover.png" />
         登出
       </a>
     </div>

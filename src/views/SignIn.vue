@@ -7,7 +7,7 @@
     <form @submit.prevent.stop="handleSubmit">
       <div class="input-field">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" autofocus placeholder="email" v-model="email" />
+        <input type="email" name="email" id="email" required autofocus placeholder="email" v-model="email" />
       </div>
       <div class="input-field">
         <label for="password">密碼</label>

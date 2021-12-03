@@ -89,6 +89,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid'
+
 const dummyUser = {
   currentUser: {
     id: "1",
@@ -139,6 +141,7 @@ export default {
         return
       } 
       this.$emit("create-new-reply", {
+        replyId: uuidv4(),
         tweetId: tweetId,
         text: this.newReply,
         User: this.currentUser

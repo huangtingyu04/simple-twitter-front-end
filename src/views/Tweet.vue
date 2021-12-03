@@ -3,9 +3,13 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent :tweet="tweet"/>
-        <ReplyItems :replies="replies"/>
-        <TweetReplyModal :tweet-item="tweetItem"/>
+        <TweetContent :initial-tweet="tweet"/>
+        <ReplyItems 
+          :replies="replies"
+          :tweet-target="tweetTarget"/>
+        <TweetReplyModal 
+          :tweet-item="tweetItem"
+          @create-new-reply="createNewReply"/>
       </div>
       <PopularUsersCard />
     </div>
@@ -100,6 +104,7 @@ export default {
       },
       tweetItem: {},
       replies: [],
+      tweetTarget: '',
     };
   },
   created() {
@@ -127,17 +132,19 @@ export default {
         createdAt,
         User,
       };
-      this.replies = Replies
+      this.replies = Replies,
+      this.tweetTarget = User.account
     },
-    addLike(tweetId) {
-      console.log(tweetId);
-      this.tweet.isLiked = true;
-      this.tweet.likeLength = this.tweet.likeLength + 1;
-    },
-    deleteLike(tweetId) {
-      console.log(tweetId);
-      this.tweet.isLiked = false;
-      this.tweet.likeLength = this.tweet.likeLength - 1;
+    createNewReply(payload) {
+      const {replyId, tweetId, text, User} = payload
+      this.replies.push({
+        id: replyId,
+        tweetId,
+        text,
+        User,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }) 
     },
   },
 };

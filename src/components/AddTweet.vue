@@ -12,7 +12,12 @@
           rows="10"
           placeholder="有什麼新鮮事?"
         ></textarea>
-        <button class="btn-addTweet">推文</button>
+        <div class="addTweet-foot">
+          <p class="addTweet-limit" v-show="newTweet.length > 140">字數不可超過140字</p>
+          <p class="addTweet-empty" v-show="checkEmptyInput">內容不可空白</p>
+          <button class="btn-addTweet" type="submit" :disabled="newTweet.length > 140">推文</button>
+        </div>
+        
       </form>
     </div>
   </div>
@@ -30,16 +35,24 @@ export default {
   },
   data() {
     return {
-      newTweet: ''
+      newTweet: '',
+      isProcessing: false,
+      checkEmptyInput: false,
     }
   },
   methods: {
     createNewTweet() {
+      if(!this.newTweet) {
+        this.checkEmptyInput = true
+        return
+      }
       this.$emit("create-new-tweet", {
         tweetId: uuidv4(),
         text: this.newTweet,
         User: this.currentUser
       })
+      this.newTweet = ''
+      this.checkEmptyInput = false
     }
   }
 };
@@ -58,7 +71,7 @@ export default {
 
 .addTweet
   width: 100%
-  height: 130px
+  height: 250px
   padding: 10px 15px 10px 15px
   border-bottom: 1px solid $input-border
   display: flex
@@ -81,15 +94,25 @@ export default {
       font-size: 18px
       font-weight: 500
       color: $input-holder
-    button
+    .addTweet-foot
       position: absolute
       bottom: 0
       right: 0
-      width: 66px
-      height: 38px
-      border: none
-      border-radius: 100px
-      background: $mainColor
-      color: $light
-      font-size: 18px
+      display: flex
+      align-content: center
+      font-size: 15px
+      font-weight: 500
+      color: $input-alert
+      .addTweet-limit, .addTweet-empty
+        margin: auto 20px
+      button
+        width: 66px
+        height: 38px
+        border: none
+        border-radius: 100px
+        background: $mainColor
+        color: $light
+        font-size: 18px
+        &:disabled
+          opacity: 60%
 </style>

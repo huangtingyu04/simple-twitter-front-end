@@ -1,17 +1,17 @@
 <template>
   <div class="replies">
-    <div class="reply">
-      <img src="https://i.imgur.com/RGxqLdu.png" alt="" class="reply-icon">
+    <div class="reply" v-for="reply in replies" :key="reply.id">
+      <img :src="reply.User? reply.User.image: ''" alt="" class="reply-icon">
       <div class="reply-content">
         <div class="reply-content-title">
-          <div class="reply-content-title-name">Apple</div>
-          <div class="reply-content-title-account">@apple<span>・</span></div>
-          <div class="reply-content-title-time">13小時</div>
+          <div class="reply-content-title-name">{{reply.User? reply.User.name: ''}}</div>
+          <div class="reply-content-title-account">@{{reply.User? reply.User.account: ''}}<span>・</span></div>
+          <div class="reply-content-title-time">{{reply.createdAt}}</div>
         </div>
         <div class="reply-content-target">回覆
-          <span class="reply-content-target-account">@apple</span>
+          <span class="reply-content-target-account">@{{tweetTarget}}</span>
         </div>
-        <div class="reply-content-comment">Goof hhh jot!</div>
+        <div class="reply-content-comment">{{reply.text}}</div>
       </div>
     </div>
   </div>
@@ -20,6 +20,16 @@
 <script>
 export default {
   name: 'ReplyItems',
+  props: {
+    replies: {
+      type: Array,
+      required: true,
+    },
+    tweetTarget: {
+      type: String,
+      required: true,
+    },
+  }
 }
 </script>
 

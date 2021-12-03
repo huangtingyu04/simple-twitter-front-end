@@ -3,45 +3,83 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <img src="../../public/images/icon_close.png" alt="" class="modal-close" data-bs-dismiss="modal" aria-label="Close">
+          <img
+            src="../../public/images/icon_close.png"
+            alt=""
+            class="modal-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          />
         </div>
         <div class="modal-body">
           <div class="modal-body-post">
             <div class="modal-body-post-head">
-              <img :src="tweetItem.User? tweetItem.User.image: ''" alt="" class="modal-body-post-head-icon" />
+              <img
+                :src="tweetItem.User ? tweetItem.User.image: ''"
+                alt=""
+                class="modal-body-post-head-icon"
+              />
               <div class="modal-body-post-head-connect"></div>
             </div>
             <div class="modal-body-post-body">
               <div class="modal-body-post-body-head">
-                <div class="modal-body-post-body-head-name">{{tweetItem.User?tweetItem.User.name: '匿名'}}</div>
-                <div class="modal-body-post-body-head-account">@{{tweetItem.User ? tweetItem.User.account: '匿名'}}</div>
+                <div class="modal-body-post-body-head-name">
+                  {{tweetItem.User? tweetItem.User.name: ''}}
+                </div>
+                <div class="modal-body-post-body-head-account">
+                  @{{tweetItem.User? tweetItem.User.account : ''}}
+                </div>
                 <span> · </span>
-                <div class="modal-body-post-body-head-time">{{tweetItem.createdAt}}</div>
+                <div class="modal-body-post-body-head-time">
+                  {{ tweetItem.createdAt }}
+                </div>
               </div>
-              <div class="modal-body-post-body-content">{{tweetItem.text}}</div>
+              <div class="modal-body-post-body-content">
+                {{ tweetItem.text }}
+              </div>
               <div class="modal-body-post-body-foot">
                 <div class="modal-body-post-body-foot-reply">
                   回覆給
-                  <span class="modal-body-post-body-foot-account">@{{tweetItem.User ? tweetItem.User.account: '匿名'}}</span>
+                  <span class="modal-body-post-body-foot-account"
+                    >@{{
+                     tweetItem.User? tweetItem.User.account: ''
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
           </div>
           <div class="modal-body-tweet">
-            <img :src="currentUser.image" alt="" class="modal-body-tweet-icon">
-            <form action="" class="modal-body-post-body">
+            <img
+              :src="currentUser.image"
+              alt=""
+              class="modal-body-tweet-icon"
+            />
+            <form 
+              action=""
+              @submit.stop.prevent="createNewReply(tweetItem.id)" 
+              class="modal-body-tweet-form">
               <textarea
                 name="tweet"
+                v-model="newReply"
                 id="tweet"
                 cols="30"
                 rows="10"
                 placeholder="推你的回覆"
               ></textarea>
-              <button
-                class="btn-tweet"
-              >
-                推文
-              </button>
+              <div class="addReply-form">
+                <p class="addReply-limit" v-show="newReply.length > 140">
+                  字數不可超過140字
+                </p>
+                <p class="addReply-empty" v-show="checkEmptyInput">
+                  內容不可空白
+                </p>
+                <button 
+                  class="btn-tweet"
+                  :data-bs-dismiss="submitOK" 
+                  :disabled="newReply.length > 140"
+                  >推文</button>
+              </div>
             </form>
           </div>
         </div>
@@ -51,6 +89,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid'
+
 const dummyUser = {
   currentUser: {
     id: "1",
@@ -67,25 +107,52 @@ export default {
   props: {
     tweetItem: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      currentUser: {}
+      currentUser: {},
+      newReply: '',
+      checkEmptyInput: false,
+      
+    };
+  },
+  computed: {
+    submitOK() {
+      if(!this.newReply) {
+        return ''
+      } else {
+        return 'modal'
+      }
     }
   },
   created() {
-    this.fetchUser()
+    this.fetchUser();
   },
   methods: {
     fetchUser() {
-      this.currentUser = dummyUser.currentUser
+      this.currentUser = dummyUser.currentUser;
+    },
+    createNewReply(tweetId) {
+      console.log(tweetId)
+      if(!this.newReply) {
+        this.checkEmptyInput = true
+        return
+      } 
+      this.$emit("create-new-reply", {
+        replyId: uuidv4(),
+        tweetId: tweetId,
+        text: this.newReply,
+        User: this.currentUser
+      })
+      this.newReply = ''
+      this.checkEmptyInput = false
     }
-  }
+  },
 };
 </script>
 
 <style lang="sass" scoped>
-  @import "../styles/_modal"
+@import "../styles/_modal"
 </style>

@@ -35,9 +35,6 @@ export default {
   },
   methods: {
     createNewTweet() {
-      if(!this.newTweet) {
-        return
-      }
       this.$emit("create-new-tweet", {
         tweetId: uuidv4(),
         text: this.newTweet,

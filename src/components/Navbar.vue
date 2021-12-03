@@ -1,54 +1,54 @@
 <template>
   <nav class="navbox">
     <div class="logo">
-      <img src="../../public/images/Logo.png" />
+    <img src="../../public/images/Logo.png" />
     </div>
     <ul>
-      <li>
+    <li>
         <router-link  to="/tweets" class="link">
-          <img class="img" src="../../public/images/icon_index.png" />
-          <img
+        <img class="img" src="../../public/images/icon_index.png" />
+        <img
             class="img-hover"
             src="../../public/images/icon_index_hover.png"
-          />
-          <span>首頁</span>
+        />
+        <span>首頁</span>
         </router-link>
-      </li>
-      <li>
+    </li>
+    <li>
         <router-link  :to="{name: 'user', params: { id: currentUser.id }}" class="link">
-          <img class="img" src="../../public/images/icon_user.png" />
-          <img
+        <img class="img" src="../../public/images/icon_user.png" />
+        <img
             class="img-hover"
             src="../../public/images/icon_user_hover.png"
-          />
-          <span>個人資料</span>
+        />
+        <span>個人資料</span>
         </router-link>
-      </li>
-      <li>
+    </li>
+    <li>
         <router-link class="link" :to="{name: 'user-setting', params: { id: currentUser.id }}">
-          <img class="img" src="../../public/images/icon_setting.png" />
-          <img
+        <img class="img" src="../../public/images/icon_setting.png" />
+        <img
             class="img-hover"
             src="../../public/images/icon_setting_hover.png"
-          />
-          <span>設定</span>
+        />
+        <span>設定</span>
         </router-link>
-      </li>
+    </li>
     </ul>
     <button
-      type="button"
-      class="tweet-btn"
-      data-bs-toggle="modal"
-      data-bs-target="#tweet-modal"
+    type="button"
+    class="tweet-btn"
+    data-bs-toggle="modal"
+    data-bs-target="#tweet-modal"
     >
-      推文
+    推文
     </button>
     <div class="logout">
-      <router-link  to="/signin" class="link">
+    <router-link  to="/signin" class="link">
         <img class="img" src="../../public/images/icon_logout.png" />
         <img class="img-hover" src="../../public/images/icon_logout_hover.png" />
         登出
-      </router-link>
+    </router-link>
     </div>
     <TweetModal />
   </nav>

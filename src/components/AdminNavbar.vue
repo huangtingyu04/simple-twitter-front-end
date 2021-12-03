@@ -50,4 +50,3 @@
 <style scoped lang="sass">
 @import '../styles/navbar'
 </style>
-

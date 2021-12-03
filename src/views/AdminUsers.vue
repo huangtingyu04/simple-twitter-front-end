@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar />
+    <AdminNavbar />
     <div class="wide-container">
       <div class="main">
         <AdminUserCards />
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import Navbar from "./../components/Navbar";
+import AdminNavbar from "./../components/AdminNavbar";
 import AdminUserCards from "./../components/AdminUserCards";
 
 export default {
   components: {
-    Navbar,
+    AdminNavbar,
     AdminUserCards,
   },
 };

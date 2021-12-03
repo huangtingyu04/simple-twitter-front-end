@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar />
+    <AdminNavbar />
     <div class="wide-container">
       <div class="main">
         <AdminTweetItems />
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import Navbar from "./../components/Navbar";
+import AdminNavbar from "./../components/AdminNavbar";
 import AdminTweetItems from "./../components/AdminTweetItems";
 
 export default {
   components: {
-    Navbar,
+    AdminNavbar,
     AdminTweetItems,
   },
 };

@@ -9,8 +9,8 @@
         color: $text-content
 
     form
-        max-width: 100%
-        max-width: 642px
+        max-width: 672px
+        width: 100%
         padding: 0 15px
         margin-bottom: 50px
 
@@ -24,10 +24,11 @@
 
 .form-signup,
 .form-signin
-    max-width: 540px
+    max-width: 570px
     width: 100%
+    padding: 0 15px
     margin: 60px auto
-
+    
     .logo
         text-align: center
 
@@ -43,24 +44,27 @@
         line-height: 33px
         color: $text-content
 
-    form
-
     .btn-main
         display: block
         width: 100%
         height: 46px
-        line-height: 46px
         text-decoration: none
 
+    .link-group
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        margin-top: 20px
+        color: $textBlue
+
+        &.j-c-c
+            justify-content: center
+
     .btn-blue
-        display: block
         color: $textBlue
         font-weight: bold
         font-size: 18px
-        line-height: 26px
         text-align: center
         text-decoration-line: underline
-        margin-top: 20px
 
-        &.text-R
-            text-align: right
+

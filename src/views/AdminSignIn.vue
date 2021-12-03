@@ -3,11 +3,11 @@
     <div class="logo">
       <img src="../../public/images/Logo.png" />
     </div>
-    <div class="main-title">登入 Alphitter</div>
-    <form @submit.prevent.stop="handleSubmit">
+    <div class="main-title">後台登入</div>
+    <form action="" @submit.prevent.stop="handleSubmit">
       <div class="input-field">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" autofocus placeholder="email" v-model="email" />
+        <input type="email" name="email" id="email" required autofocus placeholder="email" v-model="email" />
       </div>
       <div class="input-field">
         <label for="password">密碼</label>
@@ -23,9 +23,7 @@
       </div> -->
       <button type="submit" class="btn-main">登入</button>
       <div class="link-group">
-        <router-link class="btn-blue" to="/signup">註冊 Alphitter</router-link>
-        ·
-        <router-link class="btn-blue" to="/admin/signin">後台登入</router-link>
+        <router-link class="btn-blue" to="/signin">前台登入</router-link>
       </div>
     </form>
   </div>

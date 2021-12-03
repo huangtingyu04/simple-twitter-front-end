@@ -12,12 +12,17 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/tweets'
+      redirect: '/signin'
     },
     {
       path: '/signin',
-      name: 'sing-in',
+      name: 'sign-in',
       component: SignIn
+    },
+    {
+      path: '/signup',
+      name: 'sign-up',
+      component: () => import('../views/SignUp.vue')
     },
     {
       path: '/tweets',
@@ -50,17 +55,17 @@ const router = new VueRouter({
       component: () => import('../views/UserFollowers.vue')
     },
     {
-      path: '/signup',
-      name: 'sign-up',
-      component: () => import('../views/SignUp.vue')
-    },
-    {
       path: '/about',
       name: 'About',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    },
+    {
+      path: '/admin/signin',
+      name: 'admin-signin',
+      component: () => import('../views/AdminSignIn.vue')
     },
     {
       path: '/admin/tweets',

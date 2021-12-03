@@ -22,7 +22,7 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">2</span>
+            <span class="tweet-body-foot-comment-count">{{tweet.Comments ? tweet.Comments.length: 0}}</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img
@@ -37,7 +37,7 @@
               v-else
               class="tweet-body-foot-liked-icon"
             />
-            <span class="tweet-body-foot-liked-count">3</span>
+            <span class="tweet-body-foot-liked-count">{{tweet.LikeUsers ? tweet.LikeUsers.length: 0}}</span>
           </div>
         </div>
       </div>
@@ -47,79 +47,18 @@
 </template>
 
 <script>
-const dummyData = {
-  tweets: [
-    {
-      id: 1,
-      text: "Autem veniam tempore.",
-      UserId: 1,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      User: {
-        id: 1,
-        name: "user1",
-        account: "user1",
-        email: "user1@example.com",
-        password:
-          "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-        isAdmin: false,
-        image: "https://i.imgur.com/RnQRoJb.png",
-        createdAt: "2021-11-23T07:25:29.000Z",
-        updatedAt: "2021-11-26T04:22:35.000Z",
-      },
-      LikeUsers: [{}, {}, {}],
-      Comments: [{}, {}],
-      isLiked: false,
-    },
-    {
-      id: 2,
-      text: "zrtdhuua trtdghui etsfgj gfgfgrtewrt.",
-      UserId: 1,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      User: {
-        id: 1,
-        name: "user1",
-        account: "user1",
-        email: "user1@example.com",
-        password:
-          "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-        isAdmin: false,
-        image: "https://i.imgur.com/RnQRoJb.png",
-        createdAt: "2021-11-23T07:25:29.000Z",
-        updatedAt: "2021-11-26T04:22:35.000Z",
-      },
-      LikeUsers: [{}, {}],
-      isLiked: true,
-    },
-    {
-      id: 3,
-      text: "iuyituncg trdsnujkgta wefdfghhjbnsfgqerq dfsdfwerwerqwtrh fdsfe fdwer aswhjjyuir.",
-      UserId: 2,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      User: {
-        id: 2,
-        name: "user2",
-        account: "user2",
-        email: "user2@example.com",
-        password:
-          "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-        isAdmin: false,
-        image: "https://i.imgur.com/RGxqLdu.png",
-        createdAt: "2021-11-23T07:25:29.000Z",
-        updatedAt: "2021-11-26T04:22:35.000Z",
-      },
-      LikeUsers: [{}, {}, {}],
-      isLiked: true,
-    },
-  ],
-};
+
 import TweetReplyModal from "./TweetReplyModal.vue";
 export default {
   name: "TweetItems",
   components: {
     TweetReplyModal,
+  },
+  props: {
+    initialTweets: {
+      type: Array,
+      required: true
+    }
   },
   data() {
     return {
@@ -132,10 +71,10 @@ export default {
   },
   methods: {
     fetchTweets() {
-      this.tweets = dummyData.tweets;
+      this.tweets = this.initialTweets;
     },
     toggleTweetReply(tweetId) {
-      this.tweetItem = this.tweets.filter((tweet) => tweet.id === tweetId);
+      this.tweetItem = this.tweets.find(tweet => tweet.id === tweetId);
     },
   },
 };

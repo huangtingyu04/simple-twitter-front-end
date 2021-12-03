@@ -6,7 +6,8 @@
         <AddTweet 
           :current-user="currentUser"
           @create-new-tweet="createNewTweet"/>
-        <TweetItems :initial-tweets="tweets"/>
+        <TweetItems 
+          :initial-tweets="tweets"/>
       </div>
       <PopularUsersCard />
     </div>

@@ -41,7 +41,9 @@
           </div>
         </div>
       </div>
-      <TweetReplyModal :tweet-item="tweetItem" />
+      <TweetReplyModal 
+        :tweet-item="tweetItem"
+        @create-new-reply="createNewReply" />
     </div>
   </div>
 </template>
@@ -75,6 +77,15 @@ export default {
     },
     toggleTweetReply(tweetId) {
       this.tweetItem = this.tweets.find(tweet => tweet.id === tweetId);
+    },
+    createNewReply(payload) {
+      const {tweetId, text, User} = payload
+      this.tweets = this.tweets.map((tweet) => {
+        if(tweet.id === tweetId) {
+          console.log(tweetId, text, User)
+        }
+      })
+      
     },
   },
 };

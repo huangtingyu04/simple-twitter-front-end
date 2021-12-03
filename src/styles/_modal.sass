@@ -50,17 +50,27 @@
     border: none
     resize: none
     outline: none
-  button
+  .addReply-form
     position: absolute
     bottom: 0
     right: 0
-    width: 66px
-    height: 38px
-    border: none
-    border-radius: 100px
-    background: $mainColor
-    color: $light
-    font-size: 18px
+    display: flex
+    align-content: center
+    font-size: 15px
+    font-weight: 500
+    color: $input-alert
+    .addReply-limit, .addReply-empty
+      margin: auto 20px
+    button
+      width: 66px
+      height: 38px
+      border: none
+      border-radius: 100px
+      background: $mainColor
+      color: $light
+      font-size: 18px
+      &:disabled
+        opacity: 60%
 
 .modal-body-post
   margin-top: 15px
@@ -110,7 +120,9 @@
       .modal-body-post-body-foot-reply
         color: $input-label
       .modal-body-post-body-foot-account
-        color: $mainColor 
+        color: $mainColor
+    .modal-body-post-body-post
+
 
 .modal-body-bg
   width: 100%

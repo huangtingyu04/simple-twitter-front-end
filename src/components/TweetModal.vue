@@ -1,13 +1,13 @@
 <template>
   <div class="modal fade" id="tweet-modal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
+    <div class="modal-dialog" role="document" style="z-index: 9998;">
+      <div class="modal-content" style="z-index: 9999;">
         <div class="modal-header">
-          <div
+          <img 
+            src="../../public/images/icon_close.png" alt="" 
             class="modal-close"
             data-bs-dismiss="modal"
-            aria-label="Close"
-          >X</div>
+            aria-label="Close">
         </div>
         <div class="modal-body">
           <div class="modal-body-tweet">

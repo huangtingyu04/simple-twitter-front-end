@@ -54,7 +54,7 @@
         />
       </div>
     </div>
-    <TweetReplyModal />
+    <TweetReplyModal :tweet-item="tweetItem"/>
   </div>
 </template>
 
@@ -136,6 +136,7 @@ export default {
         likeLength: 0,
         isLiked: false,
       },
+      tweetItem: {}
     };
   },
   created() {
@@ -157,6 +158,12 @@ export default {
         likeLength: Likes ? Likes.length : 0,
         isLiked,
       };
+      this.tweetItem = {
+        id,
+        text,
+        createdAt,
+        User
+      }
     },
     addLike(tweetId) {
       console.log(tweetId);

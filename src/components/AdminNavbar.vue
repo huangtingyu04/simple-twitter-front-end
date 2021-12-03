@@ -11,7 +11,7 @@
             class="img-hover"
             src="../../public/images/icon_index_hover.png"
           />
-          <span>首頁</span>
+          <span>推文清單</span>
         </a>
       </li>
       <li>
@@ -21,21 +21,10 @@
             class="img-hover"
             src="../../public/images/icon_user_hover.png"
           />
-          <span>個人資料</span>
-        </a>
-      </li>
-      <li>
-        <a href="javascript:;" class="link">
-          <img class="img" src="../../public/images/icon_setting.png" />
-          <img
-            class="img-hover"
-            src="../../public/images/icon_setting_hover.png"
-          />
-          <span>設定</span>
+          <span>使用者列表</span>
         </a>
       </li>
     </ul>
-    <button type="button" class="tweet-btn">推文</button>
     <div class="logout">
       <a href="javascript:;" class="link">
         <img class="img" src="../../public/images/icon_logout.png" />

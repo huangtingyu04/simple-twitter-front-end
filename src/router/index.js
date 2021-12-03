@@ -63,6 +63,11 @@ const router = new VueRouter({
       component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     },
     {
+      path: '/admin',
+      exact: true,
+      redirect: '/admin/signin'
+    },
+    {
       path: '/admin/signin',
       name: 'admin-signin',
       component: () => import('../views/AdminSignIn.vue')

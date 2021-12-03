@@ -1,6 +1,6 @@
 <template>
   <div class="tweets">
-    <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
+    <div class="tweet" v-for="tweet in initialTweets" :key="tweet.id">
       <div class="tweet-icon">
         <img :src="tweet.User.image" alt="user-icon" class="tweet-icon-photo" />
       </div>
@@ -30,62 +30,41 @@
               alt="tweet-liKed-icon"
               v-if="!tweet.isLiked"
               class="tweet-body-foot-liked-icon"
+              @click.stop.prevent="addLiked(tweet.id)"
             />
             <img
               src="../../public/images/icon_like_fill_2x.png"
               alt="tweet-isLiked-icon"
               v-else
               class="tweet-body-foot-liked-icon"
+              @click.stop.prevent="deleteLiked(tweet.id)"
             />
-            <span class="tweet-body-foot-liked-count">{{tweet.LikeUsers ? tweet.LikeUsers.length: 0}}</span>
+            <span class="tweet-body-foot-liked-count">{{tweet.likesLength}}</span>
           </div>
         </div>
       </div>
-      <TweetReplyModal 
-        :tweet-item="tweetItem"
-        @create-new-reply="createNewReply" />
     </div>
   </div>
 </template>
 
 <script>
-
-import TweetReplyModal from "./TweetReplyModal.vue";
 export default {
   name: "TweetItems",
-  components: {
-    TweetReplyModal,
-  },
   props: {
     initialTweets: {
       type: Array,
       required: true
     }
   },
-  data() {
-    return {
-      tweets: [],
-      tweetItem: {},
-    };
-  },
-  created() {
-    this.fetchTweets();
-  },
   methods: {
-    fetchTweets() {
-      this.tweets = this.initialTweets;
-    },
     toggleTweetReply(tweetId) {
-      this.tweetItem = this.tweets.find(tweet => tweet.id === tweetId);
+      this.$emit("toggle-tweet-reply", tweetId)
     },
-    createNewReply(payload) {
-      const {tweetId, text, User} = payload
-      this.tweets = this.tweets.map((tweet) => {
-        if(tweet.id === tweetId) {
-          console.log(tweetId, text, User)
-        }
-      })
-      
+    addLiked(tweetId) {
+      this.$emit("add-liked", tweetId)
+    },
+    deleteLiked(tweetId) {
+      this.$emit("delete-liked", tweetId)
     },
   },
 };

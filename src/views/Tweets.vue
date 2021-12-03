@@ -3,11 +3,20 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <AddTweet 
+        <AddTweet
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet"/>
-        <TweetItems 
-          :initial-tweets="tweets"/>
+          @create-new-tweet="createNewTweet"
+        />
+        <TweetItems
+          :initial-tweets="tweets"
+          @toggle-tweet-reply="toggleTweetReply"
+          @add-liked="addLiked"
+          @delete-liked="deleteLiked"
+        />
+        <TweetReplyModal
+          :tweet-item="tweetItem"
+          @create-new-reply="createNewReply"
+        />
       </div>
       <PopularUsersCard />
     </div>
@@ -18,7 +27,8 @@
 import Navbar from "./../components/Navbar";
 import TweetItems from "./../components/TweetItems";
 import PopularUsersCard from "./../components/PopularUsersCard";
-import AddTweet from './../components/AddTweet.vue'
+import AddTweet from "./../components/AddTweet.vue";
+import TweetReplyModal from "../components/TweetReplyModal.vue";
 
 const dummyUser = {
   currentUser: {
@@ -51,7 +61,7 @@ const dummyData = {
         createdAt: "2021-11-23T07:25:29.000Z",
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
-      LikeUsers: [{}, {}, {}],
+      likesLength: 3,
       Comments: [{}, {}],
       isLiked: false,
     },
@@ -73,7 +83,8 @@ const dummyData = {
         createdAt: "2021-11-23T07:25:29.000Z",
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
-      LikeUsers: [{}, {}],
+      likesLength: 2,
+      Comments: [],
       isLiked: true,
     },
     {
@@ -94,7 +105,8 @@ const dummyData = {
         createdAt: "2021-11-23T07:25:29.000Z",
         updatedAt: "2021-11-26T04:22:35.000Z",
       },
-      LikeUsers: [{}, {}, {}],
+      likesLength: 3,
+      Comments: [],
       isLiked: true,
     },
   ],
@@ -106,24 +118,26 @@ export default {
     Navbar,
     AddTweet,
     TweetItems,
+    TweetReplyModal,
     PopularUsersCard,
   },
   data() {
     return {
       currentUser: {},
       tweets: [],
-    }
+      tweetItem: {},
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     fetchData() {
-      this.currentUser = dummyUser.currentUser
-      this.tweets = dummyData.tweets
+      this.currentUser = dummyUser.currentUser;
+      this.tweets = dummyData.tweets;
     },
     createNewTweet(payload) {
-      const { tweetId, text, User } = payload
+      const { tweetId, text, User } = payload;
       this.tweets.push({
         id: tweetId,
         text: text,
@@ -133,9 +147,52 @@ export default {
         LikeUsers: [],
         Comments: [],
         isLiked: false,
+      });
+    },
+    toggleTweetReply(tweetId) {
+      this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
+    },
+    createNewReply(payload) {
+      const { replyId, tweetId, text, User } = payload;
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
+          return {
+            ...tweet,
+            Comments: tweet.Comments.push({
+              id: replyId,
+              tweetId,
+              text,
+              User,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            })
+          }
+        } else {return tweet}
+      });
+    },
+    addLiked(tweetId) {
+      this.tweets = this.tweets.map(tweet => {
+        if(tweet.id === tweetId) {
+          return {
+            ...tweet,
+            likesLength: tweet.likesLength + 1,
+            isLiked: true
+          }
+        } else {return tweet}
       })
     },
-  }
+    deleteLiked(tweetId) {
+      this.tweets = this.tweets.map(tweet => {
+        if(tweet.id === tweetId) {
+          return {
+            ...tweet,
+            likesLength: tweet.likesLength - 1,
+            isLiked: false
+          }
+        } else {return tweet}
+      })
+    },
+  },
 };
 </script>
 

@@ -3,7 +3,9 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <AddTweet :current-user="currentUser"/>
+        <AddTweet 
+          :current-user="currentUser"
+          @create-new-tweet="createNewTweet"/>
         <TweetItems :initial-tweets="tweets"/>
       </div>
       <PopularUsersCard />
@@ -118,7 +120,20 @@ export default {
     fetchData() {
       this.currentUser = dummyUser.currentUser
       this.tweets = dummyData.tweets
-    }
+    },
+    createNewTweet(payload) {
+      const { tweetId, text, User } = payload
+      this.tweets.push({
+        id: tweetId,
+        text: text,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        User: User,
+        LikeUsers: [],
+        Comments: [],
+        isLiked: false,
+      })
+    },
   }
 };
 </script>

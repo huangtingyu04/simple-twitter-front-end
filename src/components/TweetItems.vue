@@ -22,7 +22,7 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">2</span>
+            <span class="tweet-body-foot-comment-count">{{tweet.Comments ? tweet.Comments.length: 0}}</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img
@@ -37,7 +37,7 @@
               v-else
               class="tweet-body-foot-liked-icon"
             />
-            <span class="tweet-body-foot-liked-count">3</span>
+            <span class="tweet-body-foot-liked-count">{{tweet.LikeUsers ? tweet.LikeUsers.length: 0}}</span>
           </div>
         </div>
       </div>

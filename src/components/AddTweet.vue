@@ -3,9 +3,10 @@
     <div class="top">首頁</div>
     <div class="addTweet">
       <img :src="currentUser.image" alt="" class="addTweet-icon" />
-      <form action="" class="addTweet-form">
+      <form action="" class="addTweet-form" @submit.stop.prevent="createNewTweet">
         <textarea
           name="tweet"
+          v-model="newTweet"
           id="tweet"
           cols="30"
           rows="10"
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid'
 export default {
   name: "AddTweet",
   props: {
@@ -26,6 +28,23 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      newTweet: ''
+    }
+  },
+  methods: {
+    createNewTweet() {
+      if(!this.newTweet) {
+        return
+      }
+      this.$emit("create-new-tweet", {
+        tweetId: uuidv4(),
+        text: this.newTweet,
+        User: this.currentUser
+      })
+    }
+  }
 };
 </script>
 

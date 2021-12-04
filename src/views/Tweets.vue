@@ -165,32 +165,38 @@ export default {
               User,
               createdAt: new Date(),
               updatedAt: new Date(),
-            })
-          }
-        } else {return tweet}
+            }),
+          };
+        } else {
+          return tweet;
+        }
       });
     },
     addLiked(tweetId) {
-      this.tweets = this.tweets.map(tweet => {
-        if(tweet.id === tweetId) {
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
           return {
             ...tweet,
             likesLength: tweet.likesLength + 1,
-            isLiked: true
-          }
-        } else {return tweet}
-      })
+            isLiked: true,
+          };
+        } else {
+          return tweet;
+        }
+      });
     },
     deleteLiked(tweetId) {
-      this.tweets = this.tweets.map(tweet => {
-        if(tweet.id === tweetId) {
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
           return {
             ...tweet,
             likesLength: tweet.likesLength - 1,
-            isLiked: false
-          }
-        } else {return tweet}
-      })
+            isLiked: false,
+          };
+        } else {
+          return tweet;
+        }
+      });
     },
   },
 };

@@ -59,13 +59,11 @@
         登出
       </router-link>
     </div>
-    <TweetModal :current-user="currentUser" />
+    
   </nav>
 </template>
 
 <script>
-import TweetModal from "../components/TweetModal.vue";
-
 const dummyUser = {
   currentUser: {
     id: 1,
@@ -81,9 +79,6 @@ const dummyUser = {
 
 export default {
   name: "Navbar",
-  components: {
-    TweetModal,
-  },
   data() {
     return {
       currentUser: {

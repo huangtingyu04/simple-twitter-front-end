@@ -13,10 +13,10 @@
         </div>
         <div class="modal-body">
           <div class="modal-body-tweet">
-            <div class="modal-body-tweet-icon"></div>
+            <img :src="currentUser.image" alt="" class="modal-body-tweet-icon">
             <form
               action=""
-              class="modal-body-post-body"
+              class="modal-body-tweet-form"
               @submit.stop.prevent="createNewTweet(currentUser.id)"
             >
               <textarea
@@ -27,13 +27,22 @@
                 rows="10"
                 placeholder="有什麼新鮮事?"
               ></textarea>
-              <button
-                class="btn-tweet"
-                :data-bs-dismiss="submitOK"
-                :disabled="newTweet.length > 140"
-              >
-                推文
-              </button>
+              <div class="addReply-form">
+                <p class="addReply-limit" v-show="newTweet.length > 140">
+                  字數不可超過140字
+                </p>
+                <p class="addReply-empty" v-show="checkEmptyInput">
+                  內容不可空白
+                </p>
+                <button
+                  class="btn-addTweet"
+                  type="submit"
+                  :data-bs-dismiss="submitOK" 
+                  :disabled="newTweet.length > 140"
+                >
+                  推文
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -43,6 +52,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from 'uuid'
+
 export default {
   name: "TweetModal",
   props: {
@@ -74,8 +85,9 @@ export default {
         return;
       }
       this.$emit("create-new-tweet", {
-        tweetId: id,
+        tweetId: uuidv4(),
         text: this.newTweet,
+        User: this.currentUser
       });
       this.newTweet = "";
       this.checkEmptyInput = false;

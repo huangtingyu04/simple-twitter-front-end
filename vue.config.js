@@ -5,5 +5,8 @@ module.exports = {
         data: `@import "@/styles/global.sass";`
       }
     }
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/forum-front-end-vue/'
+    : '/'
 };

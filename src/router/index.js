@@ -12,7 +12,7 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'root',
-      redirect: '/signin'
+      redirect: '/tweets'
     },
     {
       path: '/signin',

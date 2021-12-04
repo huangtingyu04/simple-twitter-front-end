@@ -19,21 +19,9 @@
 
     .main
         flex: 1
-        border-right: 1px solid $input-border
-        min-height: 100vh
 
     .popular-container
         width: 462px
 
         +breakpoint(zone-nb)
             width: 43.5%
-
-//emery 20211204 調整 modal z-index 問題 
-.modal-backdrop.show
-    display: none
-
-.modal
-    width: 100vw
-    height: 100vh
-    background-color: rgba(0, 0, 0, .5)
-    border-radius: 0

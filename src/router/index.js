@@ -73,7 +73,7 @@ const router = new VueRouter({
       component: () => import('../views/AdminSignIn.vue')
     },
     {
-      path: '/admin/    ',
+      path: '/admin/tweets',
       name: 'admin-tweets',
       component: () => import('../views/AdminTweets.vue')
     },

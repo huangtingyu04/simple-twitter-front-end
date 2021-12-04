@@ -17,6 +17,9 @@
           :tweet-item="tweetItem"
           @create-new-reply="createNewReply"
         />
+        <TweetModal 
+          :current-user="currentUser"
+          @create-new-tweet="createNewTweet" />
       </div>
       <PopularUsersCard />
     </div>
@@ -28,6 +31,7 @@ import Navbar from "./../components/Navbar";
 import TweetItems from "./../components/TweetItems";
 import PopularUsersCard from "./../components/PopularUsersCard";
 import AddTweet from "./../components/AddTweet.vue";
+import TweetModal from "./../components/TweetModal.vue"
 import TweetReplyModal from "../components/TweetReplyModal.vue";
 
 const dummyUser = {
@@ -119,6 +123,7 @@ export default {
     AddTweet,
     TweetItems,
     TweetReplyModal,
+    TweetModal,
     PopularUsersCard,
   },
   data() {

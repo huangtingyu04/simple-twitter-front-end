@@ -3,11 +3,9 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <div
-            class="modal-close"
+          <img src="../../public/images/icon_close.png" alt="" class="modal-close"
             data-bs-dismiss="modal"
-            aria-label="Close"
-          >X</div>
+            aria-label="Close">
           <div class="modal-header-title">編輯個人資料
           </div>
           <button class="btn-save" :disabled="savable">儲存</button>

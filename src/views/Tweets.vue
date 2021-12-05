@@ -17,9 +17,10 @@
           :tweet-item="tweetItem"
           @create-new-reply="createNewReply"
         />
-        <TweetModal 
+        <TweetModal
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet" />
+          @create-new-tweet="createNewTweet"
+        />
       </div>
       <PopularUsersCard />
     </div>
@@ -31,7 +32,7 @@ import Navbar from "./../components/Navbar";
 import TweetItems from "./../components/TweetItems";
 import PopularUsersCard from "./../components/PopularUsersCard";
 import AddTweet from "./../components/AddTweet.vue";
-import TweetModal from "./../components/TweetModal.vue"
+import TweetModal from "./../components/TweetModal.vue";
 import TweetReplyModal from "../components/TweetReplyModal.vue";
 
 const dummyUser = {
@@ -67,6 +68,7 @@ const dummyData = {
       },
       likesLength: 3,
       Comments: [{}, {}],
+      commentsLength: 2,
       isLiked: false,
     },
     {
@@ -89,6 +91,7 @@ const dummyData = {
       },
       likesLength: 2,
       Comments: [],
+      commentsLength: 0,
       isLiked: true,
     },
     {
@@ -111,6 +114,7 @@ const dummyData = {
       },
       likesLength: 3,
       Comments: [],
+      commentsLength: 0,
       isLiked: true,
     },
   ],
@@ -150,7 +154,9 @@ export default {
         updatedAt: new Date(),
         User: User,
         LikeUsers: [],
+        likesLength: 0,
         Comments: [],
+        commentsLength: 0,
         isLiked: false,
       });
     },
@@ -159,21 +165,15 @@ export default {
     },
     createNewReply(payload) {
       const { replyId, tweetId, text, User } = payload;
+      console.log(replyId, tweetId, text, User)
       this.tweets = this.tweets.map((tweet) => {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            Comments: tweet.Comments.push({
-              id: replyId,
-              tweetId,
-              text,
-              User,
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            }),
+            commentsLength: tweet.commentsLength + 1
           };
         } else {
-          return tweet;
+          return {...tweet};
         }
       });
     },

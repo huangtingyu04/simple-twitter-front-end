@@ -22,7 +22,7 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">{{tweet.Comments ? tweet.Comments.length: 0}}</span>
+            <span class="tweet-body-foot-comment-count">{{tweet.commentsLength}}</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img

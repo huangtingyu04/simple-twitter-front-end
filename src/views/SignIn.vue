@@ -69,7 +69,7 @@ export default {
       } catch (error) {
         console.log(error)
         errorToast.fire({
-          title: "無法登入，請輸入正確帳號密碼"
+          title: `無法登入-${error.message}`
         })
         this.isProcessing = false
       }

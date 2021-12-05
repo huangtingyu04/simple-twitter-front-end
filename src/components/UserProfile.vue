@@ -46,18 +46,16 @@
         <UserNavPills />
       </div>
     </div>
-    <UserEditModal />
+    
   </div>
 </template>
 
 <script>
-import UserEditModal from '../components/UserEditModal.vue'
 import UserNavPills from '../components/UserNavPills.vue'
 export default {
   name: "UserProfile",
   components: {
-    UserEditModal,
-    UserNavPills
+    UserNavPills,
   }
 };
 </script>

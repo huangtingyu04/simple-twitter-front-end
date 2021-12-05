@@ -69,6 +69,7 @@ const dummyData = {
       likesLength: 3,
       Comments: [{}, {}],
       commentsLength: 2,
+      Likes: [{}],
       isLiked: false,
     },
     {

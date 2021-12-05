@@ -3,9 +3,12 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile :current-user="currentUser" />
-        <TweetItems />
+        <UserProfile 
+          :current-user="currentUser"
+          :user="user" />
+        <TweetItems :initial-tweets="tweets"/>
         <UserEditModal :current-user="currentUser" />
+        <TweetModal :current-user="currentUser" />
       </div>
       <PopularUsersCard />
     </div>
@@ -79,6 +82,7 @@ const dummyData = {
         },
       },
     ],
+    isLiked: true,
     // 推文被 like 的數量
     Likes: [
       {
@@ -231,6 +235,7 @@ import Navbar from "./../components/Navbar";
 import UserProfile from "../components/UserProfile.vue";
 import TweetItems from "../components/TweetItems.vue";
 import UserEditModal from "../components/UserEditModal.vue";
+import TweetModal from '../components/TweetModal.vue'
 import PopularUsersCard from "./../components/PopularUsersCard";
 
 export default {
@@ -240,6 +245,7 @@ export default {
     UserProfile,
     TweetItems,
     UserEditModal,
+    TweetModal,
     PopularUsersCard,
   },
   data() {
@@ -251,6 +257,7 @@ export default {
         account: '', 
         email: '', 
         image: '', 
+        isLiked: false,
         followingsLength: 0, 
         followersLength: 0
       },
@@ -263,8 +270,9 @@ export default {
   methods: {
     fetchData() {
       this.currentUser = dummyUser.currentUser;
-      const { id, name, account, email, image, Tweets, Followings, Followers } = dummyData.users;
+      const { id, name, account, email, image, Tweets, Followings, Followers, isLiked } = dummyData.users;
       this.user = { id, name, account, email, image,
+        isLiked,
         followingsLength: Followings? Followings.length: 0,
         followersLength: Followers ? Followers.length: 0 };
       this.tweets = Tweets;

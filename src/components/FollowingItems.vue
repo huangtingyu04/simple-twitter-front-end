@@ -1,46 +1,46 @@
 <template>
   <div class="follow">
-    <img :src="follower.image" class="follow-icon">
+    <img :src="following.image" class="follow-icon">
     <div class="follow-content">
       <div class="follow-content-head">
         <div class="follow-content-head-title">
-          <div class="follow-content-head-title-name">{{ follower.name }}</div>
-          <div class="follow-content-head-title-account">@{{ follower.account }}</div>
+          <div class="follow-content-head-title-name">{{ following.name }}</div>
+          <div class="follow-content-head-title-account">@{{ following.account }}</div>
         </div>
-        <button class="isfollow" v-if="!follower.isFollowing" @click.prevent.stop="addFollowing(follower.id)">跟隨</button>
-        <button class="unfollow" v-else @click.prevent.stop="deleteFollowing(follower.id)">正在跟隨</button>
+        <button class="isfollow" v-if="!following.isFollowing" @click.prevent.stop="addFollowing(following.id)">跟隨</button>
+        <button class="unfollow" v-else @click.prevent.stop="deleteFollowing(following.id)">正在跟隨</button>
       </div>
-      <div class="follow-content-body">{{ follower.text }}</div>
+      <div class="follow-content-body">{{ following.text }}</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'FollowItems',
+  name: 'FollowingItems',
   props: {
-    initialFollower: {
+    initialFollowing: {
       type: Object,
       required: true
     }
   },
   data () {
     return {
-      follower: this.initialFollower
+      following: this.initialFollowing
     }
   },
   methods: {
-    addFollowing(followerId) {
-      console.log(followerId)
-      this.follower = {
-        ...this.follower,
+    addFollowing(followingId) {
+      console.log(followingId)
+      this.following = {
+        ...this.following,
         isFollowing: true
       }
     },
-    deleteFollowing(followerId) {
-      console.log(followerId)
-      this.follower = {
-        ...this.follower,
+    deleteFollowing(followingId) {
+      console.log(followingId)
+      this.following = {
+        ...this.following,
         isFollowing: false
       }
     }

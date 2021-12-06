@@ -8,18 +8,18 @@
         @click="$router.back()"
       />
       <div class="top-title">
-        <div class="top-title-name">John Doe</div>
+        <div class="top-title-name">{{user.name}}</div>
         <div class="top-title-tweet">
-          25<span class="top-title-tweet-count">推文</span>
+          {{user.tweetsCount}}<span class="top-title-tweet-count"> 推文</span>
         </div>
       </div>
     </div>
     <div class="user">
-      <img src="https://i.imgur.com/ifqzNgs.png" alt="" class="user-bg" />
+      <img :src="user.cover" alt="" class="user-bg" />
       <div class="user-header">
         <div class="user-header-container">
           <img
-            src="https://i.imgur.com/RGxqLdu.png"
+            :src="user.avatar"
             alt=""
             class="user-header-container-photo"
           />
@@ -63,26 +63,25 @@
         </div>
       </div>
       <div class="user-title">
-        <div class="user-title-name">John Doe</div>
-        <div class="user-title-account">@heyjohn</div>
+        <div class="user-title-name">{{user.name}}</div>
+        <div class="user-title-account">@{{user.account}}</div>
       </div>
       <div class="user-info">
         <div class="user-info-content">
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-          sint.
+          {{user.introduction}}
         </div>
         <div class="user-info-feat">
           <router-link
             :to="{ name: 'user-followings', params: 1 }"
             class="user-info-feat-following"
           >
-            34 個<span class="user-info-feat-unit">跟隨中</span>
+            {{user.followingsLength}} 個<span class="user-info-feat-unit">跟隨中</span>
           </router-link>
           <router-link
             :to="{ name: 'user-followers', params: 1 }"
             class="user-info-feat-follower"
           >
-            59 位<span class="user-info-feat-unit">跟隨者</span>
+            {{user.followersLength}} 位<span class="user-info-feat-unit">跟隨者</span>
           </router-link>
         </div>
       </div>

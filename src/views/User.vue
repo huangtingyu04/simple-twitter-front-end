@@ -7,7 +7,9 @@
           :current-user="currentUser"
           :user="user" />
         <TweetItems :initial-tweets="tweets"/>
-        <UserEditModal :current-user="currentUser" />
+        <UserEditModal 
+          :current-user="currentUser" 
+          @user-update="userUpdate"/>
         <TweetModal :current-user="currentUser" />
       </div>
       <PopularUsersCard />
@@ -23,7 +25,9 @@ const dummyUser = {
     account: "apple",
     email: "apple@example.com",
     password: "12345678",
-    image: "https://i.imgur.com/RGxqLdu.png",
+    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
+    avatar: "https://i.imgur.com/RGxqLdu.png",
+    cover: 'https://i.imgur.com/ifqzNgs.png',
   },
 };
 
@@ -33,7 +37,10 @@ const dummyData = {
     name: "Apple",
     account: "apple",
     email: "apple@example.com",
-    image: "https://i.imgur.com/RGxqLdu.png",
+    password: "12345678",
+    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
+    avatar: "https://i.imgur.com/RGxqLdu.png",
+    cover: 'https://i.imgur.com/ifqzNgs.png',
     Followings: [
       {
         id: "1",
@@ -255,11 +262,14 @@ export default {
         id: 0,
         name: '', 
         account: '', 
-        email: '', 
-        image: '', 
+        email: '',
+        introduction: '',
+        avatar: '',
+        cover: '',
         isLiked: false,
         followingsLength: 0, 
-        followersLength: 0
+        followersLength: 0,
+        tweetsCount: 0,
       },
       tweets: [],
     };
@@ -270,12 +280,22 @@ export default {
   methods: {
     fetchData() {
       this.currentUser = dummyUser.currentUser;
-      const { id, name, account, email, image, Tweets, Followings, Followers, isLiked } = dummyData.users;
-      this.user = { id, name, account, email, image,
+      const { id, name, account, email, avatar, cover, introduction, Tweets, Followings, Followers, isLiked } = dummyData.users;
+      this.user = { id, name, account, email, avatar, cover,
         isLiked,
         followingsLength: Followings? Followings.length: 0,
-        followersLength: Followers ? Followers.length: 0 };
+        followersLength: Followers ? Followers.length: 0,
+        introduction,
+        tweetsCount: Tweets ? Tweets.length: 0,
+      };
       this.tweets = Tweets;
+    },
+    userUpdate(payload) {
+      const { name, introduction, avatar, cover } = payload
+      this.user.name = name
+      this.user.introduction = introduction
+      this.user.avatar = avatar
+      this.user.cover = cover
     },
   },
 };

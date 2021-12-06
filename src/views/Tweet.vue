@@ -115,16 +115,14 @@ export default {
           title: "無法取得推文",
         });
       }
-      
-      
-      
     },
     createNewReply(payload) {
-      const { replyId, tweetId, text, User } = payload;
+      const { replyId, tweetId, comment, User } = payload;
+      console.log(comment)
       this.replies.push({
         id: replyId,
         tweetId,
-        text,
+        comment,
         User,
         createdAt: new Date(),
         updatedAt: new Date(),

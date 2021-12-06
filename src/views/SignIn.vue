@@ -61,6 +61,13 @@ export default {
         if(data.status !== 'success' || statusText !== 'OK') {
           throw new Error(data.message)
         }
+        if(data.user.role === "admin") {
+          errorToast.fire({
+            title: '請至後台登入',
+          })
+          this.$router.push('/admin/signin')
+          return
+        }
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
         this.isProcessing = false

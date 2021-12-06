@@ -1,23 +1,62 @@
 <template>
   <div class="profile">
     <div class="top">
-      <img src="../../public/images/icon_back.png" alt="" class="top-back" @click="$router.back()">
+      <img
+        src="../../public/images/icon_back.png"
+        alt=""
+        class="top-back"
+        @click="$router.back()"
+      />
       <div class="top-title">
         <div class="top-title-name">John Doe</div>
-        <div class="top-title-tweet">25<span class="top-title-tweet-count">推文</span></div>
+        <div class="top-title-tweet">
+          25<span class="top-title-tweet-count">推文</span>
+        </div>
       </div>
     </div>
     <div class="user">
       <img src="https://i.imgur.com/ifqzNgs.png" alt="" class="user-bg" />
       <div class="user-header">
         <div class="user-header-container">
-          <img src="https://i.imgur.com/RGxqLdu.png" alt="" class="user-header-container-photo" />
+          <img
+            src="https://i.imgur.com/RGxqLdu.png"
+            alt=""
+            class="user-header-container-photo"
+          />
         </div>
         <div class="user-header-edit">
+          <img
+            src="../../public/images/btn_messege.png"
+            alt=""
+            class="user-header-edit-message"
+            v-show="currentUser.id !== user.id"
+          />
+          <img
+            src="../../public/images/btn_noti.png"
+            alt=""
+            class="user-header-edit-notice"
+            v-show="currentUser.id !== user.id"
+          />
           <button
-            class="btn-edit"
+            v-if="!user.isLiked"
+            class="user-header-edit-follow"
+            v-show="currentUser.id !== user.id"
+          >
+            跟隨
+          </button>
+          <button
+            v-else
+            class="user-header-edit-unfollow"
+            v-show="currentUser.id !== user.id"
+          >
+            正在跟隨
+          </button>
+
+          <button
+            class="user-header-edit-edit"
             data-bs-toggle="modal"
             data-bs-target="#user-edit-modal"
+            v-show="currentUser.id === user.id"
           >
             編輯個人資料
           </button>
@@ -28,17 +67,22 @@
         <div class="user-title-account">@heyjohn</div>
       </div>
       <div class="user-info">
-        <div class="user-info-content">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. </div>
+        <div class="user-info-content">
+          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
+          sint.
+        </div>
         <div class="user-info-feat">
-          <router-link :to="{name: 'user-followings', params: 1}" class="user-info-feat-following">
-            34 個<span class="user-info-feat-unit"
-              >跟隨中</span
-            >
+          <router-link
+            :to="{ name: 'user-followings', params: 1 }"
+            class="user-info-feat-following"
+          >
+            34 個<span class="user-info-feat-unit">跟隨中</span>
           </router-link>
-          <router-link :to="{name: 'user-followers', params: 1}"  class="user-info-feat-follower">
-            59 位<span class="user-info-feat-unit"
-              >跟隨者</span
-            >
+          <router-link
+            :to="{ name: 'user-followers', params: 1 }"
+            class="user-info-feat-follower"
+          >
+            59 位<span class="user-info-feat-unit">跟隨者</span>
           </router-link>
         </div>
       </div>
@@ -46,24 +90,30 @@
         <UserNavPills />
       </div>
     </div>
-    <UserEditModal />
   </div>
 </template>
 
 <script>
-import UserEditModal from '../components/UserEditModal.vue'
-import UserNavPills from '../components/UserNavPills.vue'
+import UserNavPills from "../components/UserNavPills.vue";
 export default {
   name: "UserProfile",
   components: {
-    UserEditModal,
-    UserNavPills
-  }
+    UserNavPills,
+  },
+  props: {
+    currentUser: {
+      type: Object,
+      required: true,
+    },
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
 
 <style lang="sass" scoped>
-
 .top
   padding: 6px 19px 6px 19px
   height: 55px
@@ -112,20 +162,54 @@ export default {
         +breakpoint(zone-nb)
           width: 120px
           height: 120px
-    button
+    .user-header-edit
       margin-top: 86px
-      width: 120px
-      height: 35px
-      background: $light
-      color: $mainColor
-      border: 1px solid $mainColor
+      display: flex
       font-size: 15px
       font-weight: 700
-      border-radius: 100px
-      +breakpoint(zone-nb)
-        font-size: 10px
-        width: 100px
-        height: 30px
+      img
+        width: 35px
+        height: 35px
+        object-fit: cover
+        cursor: pointer
+        margin-right: 5%
+        +breakpoint(zone-nb)
+          width: 30px
+          height: 30px
+          margin-right: 3%
+      .user-header-edit-follow
+        width: 60px
+        height: 35px
+        color: $mainColor
+        background: $light
+        border: 1px solid $mainColor
+        border-radius: 100px
+        +breakpoint(zone-nb)
+          font-size: 10px
+          width: 55px
+          height: 30px
+      .user-header-edit-unfollow
+        width: 90px
+        height: 35px
+        color: $light
+        background: $mainColor
+        border: 1px solid $mainColor
+        border-radius: 100px
+        +breakpoint(zone-nb)
+          font-size: 10px
+          width: 75px
+          height: 30px
+      .user-header-edit-edit
+        width: 120px
+        height: 35px
+        background: $light
+        color: $mainColor
+        border: 1px solid $mainColor
+        border-radius: 100px
+        +breakpoint(zone-nb)
+          font-size: 10px
+          width: 100px
+          height: 30px
   .user-title
     padding: 5px 15px 0 15px
     .user-title-name

@@ -12,7 +12,7 @@
                 type="text"
                 id="account"
                 placeholder="@wonderman"
-                v-model="account"
+                v-model="user.account"
               />
             </div>
             <div class="input-field">
@@ -21,7 +21,7 @@
                 type="text"
                 id="name"
                 placeholder="John Doe"
-                v-model="name"
+                v-model="user.name"
               />
             </div>
             <div class="input-field">
@@ -30,7 +30,7 @@
                 type="text"
                 id="email"
                 placeholder="JohnDoe@gmail.com"
-                v-model="email"
+                v-model="user.email"
               />
             </div>
             <div class="input-field">
@@ -41,8 +41,8 @@
               <label for="passwordConfirmed">密碼確認</label>
               <input
                 type="password"
-                id="passwordConfirmed"
-                v-model="password"
+                id="checkPassword"
+                v-model="checkPassword"
               />
             </div>
             <div class="input-field input-alert">
@@ -58,33 +58,45 @@
         </div>
       </div>
     </div>
+    <TweetModal :current-user="user"/>
   </div>
 </template>
 
 <script>
 import Navbar from "./../components/Navbar";
+import TweetModal from '../components/TweetModal.vue'
+import { successToast, errorToast } from '../utils/toast'
 
 const dummyUser = {
   currentUser: {
-    id: 1,
-    name: "John Doe",
-    account: "JohnDoe",
-    email: "John@example.com",
+    id: "1",
+    name: "Apple",
+    account: "apple",
+    email: "apple@example.com",
     password: "12345678",
+    introduction:
+      "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
+    avatar: "https://i.imgur.com/RGxqLdu.png",
+    cover: "https://i.imgur.com/ifqzNgs.png",
   },
 };
 
 export default {
   components: {
     Navbar,
+    TweetModal
   },
   data() {
     return {
-      id: -1,
-      name: "",
-      account: "",
-      email: "",
-      password: "",
+      user: {
+        id: -1,
+        name: "",
+        account: "",
+        email: "",
+        avatar: ''
+      },
+      password: '',
+      checkPassword: ''
     };
   },
   methods: {
@@ -93,15 +105,23 @@ export default {
         ...this.currentUser,
         ...dummyUser.currentUser,
       };
-      const { id, name, account, email, password } = dummyUser.currentUser;
-
-      this.id = id;
-      this.name = name;
-      this.account = account;
-      this.email = email;
-      this.password = password;
+      const { id, name, account, email, avatar } = dummyUser.currentUser;
+      this.user = { id, name, account, email, avatar }
+      
     },
     handleSubmit() {
+      if(!this.password || !this.checkPassword) {
+        errorToast.fire({
+          title: '請填寫密碼與密碼確認後送出'
+        })
+        return
+      }
+      if(this.password !== this.checkPassword) {
+        errorToast.fire({
+          title: '兩次密碼輸入不一致'
+        })
+        return
+      }
       const data = JSON.stringify({
         id: this.id,
         name: this.name,
@@ -110,6 +130,9 @@ export default {
         password: this.password,
       });
       console.log("data", data);
+      successToast.fire({
+        title: '個人資訊儲存成功'
+      })
     },
   },
   created() {

@@ -118,7 +118,6 @@ export default {
     },
     createNewReply(payload) {
       const { replyId, tweetId, comment, User } = payload;
-      console.log(comment)
       this.replies.push({
         id: replyId,
         tweetId,

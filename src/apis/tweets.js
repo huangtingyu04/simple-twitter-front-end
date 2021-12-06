@@ -7,8 +7,8 @@ export default {
   getTweet({ tweetId }) {
     return apiHelper.get(`/tweets/${tweetId}`)
   },
-  create({ description }) {
-    return apiHelper.post('/tweets', { description })
+  create( {description} ) {
+    return apiHelper.post('/tweets', {description} )
   },
   reply( tweetId, reply ) {
     return apiHelper.post(`/tweets/${tweetId}/replies`, reply )

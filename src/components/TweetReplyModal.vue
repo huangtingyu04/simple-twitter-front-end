@@ -128,7 +128,6 @@ export default {
   methods: {
     async createNewReply(tweetId) {
       try {
-        console.log(tweetId);
         if (!this.newReply.trim()) {
           this.checkEmptyInput = true;
           return;
@@ -158,11 +157,9 @@ export default {
         console.log(error);
         this.isProcessing = false
         errorToast.fire({
-          title: "無法留言",
+          title: `無法回復推文-${error.message}`,
         });
       }
-
-      
     },
   },
 };

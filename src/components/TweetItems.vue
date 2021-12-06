@@ -11,7 +11,7 @@
           <span> · </span>
           <div class="tweet-body-head-time">{{ tweet.createdAt }}</div>
         </div>
-        <router-link to="/tweets/1" class="tweet-body-content">{{ tweet.text }}</router-link>
+        <router-link :to="{ name: 'tweet', params: { id: tweet.id } }" class="tweet-body-content">{{ tweet.text }}</router-link>
         <div class="tweet-body-foot">
           <div class="tweet-body-foot-comment">
             <img

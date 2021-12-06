@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="user-follow">
-          <FollowNavPills />
+          <FollowNavPills :userId="id" />
           <FollowItems v-for="follower in followers" :key="follower.id"  :initial-follower="follower" />
         </div>
       </div>

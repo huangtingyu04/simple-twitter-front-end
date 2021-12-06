@@ -24,7 +24,7 @@
           <div class="modal-body">
             <div class="modal-body-bg">
               <img
-                :src="userCover"
+                :src="userCover | emptyImage"
                 alt=""
                 class="modal-body-bg-photo"
               />
@@ -46,7 +46,7 @@
             </div>
             <div class="modal-body-header">
               <img
-                :src="userAvatar"
+                :src="userAvatar |emptyImage"
                 alt=""
                 class="modal-body-header-photo"
               />
@@ -115,8 +115,11 @@
 </template>
 
 <script>
+ import { emptyImageFilter } from '../utils/mixins'
+
 export default {
   name: "UserEditModal",
+  mixins: [ emptyImageFilter ],
   props: {
     currentUser: {
       type: Object,

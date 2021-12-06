@@ -1,12 +1,12 @@
 <template>
   <div class="replies">
     <div class="reply" v-for="reply in replies" :key="reply.id">
-      <img :src="reply.User? reply.User.image: ''" alt="" class="reply-icon">
+      <img :src="reply.User? reply.User.image: '' | emptyImage" alt="" class="reply-icon">
       <div class="reply-content">
         <div class="reply-content-title">
           <div class="reply-content-title-name">{{reply.User? reply.User.name: ''}}</div>
           <div class="reply-content-title-account">@{{reply.User? reply.User.account: ''}}<span>・</span></div>
-          <div class="reply-content-title-time">{{reply.createdAt}}</div>
+          <div class="reply-content-title-time">{{reply.createdAt | fromNow}}</div>
         </div>
         <div class="reply-content-target">回覆
           <span class="reply-content-target-account">@{{reply.tweetTarget}}</span>
@@ -18,8 +18,11 @@
 </template>
 
 <script>
+import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+
 export default {
   name: 'ReplyItems',
+  mixins: [ fromNowFilter, emptyImageFilter ],
   props: {
     replies: {
       type: Array,

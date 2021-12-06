@@ -1,6 +1,6 @@
 <template>
   <div class="follow">
-    <img :src="follower.image" class="follow-icon">
+    <img :src="follower.image | emptyImage" class="follow-icon">
     <div class="follow-content">
       <div class="follow-content-head">
         <div class="follow-content-head-title">
@@ -16,8 +16,11 @@
 </template>
 
 <script>
+import { emptyImageFilter } from '../utils/mixins'
+
 export default {
   name: 'FollowItems',
+  mixins: [ emptyImageFilter ],
   props: {
     initialFollower: {
       type: Object,

@@ -12,7 +12,9 @@
         @add-liked="addLiked"
         @delete-liked="deleteLiked"
         />
-        <UserEditModal :current-user="currentUser" />
+        <UserEditModal 
+          :current-user="currentUser"
+          @user-update="userUpdate" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           @create-new-reply="createNewReply"

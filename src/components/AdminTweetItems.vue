@@ -5,7 +5,7 @@
       <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
         <div class="tweet-icon">
           <img
-            :src="tweet.User.image"
+            :src="tweet.User.image | emptyImage"
             alt="user-icon"
             class="tweet-icon-photo"
           />
@@ -14,7 +14,7 @@
           <div class="tweet-body-head">
             <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
             <span> · </span>
-            <div class="tweet-body-head-time">{{ tweet.createdAt }}</div>
+            <div class="tweet-body-head-time">{{ tweet.createdAt | fromNow}}</div>
           </div>
           <a href="" class="tweet-body-content">{{ tweet.text }}</a>
         </div>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+
 const dummyData = {
   tweets: [
     {
@@ -102,6 +104,7 @@ const dummyData = {
 
 export default {
   name: "AdminTweetItems",
+  mixins: [ fromNowFilter, emptyImageFilter ],
   data() {
     return {
       tweets: [],
@@ -131,5 +134,4 @@ export default {
   font-weight: 700
   color: $text-content
   border-bottom: 1px solid $input-border
-  
 </style>

@@ -5,7 +5,7 @@
       <div class="popluar-item" v-for="user in popularUsers" :key="user.id">
         <div class="user-info">
           <div class="user-img">
-            <img :src="user.image" />
+            <img :src="user.image | emptyImage" />
           </div>
           <div class="user-content">
             <div class="name">{{ user.name }}</div>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { emptyImageFilter } from '../utils/mixins'
+
 const dummyData = {
   popularUsers: [
     {
@@ -76,6 +78,8 @@ const dummyData = {
 };
 
 export default {
+  name: 'PopularUsersCards',
+  mixins: [ emptyImageFilter ],
   data() {
     return {
       popularUsers: [],

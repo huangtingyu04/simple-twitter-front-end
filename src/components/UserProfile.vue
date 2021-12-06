@@ -118,6 +118,7 @@ export default {
   height: 55px
   display: flex
   align-items: center
+  border-bottom: 1px solid $input-border
   .top-back
     width: 24px
     height: 24px

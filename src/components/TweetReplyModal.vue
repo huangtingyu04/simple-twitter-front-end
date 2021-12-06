@@ -15,7 +15,7 @@
           <div class="modal-body-post">
             <div class="modal-body-post-head">
               <img
-                :src="tweetItem.User ? tweetItem.User.image: ''"
+                :src="tweetItem.User ? tweetItem.User.image: '' | emptyImage"
                 alt=""
                 class="modal-body-post-head-icon"
               />
@@ -31,7 +31,7 @@
                 </div>
                 <span> · </span>
                 <div class="modal-body-post-body-head-time">
-                  {{ tweetItem.createdAt }}
+                  {{ tweetItem.createdAt | fromNow}}
                 </div>
               </div>
               <div class="modal-body-post-body-content">
@@ -90,6 +90,7 @@
 
 <script>
 import { v4 as uuidv4 } from 'uuid'
+import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 
 const dummyUser = {
   currentUser: {
@@ -104,6 +105,7 @@ const dummyUser = {
 
 export default {
   name: "TweetReplyModal",
+  mixins: [ fromNowFilter, emptyImageFilter ],
   props: {
     tweetItem: {
       type: Object,

@@ -9,7 +9,7 @@
             :style="{ 'background-image': 'url(' + user.imgCover + ')' }"
           ></div>
           <div class="avatar">
-            <img :src="user.image" />
+            <img :src="user.image | emptyImage" />
           </div>
         </div>
         <div class="card-user-name">{{ user.name }}</div>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import { emptyImageFilter } from '../utils/mixins'
+
 const dummyData = {
   users: [
     {
@@ -74,6 +76,7 @@ const dummyData = {
 };
 export default {
   name: "AdminUserCards",
+  mixins: [ emptyImageFilter ],
   data() {
     return {
       users: [],

@@ -2,14 +2,14 @@
   <div class="tweets">
     <div class="tweet" v-for="tweet in initialTweets" :key="tweet.id">
       <div class="tweet-icon">
-        <img :src="tweet.User.image" alt="user-icon" class="tweet-icon-photo" />
+        <img :src="tweet.User.image | emptyImage" alt="user-icon" class="tweet-icon-photo" />
       </div>
       <div class="tweet-body">
         <div class="tweet-body-head">
           <div class="tweet-body-head-name">{{tweet.User.name}}</div>
           <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
           <span> · </span>
-          <div class="tweet-body-head-time">{{ tweet.createdAt }}</div>
+          <div class="tweet-body-head-time">{{ tweet.createdAt | fromNow }}</div>
         </div>
         <router-link :to="{ name: 'tweet', params: { id: tweet.id } }" class="tweet-body-content">{{ tweet.text }}</router-link>
         <div class="tweet-body-foot">
@@ -48,8 +48,11 @@
 </template>
 
 <script>
+import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+
 export default {
   name: "TweetItems",
+  mixins: [ fromNowFilter, emptyImageFilter ],
   props: {
     initialTweets: {
       type: Array,

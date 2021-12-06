@@ -1,12 +1,17 @@
 <template>
   <div>
     <div class="top">
-      <img src="./../../public/images/icon_back.png" alt="" class="top-back" @click="$router.back()"/>
+      <img
+        src="./../../public/images/icon_back.png"
+        alt=""
+        class="top-back"
+        @click="$router.back()"
+      />
       <p class="top-title">推文</p>
     </div>
     <div class="content">
       <div class="content-header">
-        <img :src="tweet.image" alt="" class="content-header-icon" />
+        <img :src="tweet.image | emptyImage" alt="" class="content-header-icon" />
         <div class="content-header-title">
           <div class="content-header-title-name">{{ tweet.name }}</div>
           <div class="content-header-title-account">@{{ tweet.account }}</div>
@@ -15,7 +20,7 @@
       <div class="content-body">
         {{ tweet.text }}
       </div>
-      <div class="content-time">{{ tweet.createdAt }}</div>
+      <div class="content-time">{{ tweet.createdAt | fromNow }}</div>
       <div class="content-info">
         <div class="content-info-reply">
           <div class="content-info-reply-count">
@@ -58,25 +63,28 @@
 </template>
 
 <script>
+import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+
 export default {
   name: "TweetContent",
+  mixins: [ fromNowFilter, emptyImageFilter ],
   props: {
     initialTweet: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       tweet: {},
-    }
+    };
   },
   created() {
-    this.fetchTweet()
+    this.fetchTweet();
   },
   methods: {
     fetchTweet() {
-      this.tweet = this.initialTweet
+      this.tweet = this.initialTweet;
     },
     addLike() {
       this.tweet.isLiked = true;

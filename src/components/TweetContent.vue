@@ -93,8 +93,9 @@ export default {
 <style lang="sass" scoped>
 .top
   height: 55px
-  padding: 15px
+  padding: 6px 19px 6px 19px
   display: flex
+  align-items: center
   border-bottom: 1px solid $input-border
   .top-back
     width: 24px

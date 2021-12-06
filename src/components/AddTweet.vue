@@ -63,7 +63,7 @@ export default {
 
 .top
   height: 55px
-  padding: 15px
+  padding: 13px 20px 14px 20px
   font-size: 18px
   font-weight: 700
   color: $text-content

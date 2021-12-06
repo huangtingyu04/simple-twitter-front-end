@@ -51,7 +51,7 @@
           </div>
           <div class="modal-body-tweet">
             <img
-              :src="currentUser.image"
+              :src="currentUser.avatar"
               alt=""
               class="modal-body-tweet-icon"
             />
@@ -92,17 +92,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 
-const dummyUser = {
-  currentUser: {
-    id: "1",
-    name: "Apple",
-    account: "apple",
-    email: "apple@example.com",
-    password: "12345678",
-    image: "https://i.imgur.com/RGxqLdu.png",
-  },
-};
-
 export default {
   name: "TweetReplyModal",
   mixins: [ fromNowFilter, emptyImageFilter ],
@@ -111,10 +100,15 @@ export default {
       type: Object,
       required: true,
     },
+    currentUser: {
+      type: Object,
+      required: true,
+    },
   },
+  
   data() {
     return {
-      currentUser: {},
+      
       newReply: '',
       checkEmptyInput: false,
       
@@ -129,13 +123,7 @@ export default {
       }
     }
   },
-  created() {
-    this.fetchUser();
-  },
   methods: {
-    fetchUser() {
-      this.currentUser = dummyUser.currentUser;
-    },
     createNewReply(tweetId) {
       console.log(tweetId)
       if(!this.newReply) {

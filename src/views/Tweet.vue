@@ -6,7 +6,7 @@
         <TweetContent :initial-tweet="tweet"/>
         <ReplyItems 
           :replies="replies"
-          :tweet-target="tweetTarget"/>
+          />
         <TweetReplyModal 
           :tweet-item="tweetItem"
           @create-new-reply="createNewReply"/>
@@ -46,6 +46,7 @@ const dummyData = {
         },
         createdAt: "2019-06-22T09:00:43.000Z",
         text: "Great~",
+        tweetTarget: 'apple',
       },
       {
         id: 2,
@@ -57,6 +58,7 @@ const dummyData = {
         },
         createdAt: "2019-06-22T09:00:43.000Z",
         text: "Good Job!",
+        tweetTarget: 'apple',
       },
       {
         id: 3,
@@ -68,6 +70,7 @@ const dummyData = {
         },
         createdAt: "2019-06-22T09:00:43.000Z",
         text: "Moter Forker!",
+        tweetTarget: 'apple',
       },
     ],
     Likes: [{}, {}],

@@ -40,6 +40,16 @@ const router = new VueRouter({
       component: () => import('../views/User.vue')
     },
     {
+      path: '/users/:id/reply',
+      name: 'user-reply',
+      component: () => import('../views/UserReply.vue')
+    },
+    {
+      path: '/users/:id/like',
+      name: 'user-like',
+      component: () => import('../views/UserLike.vue')
+    },
+    {
       path: '/users/:id/setting',
       name: 'user-setting',
       component: () => import('../views/UserSetting.vue')

@@ -86,7 +86,7 @@
         </div>
       </div>
       <div class="user-navPill">
-        <UserNavPills />
+        <UserNavPills :current-user-id="currentUser.id" />
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@
           <div class="reply-content-title-time">{{reply.createdAt}}</div>
         </div>
         <div class="reply-content-target">回覆
-          <span class="reply-content-target-account">@{{tweetTarget}}</span>
+          <span class="reply-content-target-account">@{{reply.tweetTarget}}</span>
         </div>
         <div class="reply-content-comment">{{reply.text}}</div>
       </div>
@@ -23,10 +23,6 @@ export default {
   props: {
     replies: {
       type: Array,
-      required: true,
-    },
-    tweetTarget: {
-      type: String,
       required: true,
     },
   }

@@ -11,14 +11,14 @@
     </div>
     <div class="content">
       <div class="content-header">
-        <img :src="tweet.image | emptyImage" alt="" class="content-header-icon" />
+        <img :src="tweet.avatar | emptyImage" alt="" class="content-header-icon" />
         <div class="content-header-title">
           <div class="content-header-title-name">{{ tweet.name }}</div>
           <div class="content-header-title-account">@{{ tweet.account }}</div>
         </div>
       </div>
       <div class="content-body">
-        {{ tweet.text }}
+        {{ tweet.description }}
       </div>
       <div class="content-time">{{ tweet.createdAt | fromNow }}</div>
       <div class="content-info">
@@ -79,13 +79,15 @@ export default {
       tweet: {},
     };
   },
-  created() {
-    this.fetchTweet();
+  watch: {
+    initialTweet(newValue) {
+      this.tweet = {
+        ...this.tweet,
+        ...newValue,
+      }
+    }
   },
   methods: {
-    fetchTweet() {
-      this.tweet = this.initialTweet;
-    },
     addLike() {
       this.tweet.isLiked = true;
       this.tweet.likeLength = this.tweet.likeLength + 1;

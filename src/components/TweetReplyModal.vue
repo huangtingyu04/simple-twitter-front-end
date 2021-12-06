@@ -15,7 +15,7 @@
           <div class="modal-body-post">
             <div class="modal-body-post-head">
               <img
-                :src="tweetItem.User ? tweetItem.User.image: '' | emptyImage"
+                :src="tweetItem.User ? tweetItem.User.avatar: '' | emptyImage"
                 alt=""
                 class="modal-body-post-head-icon"
               />
@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="modal-body-post-body-content">
-                {{ tweetItem.text }}
+                {{ tweetItem.description }}
               </div>
               <div class="modal-body-post-body-foot">
                 <div class="modal-body-post-body-foot-reply">

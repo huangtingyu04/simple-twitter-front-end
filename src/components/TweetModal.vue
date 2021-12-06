@@ -13,7 +13,7 @@
         </div>
         <div class="modal-body">
           <div class="modal-body-tweet">
-            <img :src="currentUser.image" alt="" class="modal-body-tweet-icon">
+            <img :src="currentUser.avatar" alt="" class="modal-body-tweet-icon">
             <form
               action=""
               class="modal-body-tweet-form"

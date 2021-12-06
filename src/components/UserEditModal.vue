@@ -24,7 +24,7 @@
           <div class="modal-body">
             <div class="modal-body-bg">
               <img
-                src="https://i.imgur.com/ifqzNgs.png"
+                :src="userCover"
                 alt=""
                 class="modal-body-bg-photo"
               />
@@ -33,17 +33,20 @@
                   src="../../public/images/icon_uploadPhoto.png"
                   alt=""
                   class="modal-body-bg-option-edit"
+                  @click="updateCover"
                 />
                 <img
                   src="../../public/images/icon_delete.png"
                   alt=""
                   class="modal-body-bg-option-delete"
+                  @click="removeCover"
                 />
+                <input type="file" name="cover" id="cover" ref="cover" @change="handleImage('cover')">
               </div>
             </div>
             <div class="modal-body-header">
               <img
-                src="https://i.imgur.com/RGxqLdu.png"
+                :src="userAvatar"
                 alt=""
                 class="modal-body-header-photo"
               />
@@ -52,7 +55,9 @@
                   src="../../public/images/icon_uploadPhoto.png"
                   alt=""
                   class="modal-body-header-edit-photo"
+                  @click="updateAvatar"
                 />
+                <input type="file" name="avatar" id="avatar" ref="avatar" @change="handleImage('avatar')">
               </div>
             </div>
             <div class="modal-body-form">
@@ -174,17 +179,40 @@ export default {
     fetchUser() {
       this.userName = this.currentUser.name;
       this.userintro = this.currentUser.introduction;
-      this.userAvatar = this.currentUser.userAvatar;
+      this.userAvatar = this.currentUser.avatar;
       this.userCover = this.currentUser.cover;
     },
     userUpdate() {
       this.$emit("user-update", {
         name: this.userName,
         introduction: this.userintro,
-        // avatar: this.userAvatar,
-        // cover: this.userCover,
+        avatar: this.userAvatar,
+        cover: this.userCover,
       })
     },
+    updateCover() {
+      this.$refs.cover.click()
+    },
+    removeCover() {
+      this.$refs.cover.value= ""
+      this.userCover = ''
+    },
+    updateAvatar() {
+      this.$refs.avatar.click()
+    },
+    handleImage(target) {
+      const { files } = event.target
+      if(!files.length) return
+      
+      const imageURL = window.URL.createObjectURL(files[0])
+      switch(target) {
+        case 'cover':
+          this.userCover = imageURL
+          break
+        case 'avatar':
+          this.userAvatar = imageURL
+      }
+    }
   },
 };
 </script>

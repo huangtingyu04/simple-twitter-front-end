@@ -26,7 +26,8 @@ const dummyUser = {
     email: "apple@example.com",
     password: "12345678",
     introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
-    image: "https://i.imgur.com/RGxqLdu.png",
+    avatar: "https://i.imgur.com/RGxqLdu.png",
+    cover: 'https://i.imgur.com/ifqzNgs.png',
   },
 };
 
@@ -290,9 +291,11 @@ export default {
       this.tweets = Tweets;
     },
     userUpdate(payload) {
-      const { name, introduction } = payload
+      const { name, introduction, avatar, cover } = payload
       this.user.name = name
       this.user.introduction = introduction
+      this.user.avatar = avatar
+      this.user.cover = cover
     },
   },
 };

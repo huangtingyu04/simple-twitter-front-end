@@ -3,9 +3,7 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent 
-          :initial-tweet="tweet"
-          :is-liked="isLiked" />
+        <TweetContent :initial-tweet="tweet" :is-liked="isLiked" />
         <ReplyItems :replies="replies" :tweet-target="tweetTarget" />
         <TweetReplyModal
           :tweet-item="tweetItem"
@@ -25,11 +23,11 @@ import PopularUsersCard from "./../components/PopularUsersCard";
 import TweetContent from "./../components/TweetContent.vue";
 import ReplyItems from "./../components/ReplyItems.vue";
 import TweetReplyModal from "./../components/TweetReplyModal.vue";
-import TweetModal from '../components/TweetModal.vue'
+import TweetModal from "../components/TweetModal.vue";
 
 import tweetsAPI from "../apis/tweets";
 import { errorToast } from "../utils/toast";
-import { mapState } from "vuex"
+import { mapState } from "vuex";
 
 export default {
   name: "Tweet",
@@ -51,12 +49,13 @@ export default {
         description: "",
         replyLength: 0,
         likeLength: 0,
-        createdAt: '',
+        createdAt: "",
       },
       tweetItem: {},
       replies: [],
       tweetTarget: "",
-      isLiked: false
+      isLiked: false,
+      isLoading: true,
     };
   },
   computed: {
@@ -74,11 +73,12 @@ export default {
   methods: {
     async fetchTweet({ tweetId }) {
       try {
+        this.isLoading = true;
         const { data, statusText } = await tweetsAPI.getTweet({ tweetId });
         if (statusText !== "OK") {
           throw new Error();
         }
-        console.log(data)
+        console.log(data);
         const { tweet, tweetLikeCount, tweetReplyCount } = data;
         const {
           id,
@@ -106,15 +106,20 @@ export default {
           createdAt,
           User,
         };
-        this.replies = Replies,
-        this.tweetTarget = User ? User.account : ''
-        this.isLiked = Likes?Likes.filter(like => {
-          if(like.UserId === this.currentUser.id) {
-            return like
-          } else {return false}
-        })[0].isLike :false
+        (this.replies = Replies), (this.tweetTarget = User ? User.account : "");
+        this.isLiked = Likes
+          ? Likes.filter((like) => {
+              if (like.UserId === this.currentUser.id) {
+                return like;
+              } else {
+                return false;
+              }
+            })[0].isLike
+          : false;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
+        this.isLoading = false;
         errorToast.fire({
           title: "無法取得推文",
         });

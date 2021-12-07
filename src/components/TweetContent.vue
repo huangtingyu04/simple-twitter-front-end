@@ -87,8 +87,11 @@ export default {
   data() {
     return {
       tweet: {},
-      isLike: false
+      isLike: false,
     };
+  },
+  mounted() {
+    console.log(this.initialTweet, "initialTweet");
   },
   watch: {
     initialTweet(newValue) {
@@ -100,9 +103,9 @@ export default {
     isLiked(newValue) {
       this.isLike = {
         ...this.isLike,
-        ...newValue
-      }
-    }
+        ...newValue,
+      };
+    },
   },
   methods: {
     async addLike(tweetId) {
@@ -130,7 +133,7 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        console.log(response)
+        console.log(response);
       } catch (error) {
         console.log(error);
         errorToast.fire({

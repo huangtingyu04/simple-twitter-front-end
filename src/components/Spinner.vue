@@ -10,9 +10,14 @@
 
 <style scoped lang="sass">
 .spinner
-    padding-top: 100px
+    position: fixed
+    width: 100vw
+    height: 100vh
+    left: 0
+    top: 0
 
 .bouncing-loader
+    padding-top: 140px
     display: flex
     justify-content: center
 

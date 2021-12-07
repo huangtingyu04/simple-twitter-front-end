@@ -1,17 +1,30 @@
 <template>
   <div class="replies">
     <div class="reply" v-for="reply in replies" :key="reply.id">
-      <img :src="reply.User? reply.User.avatar: '' | emptyImage" alt="" class="reply-icon">
+      <router-link :to="{ name: 'user', params: { id: reply.User.id } }">
+        <img
+          :src="reply.User ? reply.User.avatar : '' | emptyImage"
+          alt=""
+          class="reply-icon"
+        />
+      </router-link>
       <div class="reply-content">
         <div class="reply-content-title">
-          <div class="reply-content-title-name">{{reply.User? reply.User.name: ''}}</div>
-          <div class="reply-content-title-account">@{{reply.User? reply.User.account: ''}}<span>・</span></div>
-          <div class="reply-content-title-time">{{reply.createdAt | fromNow}}</div>
+          <div class="reply-content-title-name">
+            {{ reply.User ? reply.User.name : "" }}
+          </div>
+          <div class="reply-content-title-account">
+            @{{ reply.User ? reply.User.account : "" }}<span>・</span>
+          </div>
+          <div class="reply-content-title-time">
+            {{ reply.createdAt | fromNow }}
+          </div>
         </div>
-        <div class="reply-content-target">回覆
-          <span class="reply-content-target-account">@{{tweetTarget}}</span>
+        <div class="reply-content-target">
+          回覆
+          <span class="reply-content-target-account">@{{ tweetTarget }}</span>
         </div>
-        <div class="reply-content-comment">{{reply.comment}}</div>
+        <div class="reply-content-comment">{{ reply.comment }}</div>
       </div>
     </div>
   </div>
@@ -21,8 +34,8 @@
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 
 export default {
-  name: 'ReplyItems',
-  mixins: [ fromNowFilter, emptyImageFilter ],
+  name: "ReplyItems",
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     replies: {
       type: Array,
@@ -31,13 +44,12 @@ export default {
     tweetTarget: {
       type: String,
       required: true,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="sass" scoped>
-
 .reply
   padding: 15px
   display: flex

@@ -12,7 +12,7 @@ export const fromNowFilter = {
 export const emptyImageFilter = {
   filters: {
     emptyImage(src) {
-      return src || '../../public/images/default cover.png'
+      return src || '../images/default cover.png'
     }
   }
 }

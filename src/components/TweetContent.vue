@@ -11,14 +11,18 @@
     </div>
     <div class="content">
       <div class="content-header">
-        <img :src="tweet.image | emptyImage" alt="" class="content-header-icon" />
+        <img
+          :src="tweet.avatar | emptyImage"
+          alt=""
+          class="content-header-icon"
+        />
         <div class="content-header-title">
           <div class="content-header-title-name">{{ tweet.name }}</div>
           <div class="content-header-title-account">@{{ tweet.account }}</div>
         </div>
       </div>
       <div class="content-body">
-        {{ tweet.text }}
+        {{ tweet.description }}
       </div>
       <div class="content-time">{{ tweet.createdAt | fromNow }}</div>
       <div class="content-info">
@@ -44,18 +48,18 @@
           data-bs-target="#tweet-reply-modal"
         />
         <img
-          v-if="!tweet.isLiked"
+          v-if="!isLike"
           src="./../../public/images/icon_like_2x.png"
           alt=""
           class="content-action-liked"
-          @click.stop.prevent="addLike"
+          @click.stop.prevent="addLike(tweet.id)"
         />
         <img
           v-else
           src="./../../public/images/icon_like_fill_2x.png"
           alt=""
           class="content-action-liked"
-          @click.stop.prevent="deleteLike"
+          @click.stop.prevent="deleteLike(tweet.id)"
         />
       </div>
     </div>
@@ -64,35 +68,75 @@
 
 <script>
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+import tweetsAPI from "../apis/tweets";
+import { errorToast } from "../utils/toast";
 
 export default {
   name: "TweetContent",
-  mixins: [ fromNowFilter, emptyImageFilter ],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     initialTweet: {
       type: Object,
       required: true,
     },
+    isLiked: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       tweet: {},
+      isLike: false
     };
   },
-  created() {
-    this.fetchTweet();
+  watch: {
+    initialTweet(newValue) {
+      this.tweet = {
+        ...this.tweet,
+        ...newValue,
+      };
+    },
+    isLiked(newValue) {
+      this.isLike = {
+        ...this.isLike,
+        ...newValue
+      }
+    }
   },
   methods: {
-    fetchTweet() {
-      this.tweet = this.initialTweet;
+    async addLike(tweetId) {
+      try {
+        const response = await tweetsAPI.addLike(tweetId);
+        const { data } = response;
+        this.isLike = true;
+        this.tweet.likeLength = this.tweet.likeLength + 1;
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法按讚，請稍後再試",
+        });
+      }
     },
-    addLike() {
-      this.tweet.isLiked = true;
-      this.tweet.likeLength = this.tweet.likeLength + 1;
-    },
-    deleteLike() {
-      this.tweet.isLiked = false;
-      this.tweet.likeLength = this.tweet.likeLength - 1;
+    async deleteLike(tweetId) {
+      try {
+        const response = await tweetsAPI.deleteLike(tweetId);
+        const { data } = response;
+        this.isLike = false;
+        this.tweet.likeLength = this.tweet.likeLength - 1;
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        console.log(response)
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法按讚，請稍後再試",
+        });
+      }
     },
   },
 };

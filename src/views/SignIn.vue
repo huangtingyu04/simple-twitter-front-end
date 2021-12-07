@@ -33,7 +33,7 @@
 
 <script>
 import authorizationAPI from '../apis/authorization'
-import {  errorToast } from '../utils/toast'
+import { successToast, errorToast } from '../utils/toast'
 export default {
   data () {
     return {
@@ -71,6 +71,9 @@ export default {
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
         this.isProcessing = false
+        successToast.fire({
+          title: '已成功登入'
+        })
         // 成功登入後轉址到首頁
         this.$router.push("/tweets");
       } catch (error) {

@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade" id="user-edit-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form action="" @submit="userUpdate">
+      <form action="" >
         <div class="modal-content">
           <div class="modal-header">
             <img
@@ -24,7 +24,7 @@
           <div class="modal-body">
             <div class="modal-body-bg">
               <img
-                :src="userCover | emptyImage"
+                :src="user.cover | emptyImage"
                 alt=""
                 class="modal-body-bg-photo"
               />
@@ -46,7 +46,7 @@
             </div>
             <div class="modal-body-header">
               <img
-                :src="userAvatar |emptyImage"
+                :src="user.avatar | emptyImage"
                 alt=""
                 class="modal-body-header-photo"
               />
@@ -65,29 +65,29 @@
                 <div class="form-label-group">
                   <label for="name">名稱</label>
                   <input
-                    v-model="userName"
+                    v-model="user.name"
                     type="text"
                     name="name"
                     id="name"
-                    :invalid="userNameLength > 50"
+                    :invalid="user.name.length > 50"
                     required
                   />
                   <div class="modal-body-form-limit">
                     <div
-                      v-show="userNameLength > 50"
+                      v-show="user.name.length > 50"
                       class="modal-body-form-limit-alert"
                     >
                       字數超出上限!
                     </div>
                     <div class="modal-body-form-limit-count">
-                      {{ userNameLength }}<span>/50</span>
+                      {{ user.name.length }}<span>/50</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-label-group" id="modal-intro">
                   <label for="intro">自我介紹</label>
                   <textarea
-                    v-model="userintro"
+                    v-model="user.introduction"
                     name="intro"
                     id="intro"
                     cols="30"
@@ -95,13 +95,13 @@
                   ></textarea>
                   <div class="modal-body-form-limit">
                     <div
-                      v-show="userIntroLength > 160"
+                      v-show="user.introduction.length > 160"
                       class="modal-body-form-limit-alert"
                     >
                       字數超出上限!
                     </div>
                     <div class="modal-body-form-limit-count">
-                      {{ userIntroLength }}<span>/160</span>
+                      {{ user.introduction.length }}<span>/160</span>
                     </div>
                   </div>
                 </div>
@@ -128,20 +128,11 @@ export default {
   },
   data() {
     return {
-      userName: "",
-      userintro: "",
-      userAvatar: "",
-      userCover: "",
-      savable: false,
+      user: {},
+      savable: false
     };
   },
   computed: {
-    userNameLength() {
-      return this.userName.length;
-    },
-    userIntroLength() {
-      return this.userintro.length;
-    },
     submitOK() {
       if (!this.savable) {
         return "modal";
@@ -151,47 +142,19 @@ export default {
     },
   },
   watch: {
-    userNameLength() {
-      if (
-        this.userNameLength === 0 ||
-        this.userNameLength > 50 ||
-        this.userIntroLength > 160
-      ) {
-        0;
-        return (this.savable = true);
-      } else {
-        return (this.savable = false);
+    currentUser(newValue) {
+      this.user = {
+        ...this.user,
+        ...newValue
       }
-    },
-    userIntroLength() {
-      if (
-        this.userNameLength === 0 ||
-        this.userNameLength > 50 ||
-        this.userIntroLength > 160
-      ) {
-        return (this.savable = true);
-      } else {
-        return (this.savable = false);
-      }
-    },
+    }
   },
   created() {
     this.fetchUser();
   },
   methods: {
     fetchUser() {
-      this.userName = this.currentUser.name;
-      this.userintro = this.currentUser.introduction;
-      this.userAvatar = this.currentUser.avatar;
-      this.userCover = this.currentUser.cover;
-    },
-    userUpdate() {
-      this.$emit("user-update", {
-        name: this.userName,
-        introduction: this.userintro,
-        avatar: this.userAvatar,
-        cover: this.userCover,
-      })
+      this.user = this.currentUser
     },
     updateCover() {
       this.$refs.cover.click()

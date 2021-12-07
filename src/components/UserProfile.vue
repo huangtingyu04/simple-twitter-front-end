@@ -41,6 +41,7 @@
             v-if="!user.isFollower"
             class="user-header-edit-follow"
             v-show="currentUser.id !== user.id"
+            @click.stop.prevent="addFollow(user.id)"
           >
             跟隨
           </button>
@@ -48,6 +49,7 @@
             v-else
             class="user-header-edit-unfollow"
             v-show="currentUser.id !== user.id"
+            @click.stop.prevent="deleteFollow(user.id)"
           >
             正在跟隨
           </button>
@@ -111,6 +113,14 @@ export default {
       required: true,
     },
   },
+  methods: {
+    addFollow(userId) {
+      this.$emit("add-follow", userId)
+    },
+    deleteFollow(userId) {
+      this.$emit("delete-follow", userId)
+    },
+  }
 };
 </script>
 

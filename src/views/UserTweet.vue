@@ -3,14 +3,19 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile :current-user="currentUser" :user="user" />
+        <UserProfile
+          :current-user="currentUser"
+          :user="user"
+          @add-follow="addFollow"
+          @delete-follow="deleteFollow"
+        />
         <TweetItems
           :initial-tweets="tweets"
           @toggle-tweet-reply="toggleTweetReply"
           @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
-        <UserEditModal :current-user="currentUser" @user-update="userUpdate" />
+        <UserEditModal :current-user="currentUser" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
@@ -73,34 +78,14 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    // this.fetchUser({ userId });
     this.fetchTweet({ userId });
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    // this.fetchUser({ userId });
     this.fetchTweet({ userId });
     next();
   },
   methods: {
-    // async fetchUser({ userId }) {
-    //   try {
-    //     const response = await usersAPI.getUser({ userId });
-
-    //     const { data, statusText } = response;
-    //     if (statusText !== "OK") {
-    //       throw new Error();
-    //     }
-    //     const { id, name, account, email, avatar, cover, introduction } =
-    //       data.user;
-    //     this.user = { id, name, account, email, avatar, cover, introduction };
-    //   } catch (error) {
-    //     console.log(error);
-    //     errorToast.fire({
-    //       title: "無法取得使用者資訊",
-    //     });
-    //   }
-    // },
     async fetchTweet({ userId }) {
       try {
         const response = await usersAPI.getUserTweets({ userId });
@@ -108,10 +93,32 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        const { tweets, user } = data
-        const { id, name, account, email, avatar, cover, introduction, FollowersCount, FollowingsCount, isFollower } = user
-        this.user = { id, name, account, email, avatar, cover, introduction, followersLength: FollowersCount, followingsLength: FollowingsCount, isFollower }
-        this.tweets = tweets
+        const { tweets, user } = data;
+        const {
+          id,
+          name,
+          account,
+          email,
+          avatar,
+          cover,
+          introduction,
+          FollowersCount,
+          FollowingsCount,
+          isFollower,
+        } = user;
+        this.user = {
+          id,
+          name,
+          account,
+          email,
+          avatar,
+          cover,
+          introduction,
+          followersLength: FollowersCount,
+          followingsLength: FollowingsCount,
+          isFollower,
+        };
+        this.tweets = tweets;
         console.log(response);
       } catch (error) {
         console.log(error);
@@ -124,7 +131,7 @@ export default {
       const { tweetId, text, User } = payload;
       this.tweets.push({
         id: tweetId,
-        text: text,
+        description: text,
         createdAt: new Date(),
         updatedAt: new Date(),
         User: User,
@@ -136,7 +143,7 @@ export default {
       });
     },
     toggleTweetReply(tweetId) {
-      console.log(tweetId)
+      console.log(tweetId);
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
     },
     createNewReply(payload) {
@@ -157,8 +164,8 @@ export default {
       try {
         const { data } = await tweetsAPI.addLike({ tweetId });
         console.log(data);
-        if(data.status !== 'success') {
-          throw new Error(data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
         this.tweets = this.tweets.map((tweet) => {
           if (tweet.id === tweetId) {
@@ -182,8 +189,8 @@ export default {
       try {
         const { data } = await tweetsAPI.deleteLike({ tweetId });
         console.log(data);
-        if(data.status !== 'success') {
-          throw new Error(data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
         this.tweets = this.tweets.map((tweet) => {
           if (tweet.id === tweetId) {
@@ -209,6 +216,32 @@ export default {
       this.user.introduction = introduction;
       this.user.avatar = avatar;
       this.user.cover = cover;
+    },
+    async addFollow(userId) {
+      try {
+        console.log(userId);
+        const response = await usersAPI.addFollow({ userId });
+        console.log(response);
+        this.user.isFollower = true;
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法追蹤此使用者",
+        });
+      }
+    },
+    async deleteFollow(userId) {
+      try {
+        console.log(userId);
+        const response = await usersAPI.deleteFollow({ userId });
+        console.log(response);
+        this.user.isFollower = false;
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法取消追蹤此使用者",
+        });
+      }
     },
   },
 };

@@ -3,7 +3,11 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile :current-user="currentUser" :user="user" />
+        <UserProfile 
+          :current-user="currentUser" 
+          :user="user"
+          @add-follow="addFollow"
+          @delete-follow="deleteFollow" />
         <UserReplyItems :replies="replies" />
         <UserEditModal :current-user="currentUser" />
         <TweetModal
@@ -110,6 +114,32 @@ export default {
       this.user.introduction = introduction;
       this.user.avatar = avatar;
       this.user.cover = cover;
+    },
+    async addFollow(userId) {
+      try {
+        console.log(userId);
+        const response = await usersAPI.addFollow({ userId });
+        console.log(response);
+        this.user.isFollower = true;
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法追蹤此使用者",
+        });
+      }
+    },
+    async deleteFollow(userId) {
+      try {
+        console.log(userId);
+        const response = await usersAPI.deleteFollow({ userId });
+        console.log(response);
+        this.user.isFollower = false;
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法取消追蹤此使用者",
+        });
+      }
     },
   },
 };

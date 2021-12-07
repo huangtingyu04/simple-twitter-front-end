@@ -24,19 +24,19 @@
         <div class="record-box">
           <div class="reply record-item">
             <img src="../../public/images/icon_message.png" />
-            <span class="num">{{ user.tweetNum | formatNum }}</span>
+            <span class="num">{{ user.Tweets.length | formatNum }}</span>
           </div>
           <div class="like record-item">
             <img src="../../public/images/icon_like.png" />
-            <span class="num">{{ user.likeNum | formatNum }}</span>
+            <span class="num">{{ user.Likes.length | formatNum }}</span>
           </div>
         </div>
         <div class="follow-box">
           <div class="following follow-item">
-            <span class="num">{{ user.following }} </span>個跟隨中
+            <span class="num">{{ user.Followings.length }} </span>個跟隨中
           </div>
           <div class="following follow-item">
-            <span class="num">{{ user.followed }} </span>位跟隨者
+            <span class="num">{{ user.Followers.length }} </span>位跟隨者
           </div>
         </div>
       </div>

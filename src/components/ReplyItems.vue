@@ -1,7 +1,7 @@
 <template>
   <div class="replies">
     <div class="reply" v-for="reply in replies" :key="reply.id">
-      <router-link :to="{ name: 'user', params: { id: reply.User.id } }">
+      <router-link :to="{ name: 'user-tweet', params: { id: reply.User.id } }">
         <img
           :src="reply.User ? reply.User.avatar : '' | emptyImage"
           alt=""

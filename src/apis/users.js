@@ -6,5 +6,8 @@ export default {
   },
   getUser({userId}) {
     return apiHelper.get(`/users/${userId}`)
+  },
+  getUserTweets({userId}) {
+    return apiHelper.get(`/users/${userId}/tweets`)
   }
 }

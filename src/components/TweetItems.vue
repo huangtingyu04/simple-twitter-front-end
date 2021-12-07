@@ -2,16 +2,18 @@
   <div class="tweets">
     <div class="tweet" v-for="tweet in initialTweets" :key="tweet.id">
       <div class="tweet-icon">
-        <img :src="tweet.User.image | emptyImage" alt="user-icon" class="tweet-icon-photo" />
+        <img :src="tweet.User ? tweet.User.avatar : '' | emptyImage" alt="user-icon" class="tweet-icon-photo" />
       </div>
       <div class="tweet-body">
         <div class="tweet-body-head">
-          <div class="tweet-body-head-name">{{tweet.User.name}}</div>
+          <router-link 
+            class="tweet-body-head-name"
+            :to="{ name: 'user-tweet', params: { id: tweet.User.id } }">{{tweet.User.name}}</router-link>
           <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
           <span> · </span>
           <div class="tweet-body-head-time">{{ tweet.createdAt | fromNow }}</div>
         </div>
-        <router-link :to="{ name: 'tweet', params: { id: tweet.id } }" class="tweet-body-content">{{ tweet.text }}</router-link>
+        <router-link :to="{ name: 'tweet', params: { id: tweet.id } }" class="tweet-body-content">{{ tweet.description }}</router-link>
         <div class="tweet-body-foot">
           <div class="tweet-body-foot-comment">
             <img
@@ -22,7 +24,7 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">{{tweet.commentsLength}}</span>
+            <span class="tweet-body-foot-comment-count">{{tweet.Replies ? tweet.Replies.length: 0}}</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img
@@ -39,7 +41,7 @@
               class="tweet-body-foot-liked-icon"
               @click.stop.prevent="deleteLiked(tweet.id)"
             />
-            <span class="tweet-body-foot-liked-count">{{tweet.likesLength}}</span>
+            <span class="tweet-body-foot-liked-count">{{tweet.Likes ? tweet.Likes.length: 0}}</span>
           </div>
         </div>
       </div>

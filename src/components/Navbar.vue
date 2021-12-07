@@ -16,7 +16,7 @@
       </li>
       <li>
         <router-link
-          :to="{ name: 'user', params: { id: currentUser.id } }"
+          :to="{ name: 'user-tweet', params: { id: currentUser.id } }"
           class="link"
         >
           <img class="img" src="../../public/images/icon_user.png" />

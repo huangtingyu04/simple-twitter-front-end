@@ -1,15 +1,22 @@
 <template>
-  <div class="card-users-container">
+  <Spinner v-if="isLoading" />
+  <div v-else class="card-users-container">
     <div class="main-title">使用者列表</div>
     <div class="card-box">
       <div class="card-item" v-for="user in users" :key="user.id">
         <div class="card-img-content">
+          <!-- <div
+            class="img-cover"
+            :style="{ backgroundImage: 'url(' + '/images/bg.jpg' | webp + ')' }"
+          ></div> -->
           <div
             class="img-cover"
-            :style="{ 'background-image': 'url(' + user.imgCover + ')' }"
+            :style="{
+              'background-image': 'url(' + user.cover + ')',
+            }"
           ></div>
           <div class="avatar">
-            <img :src="user.image | emptyImage" />
+            <img :src="user.avatar | emptyImage" />
           </div>
         </div>
         <div class="card-user-name">{{ user.name }}</div>
@@ -38,53 +45,43 @@
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
+import adminAPI from "../apis/admin";
+import { errorToast } from "../utils/toast";
+import Spinner from "./../components/Spinner";
 
-const dummyData = {
-  users: [
-    {
-      id: 1,
-      name: "John Doe",
-      account: "heyjohn",
-      image:
-        "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      imgCover:
-        "https://media.istockphoto.com/photos/aerial-view-of-greenhouses-picture-id1278406333?b=1&k=20&m=1278406333&s=170667a&w=0&h=q9aWfW5UK95iNd6P0J0MAgcb2zB9_Om2K1PWuhlL77s=",
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      tweetNum: 1500,
-      likeNum: 1500,
-      following: 34,
-      followed: 59,
-    },
-    {
-      id: 2,
-      name: "Mary Jane",
-      account: "heymary",
-      image:
-        "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      imgCover:
-        "https://media.istockphoto.com/photos/aerial-view-of-greenhouses-picture-id1278406333?b=1&k=20&m=1278406333&s=170667a&w=0&h=q9aWfW5UK95iNd6P0J0MAgcb2zB9_Om2K1PWuhlL77s=",
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      tweetNum: 2500,
-      likeNum: 1400,
-      following: 54,
-      followed: 10,
-    },
-  ],
-};
 export default {
   name: "AdminUserCards",
-  mixins: [ emptyImageFilter ],
+  mixins: [emptyImageFilter],
+  components: {
+    Spinner,
+  },
   data() {
     return {
       users: [],
+      isLoading: true,
     };
   },
   methods: {
-    fetchUsers() {
-      this.users = dummyData.users;
+    async fetchUsers() {
+      try {
+        this.isLoading = true;
+        const { data } = await adminAPI.users.get();
+
+        console.log(data);
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.users = data.users;
+        this.isLoading = false;
+      } catch (error) {
+        console.log(error);
+        this.isLoading = false;
+        errorToast.fire({
+          title: "無法取得使用者，請稍後再試",
+        });
+      }
     },
   },
   created() {

@@ -5,7 +5,7 @@
     <div class="tweets">
       <div class="tweet" v-for="tweet in tweets" :key="tweet.id">
         <div class="tweet-icon">
-          <img :src="tweet.User.image | emptyImage" class="tweet-icon-photo" />
+          <img :src="tweet.User.avatar | emptyImage" class="tweet-icon-photo" />
         </div>
         <div class="tweet-body">
           <div class="tweet-body-head">
@@ -58,7 +58,6 @@ export default {
         this.isLoading = true;
         const { data } = await adminAPI.tweets.get();
 
-        console.log("data", data);
         if (data.status === "error") {
           throw new Error(data.message);
         }

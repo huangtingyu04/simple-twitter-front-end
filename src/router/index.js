@@ -4,6 +4,8 @@ import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
 import Tweets from '../views/Tweets.vue'
 
+import store from './../store'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -98,6 +100,11 @@ const router = new VueRouter({
       component: NotFound
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('fetchCurrentUser')
+  next()
 })
 
 export default router

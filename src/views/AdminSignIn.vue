@@ -21,7 +21,7 @@
           <div class="alert-limit">8/50</div>
         </div>
       </div> -->
-      <button type="submit" class="btn-main">登入</button>
+      <button type="submit" class="btn-main" :disabled="isProcessing">登入</button>
       <div class="link-group">
         <router-link class="btn-blue" to="/signin">前台登入</router-link>
       </div>
@@ -30,20 +30,57 @@
 </template>
 
 <script>
+import authorizationAPI from '../apis/authorization'
+import { successToast, errorToast } from '../utils/toast'
 export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      isProcessing: false
     }
   },
   methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        email: this.email,
-        password: this.password
-      })
-      console.log('data', data)
+    async handleSubmit() {
+      try {
+        if(!this.email || !this.password) {
+          errorToast.fire({
+            title: '請填入email 或 password'
+          })
+          return
+        }
+        this.isProcessing = true
+        const response = await authorizationAPI.signIn({
+          email: this.email,
+          password: this.password
+        })
+        console.log(response)
+        const {data, statusText} = response
+        if(data.status !== 'success' || statusText !== 'OK') {
+          throw new Error(data.message)
+        }
+        if(!data.user.role) {
+          errorToast.fire({
+            title: '請至前台登入',
+          })
+          this.$router.push('/signin')
+          return
+        }
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem("token", data.token);
+        this.isProcessing = false
+        successToast.fire({
+          title: '已成功登入'
+        })
+        // 成功登入後轉址到後台首頁
+        this.$router.push("/admin/tweets");
+      } catch (error) {
+        console.log(error)
+        this.isProcessing = false
+        errorToast.fire({
+          title: `無法登入--${error.message}`
+        })
+      }
     }
   }
 };

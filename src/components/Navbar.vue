@@ -55,6 +55,7 @@
         <img
           class="img-hover"
           src="../../public/images/icon_logout_hover.png"
+          @click="logout"
         />
         登出
       </router-link>
@@ -100,6 +101,10 @@ export default {
       };
       this.isAuthenticated = dummyUser.isAuthenticated;
     },
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/signin");
+    }
   },
   created() {
     this.fetchUser();

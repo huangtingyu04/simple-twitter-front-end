@@ -11,7 +11,7 @@
             <div class="name">{{ user.name }}</div>
             <router-link
               class="link"
-              :to="{ name: 'user', params: { id: user.id } }"
+              :to="{ name: 'user-tweet', params: { id: user.id } }"
             >
               @{{ user.account }}
             </router-link>

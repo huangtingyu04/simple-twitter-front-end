@@ -15,11 +15,11 @@
       </div>
     </div>
     <div class="user">
-      <img :src="user.cover" alt="" class="user-bg" />
+      <img :src="user.cover | emptyImage" alt="" class="user-bg" />
       <div class="user-header">
         <div class="user-header-container">
           <img
-            :src="user.avatar"
+            :src="user.avatar | emptyImage"
             alt=""
             class="user-header-container-photo"
           />
@@ -86,16 +86,18 @@
         </div>
       </div>
       <div class="user-navPill">
-        <UserNavPills :current-user-id="currentUser.id" />
+        <UserNavPills :user-id="user.id" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { emptyImageFilter } from '../utils/mixins'
 import UserNavPills from "../components/UserNavPills.vue";
 export default {
   name: "UserProfile",
+  mixins: [ emptyImageFilter ],
   components: {
     UserNavPills,
   },
@@ -159,6 +161,7 @@ export default {
         border-radius: 50%
         border: 4px solid $light
         object-fit: cover
+        background: $light
         +breakpoint(zone-nb)
           width: 120px
           height: 120px

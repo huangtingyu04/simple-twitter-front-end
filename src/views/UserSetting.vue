@@ -5,7 +5,7 @@
       <div class="main">
         <div class="form-setting">
           <div class="main-title">帳戶設定</div>
-          <form action="" @submit.prevent.stop="handleSubmit">
+          <form action="" @submit.prevent.stop="handleSubmit(currentUser.id)">
             <div class="input-field">
               <label for="account">帳號</label>
               <input
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <TweetModal :current-user="user"/>
+    <TweetModal :current-user="currentUser"/>
   </div>
 </template>
 
@@ -66,22 +66,10 @@
 import Navbar from "./../components/Navbar";
 import TweetModal from '../components/TweetModal.vue'
 import { successToast, errorToast } from '../utils/toast'
-
-const dummyUser = {
-  currentUser: {
-    id: "1",
-    name: "Apple",
-    account: "apple",
-    email: "apple@example.com",
-    password: "12345678",
-    introduction:
-      "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
-    avatar: "https://i.imgur.com/RGxqLdu.png",
-    cover: "https://i.imgur.com/ifqzNgs.png",
-  },
-};
+import { mapState } from 'vuex'
 
 export default {
+  name: 'UserSetting',
   components: {
     Navbar,
     TweetModal
@@ -99,15 +87,21 @@ export default {
       checkPassword: ''
     };
   },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"])
+  },
+  created() {
+    this.fetchUser()
+  },
   methods: {
     fetchUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      const { id, name, account, email, avatar } = dummyUser.currentUser;
-      this.user = { id, name, account, email, avatar }
-      
+      const { id, name, account, email, avatar } = this.currentUser;
+      this.user = { 
+        id, 
+        name, 
+        account, 
+        email, 
+        avatar }
     },
     handleSubmit() {
       if(!this.password || !this.checkPassword) {
@@ -134,9 +128,6 @@ export default {
         title: '個人資訊儲存成功'
       })
     },
-  },
-  created() {
-    this.fetchUser();
   },
 };
 </script>

@@ -16,7 +16,7 @@
       </li>
       <li>
         <router-link
-          :to="{ name: 'user', params: { id: currentUser.id } }"
+          :to="{ name: 'user-tweet', params: { id: currentUser.id } }"
           class="link"
         >
           <img class="img" src="../../public/images/icon_user.png" />
@@ -65,49 +65,25 @@
 </template>
 
 <script>
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "John Doe",
-    account: "JohnDoe",
-    email: "John@example.com",
-    password: "12345678",
-    image:
-      "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-  },
-  isAuthenticated: true,
-};
+import { mapState } from 'vuex'
 
 export default {
   name: "Navbar",
-  data() {
-    return {
-      currentUser: {
-        id: -1,
-        name: "",
-        account: "",
-        email: "",
-        password: "",
-        image: "",
-      },
-      isAuthenticated: false,
-    };
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"])
   },
   methods: {
-    fetchUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
-    },
+    // fetchUser() {
+    //   this.currentUser = {
+    //     ...this.currentUser,
+    //     ...dummyUser.currentUser,
+    //   };
+    //   this.isAuthenticated = dummyUser.isAuthenticated;
+    // },
     logout() {
       this.$store.commit("revokeAuthentication");
       this.$router.push("/signin");
     }
-  },
-  created() {
-    this.fetchUser();
   },
 };
 </script>

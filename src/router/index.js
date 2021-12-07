@@ -37,9 +37,9 @@ const router = new VueRouter({
       component: () => import('../views/Tweet.vue')
     },
     {
-      path: '/users/:id',
-      name: 'user',
-      component: () => import('../views/User.vue')
+      path: '/users/:id/tweet',
+      name: 'user-tweet',
+      component: () => import('../views/UserTweet.vue')
     },
     {
       path: '/users/:id/reply',

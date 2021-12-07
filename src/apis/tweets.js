@@ -13,4 +13,10 @@ export default {
   reply( tweetId, reply ) {
     return apiHelper.post(`/tweets/${tweetId}/replies`, reply )
   },
+  addLike(tweetId) {
+    return apiHelper.post(`/tweets/${tweetId}/like`, null)
+  },
+  deleteLike(tweetId) {
+    return apiHelper.post(`/tweets/${tweetId}/unlike`, null)
+  },
 }

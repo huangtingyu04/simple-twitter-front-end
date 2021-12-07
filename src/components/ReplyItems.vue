@@ -10,19 +10,23 @@
       </router-link>
       <div class="reply-content">
         <div class="reply-content-title">
-          <div class="reply-content-title-name">
+          <router-link 
+            :to="{ name: 'user-tweet', params: { id: reply.User.id } }"
+            class="reply-content-title-name">
             {{ reply.User ? reply.User.name : "" }}
-          </div>
-          <div class="reply-content-title-account">
+          </router-link>
+          <router-link 
+            :to="{ name: 'user-tweet', params: { id: reply.User.id } }"
+            class="reply-content-title-account">
             @{{ reply.User ? reply.User.account : "" }}<span>・</span>
-          </div>
+          </router-link>
           <div class="reply-content-title-time">
             {{ reply.createdAt | fromNow }}
           </div>
         </div>
         <div class="reply-content-target">
           回覆
-          <span class="reply-content-target-account">@{{ tweetTarget }}</span>
+          <span class="reply-content-target-account">@{{ reply.tweetTarget }}</span>
         </div>
         <div class="reply-content-comment">{{ reply.comment }}</div>
       </div>
@@ -39,10 +43,6 @@ export default {
   props: {
     replies: {
       type: Array,
-      required: true,
-    },
-    tweetTarget: {
-      type: String,
       required: true,
     },
   },
@@ -66,9 +66,12 @@ export default {
     .reply-content-title
       display: flex
       .reply-content-title-name
+        text-decoration: none
         color: $text-content
         font-weight: 700
+        margin-right: 5px
       .reply-content-title-account, .reply-content-title-time
+        text-decoration: none
         color: $input-label
         font-weight: 500
     .reply-content-target

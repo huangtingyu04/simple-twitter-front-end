@@ -48,7 +48,7 @@
           data-bs-target="#tweet-reply-modal"
         />
         <img
-          v-if="!isLike"
+          v-if="!tweet.isLiked"
           src="./../../public/images/icon_like_2x.png"
           alt=""
           class="content-action-liked"

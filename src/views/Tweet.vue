@@ -3,8 +3,8 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent :initial-tweet="tweet" :is-liked="isLiked" />
-        <ReplyItems :replies="replies" :tweet-target="tweetTarget" />
+        <TweetContent :initial-tweet="tweet" />
+        <ReplyItems :replies="replies" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
@@ -50,12 +50,12 @@ export default {
         replyLength: 0,
         likeLength: 0,
         createdAt: "",
+        tweetTarget: "",
+        isLiked: false,
       },
       tweetItem: {},
       replies: [],
-      tweetTarget: "",
-      isLiked: false,
-      isLoading: true,
+      isLoading: false,
     };
   },
   computed: {
@@ -79,14 +79,11 @@ export default {
           throw new Error();
         }
         console.log(data);
-        const { tweet, tweetLikeCount, tweetReplyCount } = data;
+        const { tweet, tweetLikeCount, tweetReplyCount, isLike } = data;
         const {
           id,
-          // UserId,
           description,
           createdAt,
-          // updatedAt,
-          Likes,
           Replies,
           User,
         } = tweet;
@@ -99,6 +96,7 @@ export default {
           replyLength: tweetReplyCount,
           likeLength: tweetLikeCount,
           createdAt,
+          isLiked: isLike,
         };
         this.tweetItem = {
           id,
@@ -106,16 +104,8 @@ export default {
           createdAt,
           User,
         };
-        (this.replies = Replies), (this.tweetTarget = User ? User.account : "");
-        this.isLiked = Likes
-          ? Likes.filter((like) => {
-              if (like.UserId === this.currentUser.id) {
-                return like;
-              } else {
-                return false;
-              }
-            })[0].isLike
-          : false;
+        this.replies = Replies, 
+        
         this.isLoading = false;
       } catch (error) {
         console.log(error);

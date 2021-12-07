@@ -4,7 +4,9 @@
     <div class="wide-container">
       <div class="main">
         <TweetContent :initial-tweet="tweet" />
-        <ReplyItems :replies="replies" />
+        <ReplyItems 
+          :replies="replies"
+          :tweet-target="tweetTarget" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
@@ -50,12 +52,12 @@ export default {
         replyLength: 0,
         likeLength: 0,
         createdAt: "",
-        tweetTarget: "",
         isLiked: false,
       },
       tweetItem: {},
       replies: [],
-      isLoading: false,
+      isLoading: true,
+      tweetTarget: "",
     };
   },
   computed: {
@@ -105,7 +107,7 @@ export default {
           User,
         };
         this.replies = Replies, 
-        
+        this.tweetTarget = tweet.User.account
         this.isLoading = false;
       } catch (error) {
         console.log(error);

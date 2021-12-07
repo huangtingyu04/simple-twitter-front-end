@@ -38,7 +38,7 @@
             v-show="currentUser.id !== user.id"
           />
           <button
-            v-if="!user.isLiked"
+            v-if="!user.isFollower"
             class="user-header-edit-follow"
             v-show="currentUser.id !== user.id"
           >

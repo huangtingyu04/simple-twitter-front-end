@@ -24,13 +24,13 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">{{tweet.Replies ? tweet.Replies.length: 0}}</span>
+            <span class="tweet-body-foot-comment-count">{{tweet.tweetReplyCount}}</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img
               src="../../public/images/icon_like_2x.png"
               alt="tweet-liKed-icon"
-              v-if="!tweet.isLiked"
+              v-if="!tweet.isLike"
               class="tweet-body-foot-liked-icon"
               @click.stop.prevent="addLiked(tweet.id)"
             />
@@ -41,7 +41,7 @@
               class="tweet-body-foot-liked-icon"
               @click.stop.prevent="deleteLiked(tweet.id)"
             />
-            <span class="tweet-body-foot-liked-count">{{tweet.Likes ? tweet.Likes.length: 0}}</span>
+            <span class="tweet-body-foot-liked-count">{{tweet.tweetLikeCount}}</span>
           </div>
         </div>
       </div>

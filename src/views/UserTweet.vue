@@ -3,17 +3,14 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile 
-          :current-user="currentUser" 
-          :user="user" />
+        <UserProfile :current-user="currentUser" :user="user" />
         <TweetItems
           :initial-tweets="tweets"
           @toggle-tweet-reply="toggleTweetReply"
           @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
-        <UserEditModal 
-          :current-user="currentUser" @user-update="userUpdate" />
+        <UserEditModal :current-user="currentUser" @user-update="userUpdate" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
@@ -31,6 +28,7 @@
 
 <script>
 import usersAPI from "../apis/users";
+import tweetsAPI from "../apis/tweets";
 import { mapState } from "vuex";
 import { errorToast } from "../utils/toast";
 
@@ -63,10 +61,8 @@ export default {
         introduction: "",
         avatar: "",
         cover: "",
-        isLiked: false,
         followingsLength: 0,
         followersLength: 0,
-        tweetsCount: 0,
       },
       tweets: [],
       tweetItem: {},
@@ -77,41 +73,45 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchUser({ userId });
+    // this.fetchUser({ userId });
     this.fetchTweet({ userId });
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    this.fetchUser({ userId });
+    // this.fetchUser({ userId });
     this.fetchTweet({ userId });
     next();
   },
   methods: {
-    async fetchUser({userId}) {
+    // async fetchUser({ userId }) {
+    //   try {
+    //     const response = await usersAPI.getUser({ userId });
+
+    //     const { data, statusText } = response;
+    //     if (statusText !== "OK") {
+    //       throw new Error();
+    //     }
+    //     const { id, name, account, email, avatar, cover, introduction } =
+    //       data.user;
+    //     this.user = { id, name, account, email, avatar, cover, introduction };
+    //   } catch (error) {
+    //     console.log(error);
+    //     errorToast.fire({
+    //       title: "無法取得使用者資訊",
+    //     });
+    //   }
+    // },
+    async fetchTweet({ userId }) {
       try {
-        const response = await usersAPI.getUser({userId});
-        
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
+        const response = await usersAPI.getUserTweets({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
         }
-        const { id, name, account, email, avatar, cover, introduction } = data.user;
-        this.user = { id, name, account, email, avatar, cover, introduction }
-      } catch (error) {
-        console.log(error)
-        errorToast.fire({
-          title: "無法取得使用者資訊",
-        });
-      }
-    },
-    async fetchTweet({userId}) {
-      try {
-        const response = await usersAPI.getUserTweets({userId});
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
-        }
-        this.tweets = data.tweets
+        const { tweets, user } = data
+        const { id, name, account, email, avatar, cover, introduction, FollowersCount, FollowingsCount, isFollower } = user
+        this.user = { id, name, account, email, avatar, cover, introduction, followersLength: FollowersCount, followingsLength: FollowingsCount, isFollower }
+        this.tweets = tweets
         console.log(response);
       } catch (error) {
         console.log(error);
@@ -136,6 +136,7 @@ export default {
       });
     },
     toggleTweetReply(tweetId) {
+      console.log(tweetId)
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
     },
     createNewReply(payload) {
@@ -145,38 +146,62 @@ export default {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            commentsLength: tweet.commentsLength + 1,
+            tweetReplyCount: tweet.tweetReplyCount + 1,
           };
         } else {
           return { ...tweet };
         }
       });
     },
-    addLiked(tweetId) {
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
-          return {
-            ...tweet,
-            likesLength: tweet.likesLength + 1,
-            isLiked: true,
-          };
-        } else {
-          return tweet;
+    async addLiked(tweetId) {
+      try {
+        const { data } = await tweetsAPI.addLike({ tweetId });
+        console.log(data);
+        if(data.status !== 'success') {
+          throw new Error(data.message)
         }
-      });
+        this.tweets = this.tweets.map((tweet) => {
+          if (tweet.id === tweetId) {
+            return {
+              ...tweet,
+              tweetLikeCount: tweet.tweetLikeCount + 1,
+              isLike: true,
+            };
+          } else {
+            return tweet;
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法按讚",
+        });
+      }
     },
-    deleteLiked(tweetId) {
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
-          return {
-            ...tweet,
-            likesLength: tweet.likesLength - 1,
-            isLiked: false,
-          };
-        } else {
-          return tweet;
+    async deleteLiked(tweetId) {
+      try {
+        const { data } = await tweetsAPI.deleteLike({ tweetId });
+        console.log(data);
+        if(data.status !== 'success') {
+          throw new Error(data.message)
         }
-      });
+        this.tweets = this.tweets.map((tweet) => {
+          if (tweet.id === tweetId) {
+            return {
+              ...tweet,
+              tweetLikeCount: tweet.tweetLikeCount - 1,
+              isLike: false,
+            };
+          } else {
+            return tweet;
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法取消讚",
+        });
+      }
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;

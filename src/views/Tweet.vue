@@ -3,16 +3,16 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent :initial-tweet="tweet" />
-        <ReplyItems 
-          :replies="replies"
-          :tweet-target="tweetTarget" />
+        <TweetContent 
+          :initial-tweet="tweet"
+          :is-liked="isLiked" />
+        <ReplyItems :replies="replies" :tweet-target="tweetTarget" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
           @create-new-reply="createNewReply"
         />
-        <TweetModal :current-user="currentUser"/>
+        <TweetModal :current-user="currentUser" />
       </div>
       <PopularUsersCard />
     </div>
@@ -51,12 +51,12 @@ export default {
         description: "",
         replyLength: 0,
         likeLength: 0,
-        isLiked: false,
         createdAt: '',
       },
       tweetItem: {},
       replies: [],
       tweetTarget: "",
+      isLiked: false
     };
   },
   computed: {
@@ -86,7 +86,7 @@ export default {
           description,
           createdAt,
           // updatedAt,
-          // Likes,
+          Likes,
           Replies,
           User,
         } = tweet;
@@ -98,7 +98,6 @@ export default {
           description,
           replyLength: tweetReplyCount,
           likeLength: tweetLikeCount,
-          isLiked: false,
           createdAt,
         };
         this.tweetItem = {
@@ -109,6 +108,11 @@ export default {
         };
         this.replies = Replies,
         this.tweetTarget = User ? User.account : ''
+        this.isLiked = Likes?Likes.filter(like => {
+          if(like.UserId === this.currentUser.id) {
+            return like
+          } else {return false}
+        })[0].isLike :false
       } catch (error) {
         console.log(error);
         errorToast.fire({

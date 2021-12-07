@@ -44,7 +44,7 @@
           data-bs-target="#tweet-reply-modal"
         />
         <img
-          v-if="!tweet.isLiked"
+          v-if="!isLiked"
           src="./../../public/images/icon_like_2x.png"
           alt=""
           class="content-action-liked"
@@ -73,6 +73,10 @@ export default {
       type: Object,
       required: true,
     },
+    isLiked: {
+      type: Boolean,
+      default: false,
+    }
   },
   data() {
     return {

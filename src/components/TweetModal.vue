@@ -72,7 +72,7 @@ export default {
     return {
       newTweet: "",
       checkEmptyInput: false,
-      isProcessing: false
+      isProcessing: false,
     };
   },
   computed: {
@@ -84,6 +84,17 @@ export default {
       }
     },
   },
+  mounted() {
+    let self = this;
+    document.addEventListener("click", function (event) {
+      if (
+        event.target.matches(".modal") ||
+        event.target.matches(".modal-close")
+      ) {
+        self.newTweet = "";
+      }
+    });
+  },
   methods: {
     async createNewTweet(id) {
       try {
@@ -91,23 +102,23 @@ export default {
           this.checkEmptyInput = true;
           return;
         }
-        this.isProcessing = true
-        const { data } = await tweetsAPI.create({description: this.newTweet})
-        console.log(data)
+        this.isProcessing = true;
+        const { data } = await tweetsAPI.create({ description: this.newTweet });
+        console.log(data);
         this.$emit("create-new-tweet", {
           tweetId: uuidv4(),
           text: this.newTweet,
           User: this.currentUser,
         });
         successToast.fire({
-          title: '已成功新增推文'
-        })
+          title: "已成功新增推文",
+        });
         this.newTweet = "";
         this.checkEmptyInput = false;
-        this.isProcessing = false
+        this.isProcessing = false;
       } catch (error) {
         console.log(error);
-        this.isProcessing = false
+        this.isProcessing = false;
         errorToast.fire({
           title: `無法新增推文-${error.message}`,
         });

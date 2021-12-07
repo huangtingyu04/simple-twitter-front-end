@@ -60,17 +60,16 @@
         登出
       </router-link>
     </div>
-    
   </nav>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "Navbar",
   computed: {
-    ...mapState(["currentUser", "isAuthenticated"])
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   methods: {
     // fetchUser() {
@@ -83,7 +82,7 @@ export default {
     logout() {
       this.$store.commit("revokeAuthentication");
       this.$router.push("/signin");
-    }
+    },
   },
 };
 </script>

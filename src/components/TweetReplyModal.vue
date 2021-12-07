@@ -113,7 +113,7 @@ export default {
     return {
       newReply: "",
       checkEmptyInput: false,
-      isProcessing: false
+      isProcessing: false,
     };
   },
   computed: {
@@ -132,11 +132,10 @@ export default {
           this.checkEmptyInput = true;
           return;
         }
-        this.isProcessing = true
-        const { data } = await tweetsAPI.reply(
-          tweetId,
-          {reply: this.newReply.trim()}
-        );
+        this.isProcessing = true;
+        const { data } = await tweetsAPI.reply(tweetId, {
+          reply: this.newReply.trim(),
+        });
         if (data.status !== "success") {
           throw new Error(data.message);
         }
@@ -147,20 +146,31 @@ export default {
           User: this.currentUser,
         });
         successToast.fire({
-          title: '已成功回復推文'
-        })
+          title: "已成功回復推文",
+        });
         this.newReply = "";
         this.checkEmptyInput = false;
-        this.isProcessing = false
+        this.isProcessing = false;
         console.log(data);
       } catch (error) {
         console.log(error);
-        this.isProcessing = false
+        this.isProcessing = false;
         errorToast.fire({
           title: `無法回復推文-${error.message}`,
         });
       }
     },
+  },
+  mounted() {
+    let self = this;
+    document.addEventListener("click", function (event) {
+      if (
+        event.target.matches(".modal") ||
+        event.target.matches(".modal-close")
+      ) {
+        self.newReply = "";
+      }
+    });
   },
 };
 </script>

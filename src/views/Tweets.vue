@@ -15,6 +15,7 @@
         />
         <TweetReplyModal
           :tweet-item="tweetItem"
+          :current-user="currentUser"
           @create-new-reply="createNewReply"
         />
         <TweetModal
@@ -35,16 +36,7 @@ import AddTweet from "./../components/AddTweet.vue";
 import TweetModal from "./../components/TweetModal.vue";
 import TweetReplyModal from "../components/TweetReplyModal.vue";
 
-const dummyUser = {
-  currentUser: {
-    id: "1",
-    name: "Apple",
-    account: "apple",
-    email: "apple@example.com",
-    password: "12345678",
-    image: "https://i.imgur.com/RGxqLdu.png",
-  },
-};
+import { mapState } from 'vuex'
 
 const dummyData = {
   tweets: [
@@ -133,17 +125,18 @@ export default {
   },
   data() {
     return {
-      currentUser: {},
       tweets: [],
       tweetItem: {},
     };
+  },
+  computed: {
+    ...mapState(["currentUser", 'isAuthenticated'])
   },
   created() {
     this.fetchData();
   },
   methods: {
     fetchData() {
-      this.currentUser = dummyUser.currentUser;
       this.tweets = dummyData.tweets;
     },
     createNewTweet(payload) {

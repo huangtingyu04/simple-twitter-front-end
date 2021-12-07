@@ -2,7 +2,7 @@
   <div>
     <div class="top">首頁</div>
     <div class="addTweet">
-      <img :src="currentUser.image | emptyImage" alt="" class="addTweet-icon" />
+      <img :src="currentUser.avatar | emptyImage" alt="" class="addTweet-icon" />
       <form action="" class="addTweet-form" @submit.stop.prevent="createNewTweet">
         <textarea
           name="tweet"

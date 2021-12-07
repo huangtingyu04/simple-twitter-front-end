@@ -49,7 +49,7 @@
           </div>
           <div class="modal-body-tweet">
             <img
-              :src="currentUser.avatar"
+              :src="currentUser.avatar | emptyImage"
               alt=""
               class="modal-body-tweet-icon"
             />

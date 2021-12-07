@@ -26,7 +26,7 @@
         </div>
         <div class="reply-content-target">
           回覆
-          <span class="reply-content-target-account">@{{ tweetTarget }}</span>
+          <span class="reply-content-target-account">@{{ reply.Tweet.User.account }}</span>
         </div>
         <div class="reply-content-comment">{{ reply.comment }}</div>
       </div>
@@ -38,17 +38,13 @@
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 
 export default {
-  name: "ReplyItems",
+  name: 'UserReplyItems',
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
     replies: {
       type: Array,
       required: true,
     },
-    tweetTarget: {
-      type: String,
-      required: true,
-    }
   },
 };
 </script>

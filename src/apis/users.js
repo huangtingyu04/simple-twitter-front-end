@@ -10,4 +10,13 @@ export default {
   getUserTweets({userId}) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
+  getUserReplies({userId}) {
+    return apiHelper.get(`/users/${userId}/replies`)
+  },
+  addFollow({userId}) {
+    return apiHelper.post(`/followships/${userId}`, null)
+  },
+  deleteFollow({userId}) {
+    return apiHelper.delete(`/followships/${userId}`)
+  }
 }

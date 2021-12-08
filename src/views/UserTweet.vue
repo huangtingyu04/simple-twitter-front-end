@@ -6,6 +6,7 @@
         <UserProfile
           :current-user="currentUser"
           :user="user"
+          :tweets-count="tweetsCount"
           @add-follow="addFollow"
           @delete-follow="deleteFollow"
         />
@@ -69,8 +70,8 @@ export default {
         followingsLength: 0,
         followersLength: 0,
         isFollower: false,
-        tweetsCount: 0
       },
+      tweetsCount: 0,
       tweets: [],
       tweetItem: {},
     };
@@ -119,8 +120,8 @@ export default {
           followersLength: FollowersCount,
           followingsLength: FollowingsCount,
           isFollower,
-          tweetsCount: tweets.length
         };
+        this.tweetsCount = tweets.length
         this.tweets = tweets;
         console.log(response);
       } catch (error) {

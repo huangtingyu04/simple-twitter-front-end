@@ -8,7 +8,7 @@
           <img src="../../public/images/icon_back.png" alt="" class="top-back" @click="$router.back()">
           <div class="top-title">
             <div class="top-title-name">{{ name }}</div>
-            <div class="top-title-tweet">{{ tweetsNum }}<span class="top-title-tweet-count">推文</span></div>
+            <div class="top-title-tweet">{{ tweetsNum }}<span class="top-title-tweet-count"> 推文</span></div>
           </div>
         </div>
         <div class="user-follow">
@@ -70,8 +70,8 @@ export default {
         if(statusText !== 'OK') {
           throw new Error
         }
-        const {user} = data
-        const {id, name, Followers} = user
+        const {result} = data
+        const {id, name, Followers} = result
         this.id = id
         this.name = name
         this.followers = Followers

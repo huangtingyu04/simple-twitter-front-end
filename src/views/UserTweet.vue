@@ -34,7 +34,6 @@
 
 <script>
 import usersAPI from "../apis/users";
-import tweetsAPI from "../apis/tweets";
 import { mapState } from "vuex";
 import { errorToast } from "../utils/toast";
 
@@ -121,7 +120,7 @@ export default {
           followingsLength: FollowingsCount,
           isFollower,
         };
-        this.tweetsCount = tweets.length
+        this.tweetsCount = tweets.length;
         this.tweets = tweets;
         console.log(response);
       } catch (error) {
@@ -133,7 +132,7 @@ export default {
     },
     createNewTweet(payload) {
       const { tweetId, text, User } = payload;
-      this.tweets.push({
+      this.tweets.unshift({
         id: tweetId,
         description: text,
         createdAt: new Date(),
@@ -164,55 +163,31 @@ export default {
         }
       });
     },
-    async addLiked(tweetId) {
-      try {
-        const { data } = await tweetsAPI.addLike({ tweetId });
-        console.log(data);
-        if (data.status !== "success") {
-          throw new Error(data.message);
+    addLiked(tweetId) {
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
+          return {
+            ...tweet,
+            tweetLikeCount: tweet.tweetLikeCount + 1,
+            isLike: true,
+          };
+        } else {
+          return tweet;
         }
-        this.tweets = this.tweets.map((tweet) => {
-          if (tweet.id === tweetId) {
-            return {
-              ...tweet,
-              tweetLikeCount: tweet.tweetLikeCount + 1,
-              isLike: true,
-            };
-          } else {
-            return tweet;
-          }
-        });
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法按讚",
-        });
-      }
+      });
     },
     async deleteLiked(tweetId) {
-      try {
-        const { data } = await tweetsAPI.deleteLike({ tweetId });
-        console.log(data);
-        if (data.status !== "success") {
-          throw new Error(data.message);
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
+          return {
+            ...tweet,
+            tweetLikeCount: tweet.tweetLikeCount - 1,
+            isLike: false,
+          };
+        } else {
+          return tweet;
         }
-        this.tweets = this.tweets.map((tweet) => {
-          if (tweet.id === tweetId) {
-            return {
-              ...tweet,
-              tweetLikeCount: tweet.tweetLikeCount - 1,
-              isLike: false,
-            };
-          } else {
-            return tweet;
-          }
-        });
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法取消讚",
-        });
-      }
+      });
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;

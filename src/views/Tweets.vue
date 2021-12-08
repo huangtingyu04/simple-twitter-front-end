@@ -81,16 +81,16 @@ export default {
     },
     createNewTweet(payload) {
       const { tweetId, text, User } = payload;
-      this.tweets.push({
+      this.tweets.unshift({
         id: tweetId,
         description: text,
         createdAt: new Date(),
         updatedAt: new Date(),
         User: User,
-        LikeUsers: [],
-        likesLength: 0,
-        Comments: [],
-        commentsLength: 0,
+        Likes: [],
+        tweetLikeCount: 0,
+        Replies: [],
+        tweetReplyCount: 0,
         isLiked: false,
       });
     },

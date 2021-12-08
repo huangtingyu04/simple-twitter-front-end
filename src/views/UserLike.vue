@@ -3,15 +3,16 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile 
+        <UserProfile
           :current-user="currentUser"
           :user="user"
-          :tweets-count="tweetsCount" />
-        <UserLikeItems 
-        :initial-tweets="tweets"
-        @toggle-tweet-reply="toggleTweetReply"
-        @add-liked="addLiked"
-        @delete-liked="deleteLiked"
+          :tweets-count="tweetsCount"
+        />
+        <UserLikeItems
+          :initial-tweets="tweets"
+          @toggle-tweet-reply="toggleTweetReply"
+          @add-liked="addLiked"
+          @delete-liked="deleteLiked"
         />
         <UserEditModal :current-user="currentUser" />
         <TweetReplyModal
@@ -30,14 +31,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 import { errorToast } from "../utils/toast";
 import usersAPI from "../apis/users";
-
-// import usersAPI from "../apis/users";
-// import tweetsAPI from "../apis/tweets";
-// import { mapState } from "vuex";
-// import { errorToast } from "../utils/toast";
 
 import Navbar from "./../components/Navbar";
 import UserProfile from "../components/UserProfile.vue";
@@ -83,25 +79,25 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchTweet({userId})
+    this.fetchTweet({ userId });
     this.fetchLike({ userId });
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    this.fetchTweet({userId})
+    this.fetchTweet({ userId });
     this.fetchLike({ userId });
     next();
   },
   methods: {
-    async fetchLike({userId}) {
+    async fetchLike({ userId }) {
       try {
-        const response = await usersAPI.getUserLikes({userId})
-        console.log(response)
+        const response = await usersAPI.getUserLikes({ userId });
+        console.log(response);
         const { data, statusText } = response;
         if (statusText !== "OK") {
           throw new Error();
         }
-        const { user, tweets } = data
+        const { user, tweets } = data;
         const {
           id,
           name,
@@ -134,14 +130,14 @@ export default {
         });
       }
     },
-    async fetchTweet({userId}) {
+    async fetchTweet({ userId }) {
       try {
         const response = await usersAPI.getUserTweets({ userId });
         const { data } = response;
         const { tweets } = data;
-        this.tweetsCount = tweets.length
+        this.tweetsCount = tweets.length;
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     createNewTweet(payload) {

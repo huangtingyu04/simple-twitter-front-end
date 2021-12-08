@@ -4,28 +4,31 @@ export default {
   getCurrentUser() {
     return apiHelper.get('/get_current_user')
   },
-  getUser({userId}) {
+  getUser({ userId }) {
     return apiHelper.get(`/users/${userId}`)
   },
-  getUserTweets({userId}) {
+  getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
-  getUserReplies({userId}) {
+  getUserReplies({ userId }) {
     return apiHelper.get(`/users/${userId}/replies`)
   },
-  getUserLikes({userId}) {
+  getUserLikes({ userId }) {
     return apiHelper.get(`/users/${userId}/likes`)
   },
-  getUserFollowings({userId}) {
+  getUserFollowings({ userId }) {
     return apiHelper.get(`/users/${userId}/followings`)
   },
   getUserFollowers({ userId }) {
     return apiHelper.get(`/users/${userId}/followers`)
   },
-  addFollow({userId}) {
+  getPopularUsers() {
+    return apiHelper.get('users/top')
+  },
+  addFollow({ userId }) {
     return apiHelper.post(`/followships/${userId}`, null)
   },
-  deleteFollow({userId}) {
+  deleteFollow({ userId }) {
     return apiHelper.delete(`/followships/${userId}`)
   }
 }

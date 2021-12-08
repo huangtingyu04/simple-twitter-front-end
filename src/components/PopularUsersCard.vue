@@ -5,7 +5,7 @@
       <div class="popluar-item" v-for="user in popularUsers" :key="user.id">
         <div class="user-info">
           <div class="user-img">
-            <img :src="user.image | emptyImage" />
+            <img :src="user.avatar | emptyImage" />
           </div>
           <div class="user-content">
             <div class="name">{{ user.name }}</div>
@@ -17,101 +17,106 @@
             </router-link>
           </div>
         </div>
-        <button
-          type="button"
-          class="follow-btn"
-          v-if="!user.isFollowed"
-          @click.stop.prevent="addFollowing(user.id)"
-        >
-          跟隨
-        </button>
-        <button
-          type="button"
-          class="follow-btn active"
-          v-else
-          @click.stop.prevent="deleteFollowing(user.id)"
-        >
-          正在跟隨
-        </button>
+        <template v-if="currentUser.id !== user.id">
+          <button
+            type="button"
+            class="follow-btn"
+            v-if="!user.isFollowed"
+            @click.stop.prevent="addFollowing(user.id)"
+          >
+            跟隨
+          </button>
+          <button
+            type="button"
+            class="follow-btn active"
+            v-else
+            @click.stop.prevent="deleteFollowing(user.id)"
+          >
+            正在跟隨
+          </button>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
-
-const dummyData = {
-  popularUsers: [
-    {
-      id: 1,
-      UserId: 1,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      name: "Pizza Hut",
-      account: "pizzahut",
-      image: "https://i.imgur.com/RnQRoJb.png",
-      isFollowed: false,
-    },
-    {
-      id: 2,
-      UserId: 3,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      name: "McDonald's",
-      account: "McDonalds",
-      image:
-        "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
-      isFollowed: true,
-    },
-    {
-      id: 3,
-      UserId: 5,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      name: "McDonald's",
-      account: "McDonalds",
-      image: "https://i.imgur.com/RnQRoJb.png",
-      isFollowed: true,
-    },
-  ],
-};
+import usersAPI from "../apis/users";
+import { errorToast } from "../utils/toast";
+import { mapState } from "vuex";
+import { emptyImageFilter } from "../utils/mixins";
 
 export default {
-  name: 'PopularUsersCards',
-  mixins: [ emptyImageFilter ],
+  name: "PopularUsersCards",
+  mixins: [emptyImageFilter],
   data() {
     return {
       popularUsers: [],
     };
   },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
   methods: {
-    fetchPopularUsers() {
-      this.popularUsers = dummyData.popularUsers;
-    },
-    addFollowing(id) {
-      this.popularUsers = this.popularUsers.map((user) => {
-        if (user.id !== id) {
-          return user;
-        } else {
-          return {
-            ...user,
-            isFollowed: true,
-          };
+    async fetchPopularUsers() {
+      try {
+        const response = await usersAPI.getPopularUsers();
+        const { data } = response;
+        if (data.status === "error") {
+          throw new Error(data.message);
         }
-      });
+        this.popularUsers = data.users;
+        console.log("popularUsers", this.popularUsers);
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法取得熱門使用者，請稍後再試",
+        });
+      }
     },
-    deleteFollowing(id) {
-      this.popularUsers = this.popularUsers.map((user) => {
-        if (user.id !== id) {
-          return user;
-        } else {
-          return {
-            ...user,
-            isFollowed: false,
-          };
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.addFollow({ userId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-      });
+        this.popularUsers = this.popularUsers.map((user) => {
+          if (user.id !== userId) {
+            return user;
+          } else {
+            return {
+              ...user,
+              isFollowed: true,
+            };
+          }
+        });
+      } catch (error) {
+        errorToast.fire({
+          title: "無法追蹤",
+        });
+      }
+    },
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollow({ userId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.popularUsers = this.popularUsers.map((user) => {
+          if (user.id !== userId) {
+            return user;
+          } else {
+            return {
+              ...user,
+              isFollowed: false,
+            };
+          }
+        });
+      } catch (error) {
+        errorToast.fire({
+          title: "無法取消追蹤",
+        });
+      }
     },
   },
   created() {

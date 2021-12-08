@@ -86,10 +86,12 @@ export default {
       if (!Followers) {
         this.isFollowing = false;
       } else {
-        Followers.filter((follower) => {
+        Followers.find((follower) => {
           if (follower.id === this.currentUser.id) {
-            this.isFollowing = true;
+            console.log(this.currentUser.id)
+            return this.isFollowing = true;
           } else {
+            console.log('fuck')
             this.isFollowing = false;
           }
         });

@@ -12,7 +12,7 @@ export const fromNowFilter = {
 export const emptyImageFilter = {
   filters: {
     emptyImage(src) {
-      return src || 'https://github.com/huangtingyu04/simple-twitter-front-end/blob/main/src/image/default%20cover.png'
+      return src || 'https://media.istockphoto.com/photos/white-brick-wall-picture-id1250920176?b=1&k=20&m=1250920176&s=170667a&w=0&h=hXQiwcInam_MWs7AN8lshlZRW84zm9ORit027HJykws='
     }
   }
 }

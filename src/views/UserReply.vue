@@ -6,6 +6,7 @@
         <UserProfile 
           :current-user="currentUser" 
           :user="user"
+          :tweets-count="tweetsCount"
           @add-follow="addFollow"
           @delete-follow="deleteFollow" />
         <UserReplyItems :replies="replies" />
@@ -55,8 +56,8 @@ export default {
         followingsLength: 0,
         followersLength: 0,
         isFollower: false,
-        tweetsCount: 0
       },
+      tweetsCount: 0,
       replies: [],
     };
   },
@@ -65,10 +66,12 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params
+    this.fetchTweet({userId})
     this.fetchReplies({userId});
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params
+    this.fetchTweet({userId})
     this.fetchReplies({userId});
     next()
   },
@@ -104,7 +107,6 @@ export default {
           followersLength: FollowersCount,
           followingsLength: FollowingsCount,
           isFollower,
-          tweetsCount: tweets.length
         };
         this.replies = tweets
         console.log(response)
@@ -113,6 +115,16 @@ export default {
         errorToast.fire({
           title: '無法取得使用者回覆'
         })
+      }
+    },
+    async fetchTweet({userId}) {
+      try {
+        const response = await usersAPI.getUserTweets({ userId });
+        const { data } = response;
+        const { tweets } = data;
+        this.tweetsCount = tweets.length
+      } catch (error) {
+        console.log(error)
       }
     },
     createNewTweet(payload) {

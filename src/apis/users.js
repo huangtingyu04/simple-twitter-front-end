@@ -13,6 +13,9 @@ export default {
   getUserReplies({userId}) {
     return apiHelper.get(`/users/${userId}/replies`)
   },
+  getUserLikes({userId}) {
+    return apiHelper.get(`/users/${userId}/likes`)
+  },
   getUserFollowings({userId}) {
     return apiHelper.get(`/users/${userId}/followings`)
   },

@@ -10,7 +10,7 @@
       <div class="top-title">
         <div class="top-title-name">{{user.name}}</div>
         <div class="top-title-tweet">
-          {{user.tweetsCount}}<span class="top-title-tweet-count"> 推文</span>
+          {{tweetsCount}}<span class="top-title-tweet-count"> 推文</span>
         </div>
       </div>
     </div>
@@ -111,6 +111,10 @@ export default {
     user: {
       type: Object,
       required: true,
+    },
+    tweetsCount: {
+      type: Number,
+      required: true
     },
   },
   methods: {

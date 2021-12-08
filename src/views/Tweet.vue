@@ -134,6 +134,10 @@ export default {
     },
     createNewReply(payload) {
       const { replyId, tweetId, comment, User } = payload;
+      this.tweet = {
+        ...this.tweet,
+        replyLength: this.tweet.replyLength + 1
+      }
       this.replies.push({
         id: replyId,
         tweetId,
@@ -142,6 +146,7 @@ export default {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+      
     },
   },
 };

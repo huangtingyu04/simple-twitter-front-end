@@ -66,7 +66,6 @@ export default {
           throw new Error(data.message);
         }
         this.popularUsers = data.users;
-        console.log("popularUsers", this.popularUsers);
       } catch (error) {
         console.log(error);
         errorToast.fire({

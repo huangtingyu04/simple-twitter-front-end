@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade" id="user-edit-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form action="" >
+      <form action="">
         <div class="modal-content">
           <div class="modal-header">
             <img
@@ -41,7 +41,13 @@
                   class="modal-body-bg-option-delete"
                   @click="removeCover"
                 />
-                <input type="file" name="cover" id="cover" ref="cover" @change="handleImage('cover')">
+                <input
+                  type="file"
+                  name="cover"
+                  id="cover"
+                  ref="cover"
+                  @change="handleImage('cover')"
+                />
               </div>
             </div>
             <div class="modal-body-header">
@@ -57,7 +63,13 @@
                   class="modal-body-header-edit-photo"
                   @click="updateAvatar"
                 />
-                <input type="file" name="avatar" id="avatar" ref="avatar" @change="handleImage('avatar')">
+                <input
+                  type="file"
+                  name="avatar"
+                  id="avatar"
+                  ref="avatar"
+                  @change="handleImage('avatar')"
+                />
               </div>
             </div>
             <div class="modal-body-form">
@@ -95,13 +107,14 @@
                   ></textarea>
                   <div class="modal-body-form-limit">
                     <div
-                      v-show="user.introduction.length > 160"
+                      v-show="checkIsNull(user.introduction).length"
                       class="modal-body-form-limit-alert"
                     >
                       字數超出上限!
                     </div>
                     <div class="modal-body-form-limit-count">
-                      {{ user.introduction.length }}<span>/160</span>
+                      {{ checkIsNull(user.introduction).length
+                      }}<span>/160</span>
                     </div>
                   </div>
                 </div>
@@ -115,11 +128,11 @@
 </template>
 
 <script>
- import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
 
 export default {
   name: "UserEditModal",
-  mixins: [ emptyImageFilter ],
+  mixins: [emptyImageFilter],
   props: {
     currentUser: {
       type: Object,
@@ -129,7 +142,7 @@ export default {
   data() {
     return {
       user: {},
-      savable: false
+      savable: false,
     };
   },
   computed: {
@@ -145,40 +158,43 @@ export default {
     currentUser(newValue) {
       this.user = {
         ...this.user,
-        ...newValue
-      }
-    }
+        ...newValue,
+      };
+    },
   },
   created() {
     this.fetchUser();
   },
   methods: {
+    checkIsNull(value) {
+      return value === null ? "" : value;
+    },
     fetchUser() {
-      this.user = this.currentUser
+      this.user = this.currentUser;
     },
     updateCover() {
-      this.$refs.cover.click()
+      this.$refs.cover.click();
     },
     removeCover() {
-      this.$refs.cover.value= ""
-      this.userCover = ''
+      this.$refs.cover.value = "";
+      this.userCover = "";
     },
     updateAvatar() {
-      this.$refs.avatar.click()
+      this.$refs.avatar.click();
     },
     handleImage(target) {
-      const { files } = event.target
-      if(!files.length) return
-      
-      const imageURL = window.URL.createObjectURL(files[0])
-      switch(target) {
-        case 'cover':
-          this.userCover = imageURL
-          break
-        case 'avatar':
-          this.userAvatar = imageURL
+      const { files } = event.target;
+      if (!files.length) return;
+
+      const imageURL = window.URL.createObjectURL(files[0]);
+      switch (target) {
+        case "cover":
+          this.userCover = imageURL;
+          break;
+        case "avatar":
+          this.userAvatar = imageURL;
       }
-    }
+    },
   },
 };
 </script>

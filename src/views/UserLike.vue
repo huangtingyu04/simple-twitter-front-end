@@ -3,23 +3,21 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile 
-          :current-user="currentUser"
-          :user="user" />
-        <TweetItems 
-        :initial-tweets="likes"
-        @toggle-tweet-reply="toggleTweetReply"
-        @add-liked="addLiked"
-        @delete-liked="deleteLiked"
+        <UserProfile :current-user="currentUser" :user="user" />
+        <TweetItems
+          :initial-tweets="likes"
+          @toggle-tweet-reply="toggleTweetReply"
+          @add-liked="addLiked"
+          @delete-liked="deleteLiked"
         />
         <UserEditModal :current-user="currentUser" />
         <TweetReplyModal
           :tweet-item="tweetItem"
           @create-new-reply="createNewReply"
         />
-        <TweetModal 
-        :current-user="currentUser" 
-        @create-new-tweet="createNewTweet" 
+        <TweetModal
+          :current-user="currentUser"
+          @create-new-tweet="createNewTweet"
         />
       </div>
       <PopularUsersCard />
@@ -35,9 +33,10 @@ const dummyUser = {
     account: "apple",
     email: "apple@example.com",
     password: "12345678",
-    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
+    introduction:
+      "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
     avatar: "https://i.imgur.com/RGxqLdu.png",
-    cover: 'https://i.imgur.com/ifqzNgs.png',
+    cover: "https://i.imgur.com/ifqzNgs.png",
   },
 };
 
@@ -48,9 +47,10 @@ const dummyData = {
     account: "apple",
     email: "apple@example.com",
     password: "12345678",
-    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
+    introduction:
+      "Amet minim mollit non deserunt ullamco est sit aliqua dolor do ametsint.",
     avatar: "https://i.imgur.com/RGxqLdu.png",
-    cover: 'https://i.imgur.com/ifqzNgs.png',
+    cover: "https://i.imgur.com/ifqzNgs.png",
     Followings: [
       {
         id: "1",
@@ -236,11 +236,16 @@ const dummyData = {
   },
 };
 
+// import usersAPI from "../apis/users";
+// import tweetsAPI from "../apis/tweets";
+// import { mapState } from "vuex";
+// import { errorToast } from "../utils/toast";
+
 import Navbar from "./../components/Navbar";
 import UserProfile from "../components/UserProfile.vue";
 import TweetItems from "../components/TweetItems.vue";
 import UserEditModal from "../components/UserEditModal.vue";
-import TweetModal from '../components/TweetModal.vue'
+import TweetModal from "../components/TweetModal.vue";
 import TweetReplyModal from "../components/TweetReplyModal.vue";
 import PopularUsersCard from "./../components/PopularUsersCard";
 
@@ -260,20 +265,20 @@ export default {
       currentUser: {},
       user: {
         id: 0,
-        name: '', 
-        account: '', 
-        email: '',
-        introduction: '',
-        avatar: '',
-        cover: '',
+        name: "",
+        account: "",
+        email: "",
+        introduction: "",
+        avatar: "",
+        cover: "",
         isLiked: false,
-        followingsLength: 0, 
+        followingsLength: 0,
         followersLength: 0,
         tweetsCount: 0,
       },
       tweets: [],
       tweetItem: {},
-      likes: []
+      likes: [],
     };
   },
   created() {
@@ -282,13 +287,32 @@ export default {
   methods: {
     fetchData() {
       this.currentUser = dummyUser.currentUser;
-      const { id, name, account, email, avatar, cover, introduction, Tweets, Likes, Followings, Followers, isLiked } = dummyData.users;
-      this.user = { id, name, account, email, avatar, cover,
-        isLiked,
-        followingsLength: Followings? Followings.length: 0,
-        followersLength: Followers ? Followers.length: 0,
+      const {
+        id,
+        name,
+        account,
+        email,
+        avatar,
+        cover,
         introduction,
-        tweetsCount: Tweets ? Tweets.length: 0,
+        Tweets,
+        Likes,
+        Followings,
+        Followers,
+        isLiked,
+      } = dummyData.users;
+      this.user = {
+        id,
+        name,
+        account,
+        email,
+        avatar,
+        cover,
+        isLiked,
+        followingsLength: Followings ? Followings.length : 0,
+        followersLength: Followers ? Followers.length : 0,
+        introduction,
+        tweetsCount: Tweets ? Tweets.length : 0,
       };
       this.tweets = Tweets;
       this.likes = Likes;
@@ -313,15 +337,15 @@ export default {
     },
     createNewReply(payload) {
       const { replyId, tweetId, text, User } = payload;
-      console.log(replyId, tweetId, text, User)
+      console.log(replyId, tweetId, text, User);
       this.tweets = this.tweets.map((tweet) => {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            commentsLength: tweet.commentsLength + 1
+            commentsLength: tweet.commentsLength + 1,
           };
         } else {
-          return {...tweet};
+          return { ...tweet };
         }
       });
     },
@@ -352,11 +376,11 @@ export default {
       });
     },
     userUpdate(payload) {
-      const { name, introduction, avatar, cover } = payload
-      this.user.name = name
-      this.user.introduction = introduction
-      this.user.avatar = avatar
-      this.user.cover = cover
+      const { name, introduction, avatar, cover } = payload;
+      this.user.name = name;
+      this.user.introduction = introduction;
+      this.user.avatar = avatar;
+      this.user.cover = cover;
     },
   },
 };

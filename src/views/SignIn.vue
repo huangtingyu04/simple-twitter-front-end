@@ -21,7 +21,7 @@
           <div class="alert-limit">8/50</div>
         </div>
       </div> -->
-      <button type="submit" class="btn-main">登入</button>
+      <button type="submit" class="btn-main" :disabled="isProcessing">登入</button>
       <div class="link-group">
         <router-link class="btn-blue" to="/signup">註冊 Alphitter</router-link>
         ·
@@ -32,20 +32,62 @@
 </template>
 
 <script>
+import authorizationAPI from '../apis/authorization'
+import { successToast, errorToast } from '../utils/toast'
 export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      isProcessing: false
     }
   },
   methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        email: this.email,
-        password: this.password
-      })
-      console.log('data', data)
+    async handleSubmit() {
+      try {
+        if(!this.email || !this.password) {
+          errorToast.fire({
+            title: '請填入email 或 password'
+          })
+          return
+        }
+        this.isProcessing = true
+        const response = await authorizationAPI.signIn({
+          email: this.email,
+          password: this.password
+        })
+        console.log(response)
+        const {data, statusText} = response
+        if(data.status !== 'success' || statusText !== 'OK') {
+          throw new Error(data.message)
+        }
+        if(data.user.role === "admin") {
+          errorToast.fire({
+            title: '請至後台登入',
+          })
+          this.$router.push('/admin/signin')
+          return
+        }
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem("token", data.token);
+        this.isProcessing = false
+        successToast.fire({
+          title: '已成功登入'
+        })
+        // 成功登入後轉址到首頁
+        this.$router.push("/tweets");
+      } catch (error) {
+        console.log(error)
+        errorToast.fire({
+          title: `無法登入-${error.message}`
+        })
+        this.isProcessing = false
+      }
+      // const data = JSON.stringify({
+      //   email: this.email,
+      //   password: this.password
+      // })
+      // console.log('data', data)
     }
   }
 };

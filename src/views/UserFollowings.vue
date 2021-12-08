@@ -1,26 +1,132 @@
 <template>
-    <div>
-        <Navbar />
-        <div class="wide-container">
-            <div class="main">
-                <UserFollow />
+  <div>
+    <Navbar />
+    <div class="wide-container">
+      <div class="main">
+        <!-- <UserFollow /> -->
+        <div class="top">
+          <img
+            src="../../public/images/icon_back.png"
+            alt=""
+            class="top-back"
+            @click="$router.back()"
+          />
+          <div class="top-title">
+            <div class="top-title-name">{{ name }}</div>
+            <div class="top-title-tweet">
+              {{ tweetsNum }}<span class="top-title-tweet-count">推文</span>
             </div>
-            <PopularUsersCard />
+          </div>
         </div>
+        <div class="user-follow">
+          <FollowNavPills :userId="id" />
+          <FollowingItems
+            v-for="following in followings"
+            :key="following.id"
+            :initial-following="following"
+          />
+        </div>
+      </div>
+      <PopularUsersCard />
     </div>
+  </div>
 </template>
 
 <script>
-import Navbar from './../components/Navbar'
-import UserFollow from '../components/UserFollow.vue'
-import PopularUsersCard from './../components/PopularUsersCard'
+import Navbar from "./../components/Navbar";
+import FollowNavPills from "../components/FollowNavPills.vue";
+import FollowingItems from "../components/FollowingItems.vue";
+import PopularUsersCard from "./../components/PopularUsersCard";
+
+import { mapState } from "vuex";
+import usersAPI from "../apis/users";
+import { errorToast } from "../utils/toast";
 
 export default {
-    name: 'UserFollowings',
-    components: {
-        Navbar,
-        UserFollow,
-        PopularUsersCard
+  name: "UserFollowings",
+  components: {
+    Navbar,
+    FollowNavPills,
+    FollowingItems,
+    PopularUsersCard,
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"])
+  },
+  data() {
+    return {
+      id: -1,
+      name: "",
+      tweetsNum: 0,
+      followings: [],
+    };
+  },
+  created() {
+    const { id: userId } = this.$route.params;
+    this.fetchUser({ userId });
+    this.fetchFollowings({ userId });
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: userId } = to.params;
+    this.fetchUser({ userId });
+    this.fetchFollowings({ userId });
+    next();
+  },
+  methods: {
+    async fetchFollowings({userId}) {
+      try {
+        const response = await usersAPI.getUserFollowings({userId})
+        console.log(response)
+        const {data, statusText} = response
+        if(statusText !== 'OK') {
+          throw new Error
+        }
+        const {user} = data
+        const {id, name, Followings} = user
+        this.id = id
+        this.name = name
+        this.followings = Followings
+      } catch (error) {
+        errorToast.fire({
+          title: '無法取得追蹤者資訊'
+        })
+      }
+    },
+    async fetchUser({userId}) {
+      try {
+        const response = await usersAPI.getUserTweets({userId})
+        const {data, statusText} = response
+        if(statusText !== 'OK') {
+          throw new Error
+        }
+        const {tweets} = data
+        this.tweetsNum = tweets.length
+      } catch (error) {
+        console.log(error)
+      }
     }
-}
+  },
+};
 </script>
+
+<style lang="sass" scoped>
+.top
+  padding: 6px 19px 6px 19px
+  height: 55px
+  display: flex
+  align-items: center
+  .top-back
+    width: 24px
+    height: 24px
+    object-fit: cover
+    margin-right: 5%
+    cursor: pointer
+  .top-title
+    .top-title-name
+      font-size: 19px
+      font-weight: 900
+      color: $text-content
+    .top-title-tweet
+      font-size: 13px
+      color: $input-label
+</style>

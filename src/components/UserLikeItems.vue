@@ -2,18 +2,18 @@
   <div class="tweets">
     <div class="tweet" v-for="tweet in initialTweets" :key="tweet.id">
       <div class="tweet-icon">
-        <img :src="tweet.User ? tweet.User.avatar : '' | emptyImage" alt="user-icon" class="tweet-icon-photo" />
+        <img :src="tweet.Tweet.User ? tweet.Tweet.User.avatar : '' | emptyImage" alt="user-icon" class="tweet-icon-photo" />
       </div>
       <div class="tweet-body">
         <div class="tweet-body-head">
           <router-link 
             class="tweet-body-head-name"
-            :to="{ name: 'user-tweet', params: { id: tweet.User.id } }">{{tweet.User.name}}</router-link>
-          <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
+            :to="{ name: 'user-tweet', params: { id: tweet.Tweet.User.id } }">{{tweet.Tweet.User.name}}</router-link>
+          <div class="tweet-body-head-account">@{{ tweet.Tweet.User.account }}</div>
           <span> · </span>
           <div class="tweet-body-head-time">{{ tweet.createdAt | fromNow }}</div>
         </div>
-        <router-link :to="{ name: 'tweet', params: { id: tweet.id } }" class="tweet-body-content">{{ tweet.description }}</router-link>
+        <router-link :to="{ name: 'tweet', params: { id: tweet.Tweet.id } }" class="tweet-body-content">{{ tweet.Tweet.description }}</router-link>
         <div class="tweet-body-foot">
           <div class="tweet-body-foot-comment">
             <img
@@ -53,7 +53,7 @@
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 
 export default {
-  name: "TweetItems",
+  name: "UserLikeItems",
   mixins: [ fromNowFilter, emptyImageFilter ],
   props: {
     initialTweets: {

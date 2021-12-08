@@ -4,6 +4,8 @@ import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
 import Tweets from '../views/Tweets.vue'
 
+import store from './../store'
+
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -35,9 +37,19 @@ const router = new VueRouter({
       component: () => import('../views/Tweet.vue')
     },
     {
-      path: '/users/:id',
-      name: 'user',
-      component: () => import('../views/User.vue')
+      path: '/users/:id/tweet',
+      name: 'user-tweet',
+      component: () => import('../views/UserTweet.vue')
+    },
+    {
+      path: '/users/:id/reply',
+      name: 'user-reply',
+      component: () => import('../views/UserReply.vue')
+    },
+    {
+      path: '/users/:id/like',
+      name: 'user-like',
+      component: () => import('../views/UserLike.vue')
     },
     {
       path: '/users/:id/setting',
@@ -88,6 +100,11 @@ const router = new VueRouter({
       component: NotFound
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  store.dispatch('fetchCurrentUser')
+  next()
 })
 
 export default router

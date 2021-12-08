@@ -15,7 +15,7 @@
           <div class="modal-body-post">
             <div class="modal-body-post-head">
               <img
-                :src="tweetItem.User ? tweetItem.User.image: ''"
+                :src="tweetItem.User ? tweetItem.User.avatar : '' | emptyImage"
                 alt=""
                 class="modal-body-post-head-icon"
               />
@@ -24,26 +24,24 @@
             <div class="modal-body-post-body">
               <div class="modal-body-post-body-head">
                 <div class="modal-body-post-body-head-name">
-                  {{tweetItem.User? tweetItem.User.name: ''}}
+                  {{ tweetItem.User ? tweetItem.User.name : "" }}
                 </div>
                 <div class="modal-body-post-body-head-account">
-                  @{{tweetItem.User? tweetItem.User.account : ''}}
+                  @{{ tweetItem.User ? tweetItem.User.account : "" }}
                 </div>
                 <span> · </span>
                 <div class="modal-body-post-body-head-time">
-                  {{ tweetItem.createdAt }}
+                  {{ tweetItem.createdAt | fromNow }}
                 </div>
               </div>
               <div class="modal-body-post-body-content">
-                {{ tweetItem.text }}
+                {{ tweetItem.description }}
               </div>
               <div class="modal-body-post-body-foot">
                 <div class="modal-body-post-body-foot-reply">
                   回覆給
                   <span class="modal-body-post-body-foot-account"
-                    >@{{
-                     tweetItem.User? tweetItem.User.account: ''
-                    }}</span
+                    >@{{ tweetItem.User ? tweetItem.User.account : "" }}</span
                   >
                 </div>
               </div>
@@ -51,14 +49,15 @@
           </div>
           <div class="modal-body-tweet">
             <img
-              :src="currentUser.image"
+              :src="currentUser.avatar | emptyImage"
               alt=""
               class="modal-body-tweet-icon"
             />
-            <form 
+            <form
               action=""
-              @submit.stop.prevent="createNewReply(tweetItem.id)" 
-              class="modal-body-tweet-form">
+              @submit.stop.prevent="createNewReply(tweetItem.id)"
+              class="modal-body-tweet-form"
+            >
               <textarea
                 name="tweet"
                 v-model="newReply"
@@ -74,11 +73,13 @@
                 <p class="addReply-empty" v-show="checkEmptyInput">
                   內容不可空白
                 </p>
-                <button 
+                <button
                   class="btn-tweet"
-                  :data-bs-dismiss="submitOK" 
-                  :disabled="newReply.length > 140"
-                  >推文</button>
+                  :data-bs-dismiss="submitOK"
+                  :disabled="newReply.length > 140 || isProcessing"
+                >
+                  推文
+                </button>
               </div>
             </form>
           </div>
@@ -89,66 +90,87 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid'
-
-const dummyUser = {
-  currentUser: {
-    id: "1",
-    name: "Apple",
-    account: "apple",
-    email: "apple@example.com",
-    password: "12345678",
-    image: "https://i.imgur.com/RGxqLdu.png",
-  },
-};
+import { v4 as uuidv4 } from "uuid";
+import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+import tweetsAPI from "../apis/tweets";
+import { successToast, errorToast } from "../utils/toast";
 
 export default {
   name: "TweetReplyModal",
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     tweetItem: {
       type: Object,
       required: true,
     },
+    currentUser: {
+      type: Object,
+      required: true,
+    },
   },
+
   data() {
     return {
-      currentUser: {},
-      newReply: '',
+      newReply: "",
       checkEmptyInput: false,
-      
+      isProcessing: false,
     };
   },
   computed: {
     submitOK() {
-      if(!this.newReply) {
-        return ''
+      if (!this.newReply) {
+        return "";
       } else {
-        return 'modal'
+        return "modal";
       }
-    }
-  },
-  created() {
-    this.fetchUser();
+    },
   },
   methods: {
-    fetchUser() {
-      this.currentUser = dummyUser.currentUser;
+    async createNewReply(tweetId) {
+      try {
+        if (!this.newReply.trim()) {
+          this.checkEmptyInput = true;
+          return;
+        }
+        this.isProcessing = true;
+        const { data } = await tweetsAPI.reply(tweetId, {
+          reply: this.newReply.trim(),
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.$emit("create-new-reply", {
+          replyId: uuidv4(),
+          tweetId: tweetId,
+          comment: this.newReply,
+          User: this.currentUser,
+        });
+        successToast.fire({
+          title: "已成功回復推文",
+        });
+        this.newReply = "";
+        this.checkEmptyInput = false;
+        this.isProcessing = false;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+        this.isProcessing = false;
+        errorToast.fire({
+          title: `無法回復推文-${error.message}`,
+        });
+      }
     },
-    createNewReply(tweetId) {
-      console.log(tweetId)
-      if(!this.newReply) {
-        this.checkEmptyInput = true
-        return
-      } 
-      this.$emit("create-new-reply", {
-        replyId: uuidv4(),
-        tweetId: tweetId,
-        text: this.newReply,
-        User: this.currentUser
-      })
-      this.newReply = ''
-      this.checkEmptyInput = false
-    }
+  },
+  mounted() {
+    let self = this;
+    document.addEventListener("click", function (event) {
+      if (
+        event.target.matches(".modal") ||
+        event.target.matches(".modal-close")
+      ) {
+        self.newReply = "";
+      }
+    });
   },
 };
 </script>

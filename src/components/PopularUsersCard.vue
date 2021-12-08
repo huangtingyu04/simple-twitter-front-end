@@ -2,93 +2,128 @@
   <div class="popular-container">
     <div class="popular-box">
       <div class="popular-title">Popular</div>
-      <div class="popluar-item">
+      <div class="popluar-item" v-for="user in popularUsers" :key="user.id">
         <div class="user-info">
           <div class="user-img">
-            <img
-              src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            />
+            <img :src="user.avatar | emptyImage" />
           </div>
           <div class="user-content">
-            <div class="name">Pizza Hut</div>
-            <a class="link" href="javascript:;">@pizzahut</a>
+            <div class="name">{{ user.name }}</div>
+            <router-link
+              class="link"
+              :to="{ name: 'user-tweet', params: { id: user.id } }"
+            >
+              @{{ user.account }}
+            </router-link>
           </div>
         </div>
-        <button type="button" class="follow-btn active">正在跟隨</button>
-      </div>
-      <div class="popluar-item">
-        <div class="user-info">
-          <div class="user-img">
-            <img
-              src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            />
-          </div>
-          <div class="user-content">
-            <div class="name">McDonald's</div>
-            <a class="link" href="javascript:;">@McDonalds</a>
-          </div>
-        </div>
-        <button type="button" class="follow-btn">跟隨</button>
-      </div>
-      <div class="popluar-item">
-        <div class="user-info">
-          <div class="user-img">
-            <img
-              src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            />
-          </div>
-          <div class="user-content">
-            <div class="name">Pizza Hut</div>
-            <a class="link" href="javascript:;">@pizzahut</a>
-          </div>
-        </div>
-        <button class="follow-btn active" type="button">正在跟隨</button>
-      </div>
-      <div class="popluar-item">
-        <div class="user-info">
-          <div class="user-img">
-            <img
-              src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            />
-          </div>
-          <div class="user-content">
-            <div class="name">McDonald's</div>
-            <a class="link" href="javascript:;">@McDonalds</a>
-          </div>
-        </div>
-        <button class="follow-btn" type="button">跟隨</button>
-      </div>
-      <div class="popluar-item">
-        <div class="user-info">
-          <div class="user-img">
-            <img
-              src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            />
-          </div>
-          <div class="user-content">
-            <div class="name">Pizza Hut</div>
-            <a class="link" href="javascript:;">@pizzahut</a>
-          </div>
-        </div>
-        <button class="follow-btn active" type="button">正在跟隨</button>
-      </div>
-      <div class="popluar-item">
-        <div class="user-info">
-          <div class="user-img">
-            <img
-              src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
-            />
-          </div>
-          <div class="user-content">
-            <div class="name">McDonald's</div>
-            <a class="link" href="javascript:;">@McDonalds</a>
-          </div>
-        </div>
-        <button class="follow-btn" type="button">跟隨</button>
+        <template v-if="currentUser.id !== user.id">
+          <button
+            type="button"
+            class="follow-btn"
+            v-if="!user.isFollowed"
+            @click.stop.prevent="addFollowing(user.id)"
+          >
+            跟隨
+          </button>
+          <button
+            type="button"
+            class="follow-btn active"
+            v-else
+            @click.stop.prevent="deleteFollowing(user.id)"
+          >
+            正在跟隨
+          </button>
+        </template>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import usersAPI from "../apis/users";
+import { errorToast } from "../utils/toast";
+import { mapState } from "vuex";
+import { emptyImageFilter } from "../utils/mixins";
+
+export default {
+  name: "PopularUsersCards",
+  mixins: [emptyImageFilter],
+  data() {
+    return {
+      popularUsers: [],
+    };
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  methods: {
+    async fetchPopularUsers() {
+      try {
+        const response = await usersAPI.getPopularUsers();
+        const { data } = response;
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        this.popularUsers = data.users;
+        console.log("popularUsers", this.popularUsers);
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法取得熱門使用者，請稍後再試",
+        });
+      }
+    },
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.addFollow({ userId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.popularUsers = this.popularUsers.map((user) => {
+          if (user.id !== userId) {
+            return user;
+          } else {
+            return {
+              ...user,
+              isFollowed: true,
+            };
+          }
+        });
+      } catch (error) {
+        errorToast.fire({
+          title: "無法追蹤",
+        });
+      }
+    },
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollow({ userId });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        this.popularUsers = this.popularUsers.map((user) => {
+          if (user.id !== userId) {
+            return user;
+          } else {
+            return {
+              ...user,
+              isFollowed: false,
+            };
+          }
+        });
+      } catch (error) {
+        errorToast.fire({
+          title: "無法取消追蹤",
+        });
+      }
+    },
+  },
+  created() {
+    this.fetchPopularUsers();
+  },
+};
+</script>
 <style lang="sass" scoped>
 @import '../styles/popularUsers'
 </style>

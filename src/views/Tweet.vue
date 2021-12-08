@@ -3,13 +3,18 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent :initial-tweet="tweet"/>
+        <TweetContent 
+          :initial-tweet="tweet"
+          :is-like="isLike" />
         <ReplyItems 
           :replies="replies"
-          :tweet-target="tweetTarget"/>
-        <TweetReplyModal 
+          :tweet-target="tweetTarget" />
+        <TweetReplyModal
           :tweet-item="tweetItem"
-          @create-new-reply="createNewReply"/>
+          :current-user="currentUser"
+          @create-new-reply="createNewReply"
+        />
+        <TweetModal :current-user="currentUser" />
       </div>
       <PopularUsersCard />
     </div>
@@ -17,69 +22,16 @@
 </template>
 
 <script>
-const dummyData = {
-  tweet: {
-    id: 56,
-    text: "Autem veniam tempore fdsfk iore jklerkjadkf adwerr jke trwertre opldlszl dfsdfwer.",
-    UserId: 2,
-    createdAt: "2021-11-23T07:25:29.000Z",
-    updatedAt: "2021-11-23T07:25:29.000Z",
-    User: {
-      id: 2,
-      name: "user1",
-      account: "user1",
-      email: "user1@example.com",
-      password: "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-      isAdmin: false,
-      image: "https://i.imgur.com/RnQRoJb.png",
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-26T04:22:35.000Z",
-    },
-    Replies: [
-      {
-        id: 1,
-        UserId: 1,
-        User: {
-          name: "Mary Jane",
-          account: "mjjane",
-          image: "https://i.imgur.com/MRdy9z2.png",
-        },
-        createdAt: "2019-06-22T09:00:43.000Z",
-        text: "Great~",
-      },
-      {
-        id: 2,
-        UserId: 221,
-        User: {
-          name: "Squishy Tom",
-          account: "sushiTom",
-          image: "https://i.imgur.com/a0BP98T.png",
-        },
-        createdAt: "2019-06-22T09:00:43.000Z",
-        text: "Good Job!",
-      },
-      {
-        id: 3,
-        UserId: 13,
-        User: {
-          name: "Moter Forker",
-          account: "moterforker",
-          image: "https://i.imgur.com/RGxqLdu.png",
-        },
-        createdAt: "2019-06-22T09:00:43.000Z",
-        text: "Moter Forker!",
-      },
-    ],
-    Likes: [{}, {}],
-    isLiked: true,
-  },
-};
-
 import Navbar from "./../components/Navbar";
 import PopularUsersCard from "./../components/PopularUsersCard";
 import TweetContent from "./../components/TweetContent.vue";
 import ReplyItems from "./../components/ReplyItems.vue";
-import TweetReplyModal from "./../components/TweetReplyModal.vue"
+import TweetReplyModal from "./../components/TweetReplyModal.vue";
+import TweetModal from "../components/TweetModal.vue";
+
+import tweetsAPI from "../apis/tweets";
+import { errorToast } from "../utils/toast";
+import { mapState } from "vuex";
 
 export default {
   name: "Tweet",
@@ -88,6 +40,7 @@ export default {
     TweetContent,
     ReplyItems,
     TweetReplyModal,
+    TweetModal,
     PopularUsersCard,
   },
   data() {
@@ -96,55 +49,104 @@ export default {
         id: 1,
         name: "",
         account: "",
-        image: "",
-        text: "",
+        avatar: "",
+        description: "",
         replyLength: 0,
         likeLength: 0,
-        isLiked: false,
+        createdAt: "",
       },
       tweetItem: {},
       replies: [],
-      tweetTarget: '',
+      isLike: false,
+      isLoading: true,
+      tweetTarget: "",
     };
   },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
   created() {
-    this.fetchTweet();
+    const { id: tweetId } = this.$route.params;
+    this.fetchTweet({ tweetId });
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: tweetId } = to.params;
+    this.fetchTweet({ tweetId });
+    next();
   },
   methods: {
-    fetchTweet() {
-      const { id, createdAt, updatedAt, User, Replies, text, Likes, isLiked } =
-        dummyData.tweet;
-      this.tweet = {
-        id,
-        createdAt,
-        updatedAt,
-        name: User ? User.name : "匿名",
-        account: User ? User.account : "匿名",
-        image: User ? User.image : "",
-        text,
-        replyLength: Replies ? Replies.length : 0,
-        likeLength: Likes ? Likes.length : 0,
-        isLiked,
-      };
-      this.tweetItem = {
-        id,
-        text,
-        createdAt,
-        User,
-      };
-      this.replies = Replies,
-      this.tweetTarget = User.account
+    async fetchTweet({ tweetId }) {
+      try {
+        this.isLoading = true;
+        const { data, statusText } = await tweetsAPI.getTweet({ tweetId });
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        console.log(data);
+        const { tweet, tweetLikeCount, tweetReplyCount } = data;
+        const {
+          id,
+          description,
+          createdAt,
+          Replies,
+          User,
+          Likes
+        } = tweet;
+        this.tweet = {
+          id,
+          name: User ? User.name : "匿名",
+          account: User ? User.account : "匿名",
+          avatar: User ? User.avatar : "",
+          description,
+          replyLength: tweetReplyCount,
+          likeLength: tweetLikeCount,
+          createdAt,
+        };
+        this.tweetItem = {
+          id,
+          description,
+          createdAt,
+          User,
+        };
+        this.replies = Replies, 
+        this.tweetTarget = tweet.User.account
+        // 判斷isLike
+        if(Likes === []) {
+          this.isLike = false
+        } else {
+          Likes.filter(like => {
+            if(like.UserId === this.currentUser.id) {
+              this.isLike = like.isLike
+            } else {
+              this.isLike = false
+            }
+          })
+        }
+
+        this.isLoading = false;
+      } catch (error) {
+        console.log(error);
+        this.isLoading = false;
+        errorToast.fire({
+          title: "無法取得推文",
+        });
+      }
     },
     createNewReply(payload) {
-      const {replyId, tweetId, text, User} = payload
+      const { replyId, tweetId, comment, User } = payload;
+      this.tweet = {
+        ...this.tweet,
+        replyLength: this.tweet.replyLength + 1
+      }
       this.replies.push({
         id: replyId,
         tweetId,
-        text,
+        comment,
         User,
         createdAt: new Date(),
         updatedAt: new Date(),
-      }) 
+      });
+      
     },
   },
 };

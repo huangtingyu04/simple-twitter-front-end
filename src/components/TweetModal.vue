@@ -13,7 +13,11 @@
         </div>
         <div class="modal-body">
           <div class="modal-body-tweet">
-            <img :src="currentUser.image" alt="" class="modal-body-tweet-icon">
+            <img
+              :src="currentUser.avatar | emptyImage"
+              alt=""
+              class="modal-body-tweet-icon"
+            />
             <form
               action=""
               class="modal-body-tweet-form"
@@ -37,8 +41,8 @@
                 <button
                   class="btn-addTweet"
                   type="submit"
-                  :data-bs-dismiss="submitOK" 
-                  :disabled="newTweet.length > 140"
+                  :data-bs-dismiss="submitOK"
+                  :disabled="newTweet.length > 140 || isProcessing"
                 >
                   推文
                 </button>
@@ -52,10 +56,14 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from "uuid";
+import tweetsAPI from "../apis/tweets";
+import { successToast, errorToast } from "../utils/toast";
+import { emptyImageFilter } from '../utils/mixins'
 
 export default {
   name: "TweetModal",
+  mixins: [ emptyImageFilter ],
   props: {
     currentUser: {
       type: Object,
@@ -66,6 +74,7 @@ export default {
     return {
       newTweet: "",
       checkEmptyInput: false,
+      isProcessing: false,
     };
   },
   computed: {
@@ -77,20 +86,46 @@ export default {
       }
     },
   },
-  methods: {
-    createNewTweet(id) {
-      console.log(id);
-      if (!this.newTweet) {
-        this.checkEmptyInput = true;
-        return;
+  mounted() {
+    let self = this;
+    document.addEventListener("click", function (event) {
+      if (
+        event.target.matches(".modal") ||
+        event.target.matches(".modal-close")
+      ) {
+        self.newTweet = "";
       }
-      this.$emit("create-new-tweet", {
-        tweetId: uuidv4(),
-        text: this.newTweet,
-        User: this.currentUser
-      });
-      this.newTweet = "";
-      this.checkEmptyInput = false;
+    });
+  },
+  methods: {
+    async createNewTweet(id) {
+      try {
+        if (!this.newTweet) {
+          this.checkEmptyInput = true;
+          return;
+        }
+        this.isProcessing = true;
+        const { data } = await tweetsAPI.create({ description: this.newTweet });
+        console.log(data);
+        this.$emit("create-new-tweet", {
+          tweetId: uuidv4(),
+          text: this.newTweet,
+          User: this.currentUser,
+        });
+        successToast.fire({
+          title: "已成功新增推文",
+        });
+        this.newTweet = "";
+        this.checkEmptyInput = false;
+        this.isProcessing = false;
+      } catch (error) {
+        console.log(error);
+        this.isProcessing = false;
+        errorToast.fire({
+          title: `無法新增推文-${error.message}`,
+        });
+      }
+      console.log(id);
     },
   },
 };

@@ -68,6 +68,8 @@ export default {
         cover: "",
         followingsLength: 0,
         followersLength: 0,
+        isFollower: false,
+        tweetsCount: 0
       },
       tweets: [],
       tweetItem: {},
@@ -117,6 +119,7 @@ export default {
           followersLength: FollowersCount,
           followingsLength: FollowingsCount,
           isFollower,
+          tweetsCount: tweets.length
         };
         this.tweets = tweets;
         console.log(response);

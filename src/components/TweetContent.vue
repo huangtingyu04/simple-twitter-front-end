@@ -48,7 +48,7 @@
           data-bs-target="#tweet-reply-modal"
         />
         <img
-          v-if="!tweet.isLiked"
+          v-if="!isLiked"
           src="./../../public/images/icon_like_2x.png"
           alt=""
           class="content-action-liked"
@@ -79,7 +79,7 @@ export default {
       type: Object,
       required: true,
     },
-    isLiked: {
+    isLike: {
       type: Boolean,
       default: false,
     },
@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       tweet: {},
-      isLike: false,
+      isLiked: false
     };
   },
   mounted() {
@@ -100,19 +100,20 @@ export default {
         ...newValue,
       };
     },
-    isLiked(newValue) {
-      this.isLike = {
-        ...this.isLike,
-        ...newValue,
-      };
-    },
+    isLike(newValue) {
+      this.isLiked = {
+        ...this.isLiked,
+        ...newValue
+      }
+    }
   },
   methods: {
     async addLike(tweetId) {
       try {
-        const response = await tweetsAPI.addLike(tweetId);
+        console.log(tweetId)
+        const response = await tweetsAPI.addLike({tweetId});
         const { data } = response;
-        this.isLike = true;
+        this.isLiked = true;
         this.tweet.likeLength = this.tweet.likeLength + 1;
         if (data.status !== "success") {
           throw new Error(data.message);
@@ -126,9 +127,9 @@ export default {
     },
     async deleteLike(tweetId) {
       try {
-        const response = await tweetsAPI.deleteLike(tweetId);
+        const response = await tweetsAPI.deleteLike({tweetId});
         const { data } = response;
-        this.isLike = false;
+        this.isLiked = false;
         this.tweet.likeLength = this.tweet.likeLength - 1;
         if (data.status !== "success") {
           throw new Error(data.message);

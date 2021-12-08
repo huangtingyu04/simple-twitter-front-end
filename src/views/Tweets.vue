@@ -37,81 +37,8 @@ import TweetModal from "./../components/TweetModal.vue";
 import TweetReplyModal from "../components/TweetReplyModal.vue";
 
 import { mapState } from 'vuex'
-
-const dummyData = {
-  tweets: [
-    {
-      id: 1,
-      text: "Autem veniam tempore.",
-      UserId: 1,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      User: {
-        id: 1,
-        name: "user1",
-        account: "user1",
-        email: "user1@example.com",
-        password:
-          "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-        isAdmin: false,
-        image: "https://i.imgur.com/RnQRoJb.png",
-        createdAt: "2021-11-23T07:25:29.000Z",
-        updatedAt: "2021-11-26T04:22:35.000Z",
-      },
-      likesLength: 3,
-      Comments: [{}, {}],
-      commentsLength: 2,
-      Likes: [{}],
-      isLiked: false,
-    },
-    {
-      id: 2,
-      text: "zrtdhuua trtdghui etsfgj gfgfgrtewrt.",
-      UserId: 1,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      User: {
-        id: 1,
-        name: "user1",
-        account: "user1",
-        email: "user1@example.com",
-        password:
-          "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-        isAdmin: false,
-        image: "https://i.imgur.com/RnQRoJb.png",
-        createdAt: "2021-11-23T07:25:29.000Z",
-        updatedAt: "2021-11-26T04:22:35.000Z",
-      },
-      likesLength: 2,
-      Comments: [],
-      commentsLength: 0,
-      isLiked: true,
-    },
-    {
-      id: 3,
-      text: "iuyituncg trdsnujkgta wefdfghhjbnsfgqerq dfsdfwerwerqwtrh fdsfe fdwer aswhjjyuir.",
-      UserId: 2,
-      createdAt: "2021-11-23T07:25:29.000Z",
-      updatedAt: "2021-11-23T07:25:29.000Z",
-      User: {
-        id: 2,
-        name: "user2",
-        account: "user2",
-        email: "user2@example.com",
-        password:
-          "$2a$10$xSAOmUrVGjFXNuA6pENgM.ldkJ/Nu4uf6PSXAYAfPxNnbGocDZ4rO",
-        isAdmin: false,
-        image: "https://i.imgur.com/RGxqLdu.png",
-        createdAt: "2021-11-23T07:25:29.000Z",
-        updatedAt: "2021-11-26T04:22:35.000Z",
-      },
-      likesLength: 3,
-      Comments: [],
-      commentsLength: 0,
-      isLiked: true,
-    },
-  ],
-};
+import tweetsAPI from '../apis/tweets'
+import { errorToast } from '../utils/toast'
 
 export default {
   name: "Tweets",
@@ -136,14 +63,27 @@ export default {
     this.fetchData();
   },
   methods: {
-    fetchData() {
-      this.tweets = dummyData.tweets;
+    async fetchData() {
+      try {
+        const response = await tweetsAPI.getTweets()
+        console.log(response)
+        const { data, statusText } = response
+        if(statusText !== 'OK') {
+          throw new Error
+        }
+        this.tweets = data.tweets
+      } catch (error) {
+        console.log(error)
+        errorToast.fire({
+          title: '無法取得推文資訊'
+        })
+      }
     },
     createNewTweet(payload) {
       const { tweetId, text, User } = payload;
       this.tweets.push({
         id: tweetId,
-        text: text,
+        description: text,
         createdAt: new Date(),
         updatedAt: new Date(),
         User: User,

@@ -14,7 +14,7 @@
         <div class="modal-body">
           <div class="modal-body-tweet">
             <img
-              :src="currentUser.avatar"
+              :src="currentUser.avatar | emptyImage"
               alt=""
               class="modal-body-tweet-icon"
             />
@@ -59,9 +59,11 @@
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
+import { emptyImageFilter } from '../utils/mixins'
 
 export default {
   name: "TweetModal",
+  mixins: [ emptyImageFilter ],
   props: {
     currentUser: {
       type: Object,

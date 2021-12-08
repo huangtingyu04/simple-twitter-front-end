@@ -3,7 +3,9 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent :initial-tweet="tweet" />
+        <TweetContent 
+          :initial-tweet="tweet"
+          :is-like="isLike" />
         <ReplyItems 
           :replies="replies"
           :tweet-target="tweetTarget" />
@@ -52,10 +54,10 @@ export default {
         replyLength: 0,
         likeLength: 0,
         createdAt: "",
-        isLiked: false,
       },
       tweetItem: {},
       replies: [],
+      isLike: false,
       isLoading: true,
       tweetTarget: "",
     };
@@ -81,13 +83,14 @@ export default {
           throw new Error();
         }
         console.log(data);
-        const { tweet, tweetLikeCount, tweetReplyCount, isLike } = data;
+        const { tweet, tweetLikeCount, tweetReplyCount } = data;
         const {
           id,
           description,
           createdAt,
           Replies,
           User,
+          Likes
         } = tweet;
         this.tweet = {
           id,
@@ -98,7 +101,6 @@ export default {
           replyLength: tweetReplyCount,
           likeLength: tweetLikeCount,
           createdAt,
-          isLiked: isLike,
         };
         this.tweetItem = {
           id,
@@ -108,6 +110,19 @@ export default {
         };
         this.replies = Replies, 
         this.tweetTarget = tweet.User.account
+        // 判斷isLike
+        if(Likes === []) {
+          this.isLike = false
+        } else {
+          Likes.filter(like => {
+            if(like.UserId === this.currentUser.id) {
+              this.isLike = like.isLike
+            } else {
+              this.isLike = false
+            }
+          })
+        }
+
         this.isLoading = false;
       } catch (error) {
         console.log(error);
@@ -119,6 +134,10 @@ export default {
     },
     createNewReply(payload) {
       const { replyId, tweetId, comment, User } = payload;
+      this.tweet = {
+        ...this.tweet,
+        replyLength: this.tweet.replyLength + 1
+      }
       this.replies.push({
         id: replyId,
         tweetId,
@@ -127,6 +146,7 @@ export default {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+      
     },
   },
 };

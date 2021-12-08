@@ -52,10 +52,10 @@ export default {
         introduction: "",
         avatar: "",
         cover: "",
-        isLiked: false,
         followingsLength: 0,
         followersLength: 0,
-        tweetsCount: 0,
+        isFollower: false,
+        tweetsCount: 0
       },
       replies: [],
     };
@@ -65,12 +65,10 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params
-    // this.fetchUser({userId});
     this.fetchReplies({userId});
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params
-    // this.fetchUser({userId});
     this.fetchReplies({userId});
     next()
   },
@@ -83,7 +81,31 @@ export default {
           throw new Error
         }
         const { tweets, user } = data
-        this.user = user
+        const {
+          id,
+          name,
+          account,
+          email,
+          avatar,
+          cover,
+          introduction,
+          FollowersCount,
+          FollowingsCount,
+          isFollower,
+        } = user;
+        this.user = {
+          id,
+          name,
+          account,
+          email,
+          avatar,
+          cover,
+          introduction,
+          followersLength: FollowersCount,
+          followingsLength: FollowingsCount,
+          isFollower,
+          tweetsCount: tweets.length
+        };
         this.replies = tweets
         console.log(response)
       } catch (error) {

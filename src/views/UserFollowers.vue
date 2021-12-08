@@ -27,29 +27,9 @@ import FollowNavPills from '../components/FollowNavPills.vue'
 import FollowItems from '../components/FollowItems.vue'
 import PopularUsersCard from './../components/PopularUsersCard'
 
-const dummyData = {
-  id: "1",
-  name: "Emery Huang",
-  tweetsNum: 25,
-  followers: [
-    {
-      id: "1",
-      name: "Laure",
-      account: "LaureBill",
-      image: 'https://i.imgur.com/RGxqLdu.png',
-      text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
-      isFollowing: false,
-    },
-    {
-      id: "2",
-      name: "Laure123",
-      account: "LaureBill123",
-      image: 'https://i.imgur.com/RGxqLdu.png',
-      text: '123Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.',
-      isFollowing: true,
-    },
-  ],
-};
+import { mapState } from 'vuex'
+import usersAPI from '../apis/users'
+import { errorToast } from '../utils/toast'
 
 export default {
   name: 'UserFollowers',
@@ -59,6 +39,9 @@ export default {
     FollowItems,
     PopularUsersCard
   },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"])
+  },
   data() {
     return {
       id: -1,
@@ -67,18 +50,52 @@ export default {
       followers: []
     }
   },
+  created() {
+    const { id: userId } = this.$route.params
+    this.fetchUser({userId})
+    this.fetchFollowers({userId})
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: userId } = to.params
+    this.fetchUser({userId})
+    this.fetchFollowers({userId})
+    next()
+  },
   methods: {
-    fetchFollowers() {
-      const { id, name, tweetsNum, followers } = dummyData
-      this.id= id
-      this.name= name
-      this.tweetsNum= tweetsNum
-      this.followers= followers
+    async fetchFollowers({userId}) {
+      try {
+        const response = await usersAPI.getUserFollowers({userId})
+        console.log(response)
+        const {data, statusText} = response
+        if(statusText !== 'OK') {
+          throw new Error
+        }
+        const {user} = data
+        const {id, name, Followers} = user
+        this.id = id
+        this.name = name
+        this.followers = Followers
+      } catch (error) {
+        errorToast.fire({
+          title: '無法取得追蹤者資訊'
+        })
+      }
+    },
+    async fetchUser({userId}) {
+      try {
+        const response = await usersAPI.getUserTweets({userId})
+        const {data, statusText} = response
+        if(statusText !== 'OK') {
+          throw new Error
+        }
+        const {tweets} = data
+        this.tweetsNum = tweets.length
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
-  created() {
-    this.fetchFollowers()
-  }
+  
 }
 </script>
 

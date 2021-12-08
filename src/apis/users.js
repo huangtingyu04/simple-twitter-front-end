@@ -13,6 +13,12 @@ export default {
   getUserReplies({userId}) {
     return apiHelper.get(`/users/${userId}/replies`)
   },
+  getUserFollowings({userId}) {
+    return apiHelper.get(`/users/${userId}/followings`)
+  },
+  getUserFollowers({ userId }) {
+    return apiHelper.get(`/users/${userId}/followers`)
+  },
   addFollow({userId}) {
     return apiHelper.post(`/followships/${userId}`, null)
   },

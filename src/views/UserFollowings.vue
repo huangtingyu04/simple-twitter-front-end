@@ -24,10 +24,11 @@
             v-for="follower in followers"
             :key="follower.id"
             :initial-follower="follower"
+            @remove-follow-item="removeFollowItem"
           />
         </div>
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @add-follow-item="addFollowItem"/>
     </div>
   </div>
 </template>
@@ -104,6 +105,18 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    addFollowItem(form) {
+      this.followers.push({
+        id: form.id,
+        name: form.name,
+        account: form.account,
+        isFollowing: true
+      },)
+    },
+    removeFollowItem(userId) {
+      console.log(userId)
+      this.followers = this.followers.filter(follower => follower.id !== userId)
     }
   },
 };

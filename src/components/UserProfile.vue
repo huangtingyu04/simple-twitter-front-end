@@ -120,6 +120,10 @@ export default {
       required: true
     },
   },
+  created() {
+    this.popularAddFollow()
+    this.popularDeleteFollow( )
+  },
   methods: {
     async addFollow(userId) {
       try {
@@ -147,6 +151,21 @@ export default {
       }
       this.$emit("delete-follow", userId)
     },
+    // popularAddFollow() {
+    //   eventBus.$on('add-follow-pop', userId => {
+    //     console.log(userId)
+    //     if(this.follower.id === userId) {
+    //       return this.isFollowing = true
+    //     } else return
+    //   })
+    // },
+    // popularDeleteFollow() {
+    //   eventBus.$on('delete-follow-pop', userId => {
+    //     if(this.follower.id === userId) {
+    //       return this.isFollowing = false
+    //     }
+    //   })
+    // }
   }
 };
 </script>

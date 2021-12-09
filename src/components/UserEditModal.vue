@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade" id="user-edit-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form action="">
+      <form action="" @submit.stop.prevent="handleSubmit">
         <div class="modal-content">
           <div class="modal-header">
             <img
@@ -46,7 +46,7 @@
                   name="cover"
                   id="cover"
                   ref="cover"
-                  @change="handleImage('cover')"
+                  @change="handleImage($event, 'cover')"
                 />
               </div>
             </div>
@@ -68,12 +68,12 @@
                   name="avatar"
                   id="avatar"
                   ref="avatar"
-                  @change="handleImage('avatar')"
+                  @change="handleImage($event, 'avatar')"
                 />
               </div>
             </div>
             <div class="modal-body-form">
-              <form action="">
+              <div class="form">
                 <div class="form-label-group">
                   <label for="name">名稱</label>
                   <input
@@ -118,7 +118,7 @@
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -159,11 +159,25 @@ export default {
       this.user = {
         ...this.user,
         ...newValue,
+        avatarCached: newValue.avatar,
+        coverCached: newValue.cover,
       };
     },
   },
   created() {
     this.fetchUser();
+  },
+  mounted() {
+    let self = this;
+    document.addEventListener("click", function (event) {
+      if (
+        event.target.matches(".modal") ||
+        event.target.matches(".modal-close")
+      ) {
+        self.user.avatar = self.user.avatarCached;
+        self.user.cover = self.user.coverCached;
+      }
+    });
   },
   methods: {
     checkIsNull(value) {
@@ -177,22 +191,37 @@ export default {
     },
     removeCover() {
       this.$refs.cover.value = "";
-      this.userCover = "";
+      this.user.cover = this.user.coverCached;
     },
     updateAvatar() {
       this.$refs.avatar.click();
     },
-    handleImage(target) {
+    handleImage(event, target) {
       const { files } = event.target;
-      if (!files.length) return;
-
-      const imageURL = window.URL.createObjectURL(files[0]);
-      switch (target) {
-        case "cover":
-          this.userCover = imageURL;
-          break;
-        case "avatar":
-          this.userAvatar = imageURL;
+      if (files.length === 0) {
+        switch (target) {
+          case "cover":
+            this.user.cover = "";
+            break;
+          case "avatar":
+            this.user.avatar = "";
+        }
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        switch (target) {
+          case "cover":
+            this.user.cover = imageURL;
+            break;
+          case "avatar":
+            this.user.avatar = imageURL;
+        }
+      }
+    },
+    handleSubmit(e) {
+      const form = e.target;
+      const formData = new FormData(form);
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ": " + value);
       }
     },
   },

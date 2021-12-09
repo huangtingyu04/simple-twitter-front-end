@@ -44,6 +44,7 @@
                 <input
                   type="file"
                   name="cover"
+                  accept="image/*"
                   id="cover"
                   ref="cover"
                   @change="handleImage($event, 'cover')"
@@ -66,6 +67,7 @@
                 <input
                   type="file"
                   name="avatar"
+                  accept="image/*"
                   id="avatar"
                   ref="avatar"
                   @change="handleImage($event, 'avatar')"
@@ -148,14 +150,15 @@ export default {
   data() {
     return {
       user: {},
+      savable: false,
     };
   },
   computed: {
     submitOK() {
-      if (!this.user.name) {
-        return "";
-      } else {
+      if (!this.savable) {
         return "modal";
+      } else {
+        return "";
       }
     },
   },
@@ -220,7 +223,7 @@ export default {
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
 
-        // console.log(imageURL);
+        console.log(imageURL);
         switch (target) {
           case "cover":
             this.user.cover = imageURL;
@@ -233,6 +236,9 @@ export default {
     handleSubmit(e) {
       const form = e.target;
       const formData = new FormData(form);
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ": " + value);
+      }
 
       this.$emit("update-profile", formData);
     },

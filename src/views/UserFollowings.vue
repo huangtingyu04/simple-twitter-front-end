@@ -91,7 +91,7 @@ export default {
           title: '無法取得追蹤者資訊'
         })
       }
-    },
+    }, 
     async fetchUser({userId}) {
       try {
         const response = await usersAPI.getUserTweets({userId})

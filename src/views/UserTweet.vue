@@ -169,6 +169,7 @@ export default {
         commentsLength: 0,
         isLiked: false,
       });
+      this.tweetsCount += 1
     },
     toggleTweetReply(tweetId) {
       console.log(tweetId);
@@ -201,7 +202,7 @@ export default {
         }
       });
     },
-    async deleteLiked(tweetId) {
+    deleteLiked(tweetId) {
       this.tweets = this.tweets.map((tweet) => {
         if (tweet.id === tweetId) {
           return {

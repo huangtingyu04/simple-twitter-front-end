@@ -127,20 +127,8 @@ export default {
         console.log(error)
       }
     },
-    createNewTweet(payload) {
-      const { tweetId, text, User } = payload;
-      this.tweets.push({
-        id: tweetId,
-        text: text,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        User: User,
-        LikeUsers: [],
-        likesLength: 0,
-        Comments: [],
-        commentsLength: 0,
-        isLiked: false,
-      });
+    createNewTweet() {
+      this.tweetsCount += 1
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;

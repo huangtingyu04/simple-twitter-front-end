@@ -16,7 +16,10 @@
           @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
-        <UserEditModal :current-user="currentUser" />
+        <UserEditModal
+          :current-user="currentUser"
+          @update-profile="handleUpdateProfile"
+        />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
@@ -127,6 +130,28 @@ export default {
         console.log(error);
         errorToast.fire({
           title: "無法取得使用者推文資訊",
+        });
+      }
+    },
+    async handleUpdateProfile(formData) {
+      try {
+        const { data } = await usersAPI.update(
+          { userId: this.user.id },
+          formData
+        );
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        console.log(this.user.id);
+
+        this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
+      } catch (error) {
+        console.log(error);
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+        errorToast.fire({
+          title: "無法編輯使用者個人資訊",
         });
       }
     },

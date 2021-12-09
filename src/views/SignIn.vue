@@ -6,8 +6,8 @@
     <div class="main-title">登入 Alphitter</div>
     <form @submit.prevent.stop="handleSubmit">
       <div class="input-field">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required autofocus placeholder="email" v-model="email" />
+        <label for="email">帳號</label>
+        <input type="text" name="account" id="account" required autofocus placeholder="account" v-model="account" />
       </div>
       <div class="input-field">
         <label for="password">密碼</label>
@@ -37,7 +37,7 @@ import { successToast, errorToast } from '../utils/toast'
 export default {
   data () {
     return {
-      email: '',
+      account: '',
       password: '',
       isProcessing: false
     }
@@ -45,7 +45,7 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        if(!this.email || !this.password) {
+        if(!this.account || !this.password) {
           errorToast.fire({
             title: '請填入email 或 password'
           })
@@ -53,7 +53,7 @@ export default {
         }
         this.isProcessing = true
         const response = await authorizationAPI.signIn({
-          email: this.email,
+          account: this.account,
           password: this.password
         })
         console.log(response)

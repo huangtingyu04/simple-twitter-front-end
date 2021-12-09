@@ -139,17 +139,17 @@ export default {
           { userId: this.user.id },
           formData
         );
+        console.log(data);
+
         if (data.status !== "success") {
           throw new Error(data.message);
         }
         console.log(this.user.id);
+        console.log(12345);
 
         this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
       } catch (error) {
         console.log(error);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
         errorToast.fire({
           title: "無法編輯使用者個人資訊",
         });

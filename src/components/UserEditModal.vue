@@ -15,7 +15,7 @@
             <button
               type="submit"
               class="btn-save"
-              :disabled="savable"
+              :disabled="user.name.length < 1"
               :data-bs-dismiss="submitOK"
             >
               儲存
@@ -86,6 +86,12 @@
                   />
                   <div class="modal-body-form-limit">
                     <div
+                      v-show="user.name.length < 1"
+                      class="modal-body-form-limit-alert"
+                    >
+                      名稱不可為空!
+                    </div>
+                    <div
                       v-show="user.name.length > 50"
                       class="modal-body-form-limit-alert"
                     >
@@ -142,15 +148,14 @@ export default {
   data() {
     return {
       user: {},
-      savable: false,
     };
   },
   computed: {
     submitOK() {
-      if (!this.savable) {
-        return "modal";
-      } else {
+      if (!this.user.name) {
         return "";
+      } else {
+        return "modal";
       }
     },
   },
@@ -159,6 +164,8 @@ export default {
       this.user = {
         ...this.user,
         ...newValue,
+        nameCached: newValue.name,
+        introductionCached: newValue.introduction,
         avatarCached: newValue.avatar,
         coverCached: newValue.cover,
       };
@@ -191,14 +198,18 @@ export default {
     },
     removeCover() {
       this.$refs.cover.value = "";
-      this.user.cover = this.user.coverCached;
+      this.user.cover = "";
     },
     updateAvatar() {
       this.$refs.avatar.click();
     },
     handleImage(event, target) {
       const { files } = event.target;
+      // console.log(456, files);
+
       if (files.length === 0) {
+        // console.log(123);
+
         switch (target) {
           case "cover":
             this.user.cover = "";
@@ -208,6 +219,8 @@ export default {
         }
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
+
+        // console.log(imageURL);
         switch (target) {
           case "cover":
             this.user.cover = imageURL;
@@ -220,8 +233,8 @@ export default {
     handleSubmit(e) {
       const form = e.target;
       const formData = new FormData(form);
+
       this.$emit("update-profile", formData);
-      console.log(formData, 1234);
     },
   },
 };

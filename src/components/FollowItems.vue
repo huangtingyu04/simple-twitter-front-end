@@ -4,11 +4,11 @@
     <div class="follow-content">
       <div class="follow-content-head">
         <div class="follow-content-head-title">
-          <router-link   
+          <router-link
             class="follow-content-head-title-name"
-            :to="{name: 'user-tweet', params: {id: follower.id}}">{{
-            follower.name
-          }}</router-link>
+            :to="{ name: 'user-tweet', params: { id: follower.id } }"
+            >{{ follower.name }}</router-link
+          >
           <div class="follow-content-head-title-account">
             @{{ follower.account }}
           </div>
@@ -19,15 +19,15 @@
         <button
           class="isfollow"
           v-show="!(follower.id === currentUser.id)"
-          v-if="!isFollowing"
-          @click.prevent.stop="addFollowing(follower.id)"
+          v-if="!follower.isFollowing"
+          @click.prevent.stop="addFollow(follower.id)"
         >
           跟隨
         </button>
         <button
           class="unfollow"
           v-else
-          @click.prevent.stop="deleteFollowing(follower.id)"
+          @click.prevent.stop="deleteFollow(follower.id)"
         >
           正在跟隨
         </button>
@@ -40,6 +40,8 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { mapState } from "vuex";
+import { eventBus } from "../utils/eventbus";
+import usersAPI from "../apis/users";
 
 export default {
   name: "FollowItems",
@@ -56,15 +58,15 @@ export default {
         id: 0,
         name: "",
         account: "",
-        avatar: '',
+        avatar: "",
         introduction: "",
         Followers: [],
       },
-      isFollowing: false,
+      // isFollowing: false,
     };
   },
   computed: {
-    ...mapState(["currentUser"]),
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   watch: {
     initialFollower(newValue) {
@@ -76,6 +78,8 @@ export default {
   },
   created() {
     this.fetchUser();
+    this.popularAddFollow();
+    this.popularDeleteFollow();
   },
   methods: {
     fetchUser() {
@@ -88,28 +92,49 @@ export default {
       } else {
         Followers.find((follower) => {
           if (follower.id === this.currentUser.id) {
-            console.log(this.currentUser.id)
-            return this.isFollowing = true;
+            return (this.follower.isFollowing = true);
           } else {
-            console.log('fuck')
-            this.isFollowing = false;
+            this.follower.isFollowing = false;
           }
         });
       }
     },
-    addFollowing(followerId) {
-      console.log(followerId);
-      this.follower = {
-        ...this.follower,
-        isFollowing: true,
-      };
+    async addFollow(userId) {
+      try {
+        const { data } = await usersAPI.addFollow({ userId });
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+      eventBus.$emit("add-follow-pop", userId);
+      this.isFollowing = true;
     },
-    deleteFollowing(followerId) {
-      console.log(followerId);
-      this.follower = {
-        ...this.follower,
-        isFollowing: false,
-      };
+    async deleteFollow(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollow({ userId });
+        console.log(data);
+        if ((this.currentUser.id = this.$route.params)) {
+          this.$emit("remove-follow-item", userId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      eventBus.$emit("delete-follow-pop", userId);
+      this.isFollowing = false;
+    },
+    popularAddFollow() {
+      eventBus.$on("add-follow-pop", (userId) => {
+        if (this.follower.id === userId) {
+          return (this.isFollowing = true);
+        } else return;
+      });
+    },
+    popularDeleteFollow() {
+      eventBus.$on("delete-follow-pop", (userId) => {
+        if (this.follower.id === userId) {
+          return (this.isFollowing = false);
+        } else return;
+      });
     },
   },
 };

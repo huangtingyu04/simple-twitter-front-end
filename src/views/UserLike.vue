@@ -7,6 +7,8 @@
           :current-user="currentUser"
           :user="user"
           :tweets-count="tweetsCount"
+          @add-follow="addFollow"
+          @delete-follow="deleteFollow"
         />
         <UserLikeItems
           :initial-tweets="tweets"
@@ -140,20 +142,8 @@ export default {
         console.log(error);
       }
     },
-    createNewTweet(payload) {
-      const { tweetId, text, User } = payload;
-      this.tweets.push({
-        id: tweetId,
-        text: text,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        User: User,
-        LikeUsers: [],
-        likesLength: 0,
-        Comments: [],
-        commentsLength: 0,
-        isLiked: false,
-      });
+    createNewTweet() {
+      this.tweetsCount += 1
     },
     toggleTweetReply(tweetId) {
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
@@ -204,6 +194,14 @@ export default {
       this.user.introduction = introduction;
       this.user.avatar = avatar;
       this.user.cover = cover;
+    },
+    addFollow() {
+      this.user.isFollower = true;
+      this.user.followersLength += 1
+    },
+    deleteFollow() {
+      this.user.isFollower = false;
+      this.user.followersLength -= 1
     },
   },
 };

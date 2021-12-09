@@ -18,7 +18,7 @@
         />
         <UserEditModal
           :current-user="currentUser"
-          @update-profile="handleUpdateProfile"
+          @update-profile="handleUpdateProfile" 
         />
         <TweetReplyModal
           :tweet-item="tweetItem"

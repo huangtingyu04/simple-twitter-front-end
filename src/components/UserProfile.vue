@@ -120,10 +120,10 @@ export default {
       required: true
     },
   },
-  created() {
-    this.popularAddFollow()
-    this.popularDeleteFollow( )
-  },
+  // created() {
+  //   this.popularAddFollow()
+  //   this.popularDeleteFollow( )
+  // },
   methods: {
     async addFollow(userId) {
       try {

@@ -40,6 +40,7 @@ export default new Vuex.Store({
         const { data } = await usersAPI.getCurrentUser()
         const { id, name, email, account, avatar, cover, introduction } = data
         commit('setCurrentUser', { id, name, email, account, avatar, cover, introduction })
+        return true  
       } catch (error) {
         console.log(error)
         commit('revokeAuthentication')

@@ -67,14 +67,6 @@ const router = new VueRouter({
       component: () => import('../views/UserFollowers.vue')
     },
     {
-      path: '/about',
-      name: 'About',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    },
-    {
       path: '/admin',
       exact: true,
       redirect: '/admin/signin'
@@ -102,27 +94,9 @@ const router = new VueRouter({
   ]
 })
 
-router.beforeEach(async (to, from, next) => {
-  const tokenInLocalStorage = localStorage.getItem('token')
-  const tokenInStore = store.state.token
-  let isAuthenticated = store.state.isAuthenticated
-
-  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
-    isAuthenticated = await store.dispatch('fetchCurrentUser')
-  }
-
-  const pathsWithoutAuthentication = ['sign-up', 'sign-in']
-
-  if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
-    next('/signin')
-    return
-  }
-
-  if (isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
-    next('/tweets')
-    return
-  }
-
+router.beforeEach((to, from, next) => {
+  // 使用 dispatch 呼叫 Vuex 內的 actions
+  store.dispatch('fetchCurrentUser')
   next()
 })
 

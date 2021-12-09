@@ -223,7 +223,7 @@ export default {
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
 
-        console.log(imageURL);
+        console.log(files[0]);
         switch (target) {
           case "cover":
             this.user.cover = imageURL;

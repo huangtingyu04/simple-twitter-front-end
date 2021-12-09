@@ -107,7 +107,7 @@
                   ></textarea>
                   <div class="modal-body-form-limit">
                     <div
-                      v-show="checkIsNull(user.introduction).length"
+                      v-show="checkIsNull(user.introduction).length > 150"
                       class="modal-body-form-limit-alert"
                     >
                       字數超出上限!
@@ -220,9 +220,8 @@ export default {
     handleSubmit(e) {
       const form = e.target;
       const formData = new FormData(form);
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ": " + value);
-      }
+      this.$emit("update-profile", formData);
+      console.log(formData, 1234);
     },
   },
 };

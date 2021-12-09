@@ -137,6 +137,8 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
+import usersAPI from '../apis/users'
+// import { errorToast } from '../utils/toast';
 
 export default {
   name: "UserEditModal",
@@ -233,14 +235,25 @@ export default {
         }
       }
     },
-    handleSubmit(e) {
-      const form = e.target;
-      const formData = new FormData(form);
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ": " + value);
+    async handleSubmit(e) {
+      try {
+        // if(!this.user.name) {
+        //   errorToast.f
+        // }
+        const form = e.target;
+        const formData = new FormData(form);
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+        this.$emit("update-profile", formData);
+        const response = await usersAPI.update({
+          userId: this.currentUser.id,
+          formData
+        })
+        console.log(response)
+      } catch (error) {
+        console.log(error);
       }
-
-      this.$emit("update-profile", formData);
     },
   },
 };

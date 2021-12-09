@@ -139,16 +139,17 @@
 import { emptyImageFilter } from "../utils/mixins";
 import usersAPI from '../apis/users'
 // import { errorToast } from '../utils/toast';
+import { mapState } from 'vuex'
 
 export default {
   name: "UserEditModal",
   mixins: [emptyImageFilter],
-  props: {
-    currentUser: {
-      type: Object,
-      required: true,
-    },
-  },
+  // props: {
+  //   currentUser: {
+  //     type: Object,
+  //     required: true,
+  //   },
+  // },
   data() {
     return {
       user: {},
@@ -156,6 +157,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["currentUser" , "isAuthenticated"]),
     submitOK() {
       if (!this.savable) {
         return "modal";
@@ -235,15 +237,16 @@ export default {
         }
       }
     },
-    async handleSubmit(e) {
+    async handleSubmit() {
       try {
         // if(!this.user.name) {
         //   errorToast.f
         // }
-        const form = e.target;
-        const formData = new FormData(form);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
+        const formData = {
+          name: this.user.id,
+          introduction: this.user.introduction,
+          cover: this.user.cover,
+          avatar: this.user.avatar
         }
         this.$emit("update-profile", formData);
         const response = await usersAPI.update({

@@ -8,7 +8,7 @@ export default {
     return apiHelper.get(`/users/${userId}`)
   },
   update({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}`, formData)
+    return apiHelper.put(`/users/${userId}`, {formData})
   },
   getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)

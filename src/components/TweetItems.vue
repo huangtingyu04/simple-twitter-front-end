@@ -51,6 +51,8 @@
 
 <script>
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+import { errorToast } from '../utils/toast'
+import tweetsAPI from '../apis/tweets'
 
 export default {
   name: "TweetItems",
@@ -65,11 +67,32 @@ export default {
     toggleTweetReply(tweetId) {
       this.$emit("toggle-tweet-reply", tweetId)
     },
-    addLiked(tweetId) {
-      this.$emit("add-liked", tweetId)
+    async addLiked(tweetId) {
+      try {
+        console.log(tweetId)
+        const response = await tweetsAPI.addLike({tweetId})
+        console.log(response)
+        this.$emit("add-liked", tweetId)
+      } catch (error) {
+        console.log(error)
+        errorToast.fire({
+          title: `無法按讚--`
+        })
+      }
+      
     },
-    deleteLiked(tweetId) {
-      this.$emit("delete-liked", tweetId)
+    async deleteLiked(tweetId) {
+      try {
+        console.log(tweetId)
+        const response = await tweetsAPI.deleteLike({tweetId})
+        console.log(response)
+        this.$emit("delete-liked", tweetId)
+      } catch (error) {
+        console.log(error)
+        errorToast.fire({
+          title: `無法取消讚--`
+        })
+      }
     },
   },
 };

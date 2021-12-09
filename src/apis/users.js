@@ -7,6 +7,9 @@ export default {
   getUser({ userId }) {
     return apiHelper.get(`/users/${userId}`)
   },
+  update({ userId, formData }) {
+    return apiHelper.put(`/users/${userId}`, formData)
+  },
   getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
@@ -25,10 +28,10 @@ export default {
   getPopularUsers() {
     return apiHelper.get('users/top')
   },
-  addFollow({ userId }) {
+  addFollow( {userId} ) {
     return apiHelper.post(`/followships/${userId}`, null)
   },
-  deleteFollow({ userId }) {
+  deleteFollow( {userId} ) {
     return apiHelper.delete(`/followships/${userId}`)
   }
 }

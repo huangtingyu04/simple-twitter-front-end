@@ -81,16 +81,16 @@ export default {
     },
     createNewTweet(payload) {
       const { tweetId, text, User } = payload;
-      this.tweets.push({
+      this.tweets.unshift({
         id: tweetId,
         description: text,
         createdAt: new Date(),
         updatedAt: new Date(),
         User: User,
-        LikeUsers: [],
-        likesLength: 0,
-        Comments: [],
-        commentsLength: 0,
+        Likes: [],
+        tweetLikeCount: 0,
+        Replies: [],
+        tweetReplyCount: 0,
         isLiked: false,
       });
     },
@@ -104,7 +104,7 @@ export default {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            commentsLength: tweet.commentsLength + 1
+            tweetReplyCount: tweet.tweetReplyCount + 1
           };
         } else {
           return {...tweet};
@@ -116,8 +116,8 @@ export default {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            likesLength: tweet.likesLength + 1,
-            isLiked: true,
+            tweetLikeCount: tweet.tweetLikeCount + 1,
+            isLike: true,
           };
         } else {
           return tweet;
@@ -129,8 +129,8 @@ export default {
         if (tweet.id === tweetId) {
           return {
             ...tweet,
-            likesLength: tweet.likesLength - 1,
-            isLiked: false,
+            tweetLikeCount: tweet.tweetLikeCount - 1,
+            isLike: false,
           };
         } else {
           return tweet;

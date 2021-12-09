@@ -6,6 +6,7 @@
         <div class="follow-content-head-title">
           <div class="follow-content-head-title-name">{{ following.name }}</div>
           <div class="follow-content-head-title-account">@{{ following.account }}</div>
+          <div class="follow-content-head-title-intro">{{following.introduction}}</div>
         </div>
         <button class="isfollow" v-if="!following.isFollowing" @click.prevent.stop="addFollowing(following.id)">跟隨</button>
         <button class="unfollow" v-else @click.prevent.stop="deleteFollowing(following.id)">正在跟隨</button>

@@ -59,11 +59,11 @@
 import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
 
 export default {
   name: "TweetModal",
-  mixins: [ emptyImageFilter ],
+  mixins: [emptyImageFilter],
   props: {
     currentUser: {
       type: Object,

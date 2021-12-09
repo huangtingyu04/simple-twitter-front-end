@@ -14,20 +14,21 @@
           <div class="top-title">
             <div class="top-title-name">{{ name }}</div>
             <div class="top-title-tweet">
-              {{ tweetsNum }}<span class="top-title-tweet-count">推文</span>
+              {{ tweetsNum }}<span class="top-title-tweet-count"> 推文</span>
             </div>
           </div>
         </div>
         <div class="user-follow">
           <FollowNavPills :userId="id" />
-          <FollowingItems
-            v-for="following in followings"
-            :key="following.id"
-            :initial-following="following"
+          <FollowItems
+            v-for="follower in followers"
+            :key="follower.id"
+            :initial-follower="follower"
+            @remove-follow-item="removeFollowItem"
           />
         </div>
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @add-follow-item="addFollowItem"/>
     </div>
   </div>
 </template>
@@ -35,7 +36,7 @@
 <script>
 import Navbar from "./../components/Navbar";
 import FollowNavPills from "../components/FollowNavPills.vue";
-import FollowingItems from "../components/FollowingItems.vue";
+import FollowItems from "../components/FollowItems.vue";
 import PopularUsersCard from "./../components/PopularUsersCard";
 
 import { mapState } from "vuex";
@@ -47,7 +48,7 @@ export default {
   components: {
     Navbar,
     FollowNavPills,
-    FollowingItems,
+    FollowItems,
     PopularUsersCard,
   },
   computed: {
@@ -58,7 +59,7 @@ export default {
       id: -1,
       name: "",
       tweetsNum: 0,
-      followings: [],
+      followers: [],
     };
   },
   created() {
@@ -81,17 +82,17 @@ export default {
         if(statusText !== 'OK') {
           throw new Error
         }
-        const {user} = data
-        const {id, name, Followings} = user
+        const {result} = data
+        const {id, name, Followings} = result
         this.id = id
         this.name = name
-        this.followings = Followings
+        this.followers = Followings
       } catch (error) {
         errorToast.fire({
           title: '無法取得追蹤者資訊'
         })
       }
-    },
+    }, 
     async fetchUser({userId}) {
       try {
         const response = await usersAPI.getUserTweets({userId})
@@ -104,6 +105,18 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    addFollowItem(form) {
+      this.followers.push({
+        id: form.id,
+        name: form.name,
+        account: form.account,
+        isFollowing: true
+      },)
+    },
+    removeFollowItem(userId) {
+      console.log(userId)
+      this.followers = this.followers.filter(follower => follower.id !== userId)
     }
   },
 };

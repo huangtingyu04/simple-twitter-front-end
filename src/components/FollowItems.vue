@@ -1,14 +1,36 @@
 <template>
   <div class="follow">
-    <img :src="follower.image | emptyImage" class="follow-icon">
+    <img :src="follower.avatar | emptyImage" class="follow-icon" />
     <div class="follow-content">
       <div class="follow-content-head">
         <div class="follow-content-head-title">
-          <div class="follow-content-head-title-name">{{ follower.name }}</div>
-          <div class="follow-content-head-title-account">@{{ follower.account }}</div>
+          <router-link
+            class="follow-content-head-title-name"
+            :to="{ name: 'user-tweet', params: { id: follower.id } }"
+            >{{ follower.name }}</router-link
+          >
+          <div class="follow-content-head-title-account">
+            @{{ follower.account }}
+          </div>
+          <div class="follow-content-head-title-intro">
+            {{ follower.introduction }}
+          </div>
         </div>
-        <button class="isfollow" v-if="!follower.isFollowing" @click.prevent.stop="addFollowing(follower.id)">跟隨</button>
-        <button class="unfollow" v-else @click.prevent.stop="deleteFollowing(follower.id)">正在跟隨</button>
+        <button
+          class="isfollow"
+          v-show="!(follower.id === currentUser.id)"
+          v-if="!follower.isFollowing"
+          @click.prevent.stop="addFollow(follower.id)"
+        >
+          跟隨
+        </button>
+        <button
+          class="unfollow"
+          v-else
+          @click.prevent.stop="deleteFollow(follower.id)"
+        >
+          正在跟隨
+        </button>
       </div>
       <div class="follow-content-body">{{ follower.text }}</div>
     </div>
@@ -16,39 +38,106 @@
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
+import { mapState } from "vuex";
+import { eventBus } from "../utils/eventbus";
+import usersAPI from "../apis/users";
 
 export default {
-  name: 'FollowItems',
-  mixins: [ emptyImageFilter ],
+  name: "FollowItems",
+  mixins: [emptyImageFilter],
   props: {
     initialFollower: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
-      follower: this.initialFollower
-    }
+      follower: {
+        id: 0,
+        name: "",
+        account: "",
+        avatar: "",
+        introduction: "",
+        Followers: [],
+      },
+      // isFollowing: false,
+    };
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  watch: {
+    initialFollower(newValue) {
+      this.follower = {
+        ...this.follower,
+        ...newValue,
+      };
+    },
+  },
+  created() {
+    this.fetchUser();
+    this.popularAddFollow();
+    this.popularDeleteFollow();
   },
   methods: {
-    addFollowing(followerId) {
-      console.log(followerId)
-      this.follower = {
-        ...this.follower,
-        isFollowing: true
+    fetchUser() {
+      const { id, name, account, avatar, introduction, Followers } =
+        this.initialFollower;
+      this.follower = { id, name, account, avatar, introduction, Followers };
+
+      if (!Followers) {
+        this.isFollowing = false;
+      } else {
+        Followers.find((follower) => {
+          if (follower.id === this.currentUser.id) {
+            return (this.follower.isFollowing = true);
+          } else {
+            this.follower.isFollowing = false;
+          }
+        });
       }
     },
-    deleteFollowing(followerId) {
-      console.log(followerId)
-      this.follower = {
-        ...this.follower,
-        isFollowing: false
+    async addFollow(userId) {
+      try {
+        const { data } = await usersAPI.addFollow({ userId });
+        console.log(data);
+      } catch (error) {
+        console.log(error);
       }
-    }
-  }
-}
+      eventBus.$emit("add-follow-pop", userId);
+      this.isFollowing = true;
+    },
+    async deleteFollow(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollow({ userId });
+        console.log(data);
+        if ((this.currentUser.id = this.$route.params)) {
+          this.$emit("remove-follow-item", userId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      eventBus.$emit("delete-follow-pop", userId);
+      this.isFollowing = false;
+    },
+    popularAddFollow() {
+      eventBus.$on("add-follow-pop", (userId) => {
+        if (this.follower.id === userId) {
+          return (this.isFollowing = true);
+        } else return;
+      });
+    },
+    popularDeleteFollow() {
+      eventBus.$on("delete-follow-pop", (userId) => {
+        if (this.follower.id === userId) {
+          return (this.isFollowing = false);
+        } else return;
+      });
+    },
+  },
+};
 </script>
 
 <style lang="sass" scoped>
@@ -69,6 +158,7 @@ export default {
       justify-content: space-between
       .follow-content-head-title
         .follow-content-head-title-name
+          text-decoration: none
           font-size: 15px
           font-weight: 700
           color: $text-content
@@ -93,5 +183,5 @@ export default {
     .follow-content-body
       padding-top: 5px
       font-size: 15px
-      font-weight: 500    
+      font-weight: 500
 </style>

@@ -15,7 +15,7 @@
         padding-left: 10px
         border: none
         border-bottom: 1px solid #657786
-        background: $input-bg 
+        background: $input-bg
         transition: .4s ease-in-out
 
         &:-internal-autofill-selected
@@ -54,3 +54,7 @@
     text-align: center
     color: $light
     border: 1px solid $mainColor
+
+    &:disabled
+        background: rgba($mainColor, 0.6)
+        border: 1px solid rgba($mainColor, 0.6)

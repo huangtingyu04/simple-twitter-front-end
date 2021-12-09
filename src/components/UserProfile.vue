@@ -96,6 +96,9 @@
 
 <script>
 import { emptyImageFilter } from '../utils/mixins'
+import usersAPI from '../apis/users'
+import { errorToast } from "../utils/toast";
+
 import UserNavPills from "../components/UserNavPills.vue";
 export default {
   name: "UserProfile",
@@ -117,13 +120,52 @@ export default {
       required: true
     },
   },
+  // created() {
+  //   this.popularAddFollow()
+  //   this.popularDeleteFollow( )
+  // },
   methods: {
-    addFollow(userId) {
+    async addFollow(userId) {
+      try {
+        console.log(userId);
+        const response = await usersAPI.addFollow( {userId} );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法追蹤此使用者",
+        });
+      }
       this.$emit("add-follow", userId)
     },
-    deleteFollow(userId) {
+    async deleteFollow(userId) {
+      try {
+        console.log(userId);
+        const response = await usersAPI.deleteFollow( {userId} );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法取消追蹤此使用者",
+        });
+      }
       this.$emit("delete-follow", userId)
     },
+    // popularAddFollow() {
+    //   eventBus.$on('add-follow-pop', userId => {
+    //     console.log(userId)
+    //     if(this.follower.id === userId) {
+    //       return this.isFollowing = true
+    //     } else return
+    //   })
+    // },
+    // popularDeleteFollow() {
+    //   eventBus.$on('delete-follow-pop', userId => {
+    //     if(this.follower.id === userId) {
+    //       return this.isFollowing = false
+    //     }
+    //   })
+    // }
   }
 };
 </script>

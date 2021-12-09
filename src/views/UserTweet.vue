@@ -16,7 +16,10 @@
           @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
-        <UserEditModal :current-user="currentUser" />
+        <UserEditModal
+          :current-user="currentUser"
+          @update-profile="handleUpdateProfile" 
+        />
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
@@ -34,7 +37,6 @@
 
 <script>
 import usersAPI from "../apis/users";
-import tweetsAPI from "../apis/tweets";
 import { mapState } from "vuex";
 import { errorToast } from "../utils/toast";
 
@@ -121,7 +123,7 @@ export default {
           followingsLength: FollowingsCount,
           isFollower,
         };
-        this.tweetsCount = tweets.length
+        this.tweetsCount = tweets.length;
         this.tweets = tweets;
         console.log(response);
       } catch (error) {
@@ -131,9 +133,31 @@ export default {
         });
       }
     },
+    async handleUpdateProfile(formData) {
+      try {
+        const { data } = await usersAPI.update(
+          { userId: this.user.id },
+          formData
+        );
+        console.log(data);
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        console.log(this.user.id);
+        console.log(12345);
+
+        this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
+      } catch (error) {
+        console.log(error);
+        errorToast.fire({
+          title: "無法編輯使用者個人資訊",
+        });
+      }
+    },
     createNewTweet(payload) {
       const { tweetId, text, User } = payload;
-      this.tweets.push({
+      this.tweets.unshift({
         id: tweetId,
         description: text,
         createdAt: new Date(),
@@ -145,6 +169,7 @@ export default {
         commentsLength: 0,
         isLiked: false,
       });
+      this.tweetsCount += 1
     },
     toggleTweetReply(tweetId) {
       console.log(tweetId);
@@ -164,55 +189,31 @@ export default {
         }
       });
     },
-    async addLiked(tweetId) {
-      try {
-        const { data } = await tweetsAPI.addLike({ tweetId });
-        console.log(data);
-        if (data.status !== "success") {
-          throw new Error(data.message);
+    addLiked(tweetId) {
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
+          return {
+            ...tweet,
+            tweetLikeCount: tweet.tweetLikeCount + 1,
+            isLike: true,
+          };
+        } else {
+          return tweet;
         }
-        this.tweets = this.tweets.map((tweet) => {
-          if (tweet.id === tweetId) {
-            return {
-              ...tweet,
-              tweetLikeCount: tweet.tweetLikeCount + 1,
-              isLike: true,
-            };
-          } else {
-            return tweet;
-          }
-        });
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法按讚",
-        });
-      }
+      });
     },
-    async deleteLiked(tweetId) {
-      try {
-        const { data } = await tweetsAPI.deleteLike({ tweetId });
-        console.log(data);
-        if (data.status !== "success") {
-          throw new Error(data.message);
+    deleteLiked(tweetId) {
+      this.tweets = this.tweets.map((tweet) => {
+        if (tweet.id === tweetId) {
+          return {
+            ...tweet,
+            tweetLikeCount: tweet.tweetLikeCount - 1,
+            isLike: false,
+          };
+        } else {
+          return tweet;
         }
-        this.tweets = this.tweets.map((tweet) => {
-          if (tweet.id === tweetId) {
-            return {
-              ...tweet,
-              tweetLikeCount: tweet.tweetLikeCount - 1,
-              isLike: false,
-            };
-          } else {
-            return tweet;
-          }
-        });
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法取消讚",
-        });
-      }
+      });
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;
@@ -221,31 +222,13 @@ export default {
       this.user.avatar = avatar;
       this.user.cover = cover;
     },
-    async addFollow(userId) {
-      try {
-        console.log(userId);
-        const response = await usersAPI.addFollow({ userId });
-        console.log(response);
-        this.user.isFollower = true;
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法追蹤此使用者",
-        });
-      }
+    addFollow() {
+      this.user.isFollower = true;
+      this.user.followersLength += 1
     },
-    async deleteFollow(userId) {
-      try {
-        console.log(userId);
-        const response = await usersAPI.deleteFollow({ userId });
-        console.log(response);
-        this.user.isFollower = false;
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法取消追蹤此使用者",
-        });
-      }
+    deleteFollow() {
+      this.user.isFollower = false;
+      this.user.followersLength -= 1
     },
   },
 };

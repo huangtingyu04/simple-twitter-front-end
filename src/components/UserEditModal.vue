@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade" id="user-edit-modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <form action="" >
+      <form action="" @submit.stop.prevent="handleSubmit">
         <div class="modal-content">
           <div class="modal-header">
             <img
@@ -15,7 +15,7 @@
             <button
               type="submit"
               class="btn-save"
-              :disabled="savable"
+              :disabled="user.name.length < 1"
               :data-bs-dismiss="submitOK"
             >
               儲存
@@ -41,7 +41,14 @@
                   class="modal-body-bg-option-delete"
                   @click="removeCover"
                 />
-                <input type="file" name="cover" id="cover" ref="cover" @change="handleImage('cover')">
+                <input
+                  type="file"
+                  name="cover"
+                  accept="image/*"
+                  id="cover"
+                  ref="cover"
+                  @change="handleImage($event, 'cover')"
+                />
               </div>
             </div>
             <div class="modal-body-header">
@@ -57,11 +64,18 @@
                   class="modal-body-header-edit-photo"
                   @click="updateAvatar"
                 />
-                <input type="file" name="avatar" id="avatar" ref="avatar" @change="handleImage('avatar')">
+                <input
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  id="avatar"
+                  ref="avatar"
+                  @change="handleImage($event, 'avatar')"
+                />
               </div>
             </div>
             <div class="modal-body-form">
-              <form action="">
+              <div class="form">
                 <div class="form-label-group">
                   <label for="name">名稱</label>
                   <input
@@ -73,6 +87,12 @@
                     required
                   />
                   <div class="modal-body-form-limit">
+                    <div
+                      v-show="user.name.length < 1"
+                      class="modal-body-form-limit-alert"
+                    >
+                      名稱不可為空!
+                    </div>
                     <div
                       v-show="user.name.length > 50"
                       class="modal-body-form-limit-alert"
@@ -95,17 +115,18 @@
                   ></textarea>
                   <div class="modal-body-form-limit">
                     <div
-                      v-show="user.introduction.length > 160"
+                      v-show="checkIsNull(user.introduction).length > 150"
                       class="modal-body-form-limit-alert"
                     >
                       字數超出上限!
                     </div>
                     <div class="modal-body-form-limit-count">
-                      {{ user.introduction.length }}<span>/160</span>
+                      {{ checkIsNull(user.introduction).length
+                      }}<span>/160</span>
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
@@ -115,11 +136,13 @@
 </template>
 
 <script>
- import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
+import usersAPI from '../apis/users'
+// import { errorToast } from '../utils/toast';
 
 export default {
   name: "UserEditModal",
-  mixins: [ emptyImageFilter ],
+  mixins: [emptyImageFilter],
   props: {
     currentUser: {
       type: Object,
@@ -129,7 +152,7 @@ export default {
   data() {
     return {
       user: {},
-      savable: false
+      savable: false,
     };
   },
   computed: {
@@ -145,40 +168,93 @@ export default {
     currentUser(newValue) {
       this.user = {
         ...this.user,
-        ...newValue
-      }
-    }
+        ...newValue,
+        nameCached: newValue.name,
+        introductionCached: newValue.introduction,
+        avatarCached: newValue.avatar,
+        coverCached: newValue.cover,
+      };
+    },
   },
   created() {
     this.fetchUser();
   },
+  mounted() {
+    let self = this;
+    document.addEventListener("click", function (event) {
+      if (
+        event.target.matches(".modal") ||
+        event.target.matches(".modal-close")
+      ) {
+        self.user.avatar = self.user.avatarCached;
+        self.user.cover = self.user.coverCached;
+      }
+    });
+  },
   methods: {
+    checkIsNull(value) {
+      return value === null ? "" : value;
+    },
     fetchUser() {
-      this.user = this.currentUser
+      this.user = this.currentUser;
     },
     updateCover() {
-      this.$refs.cover.click()
+      this.$refs.cover.click();
     },
     removeCover() {
-      this.$refs.cover.value= ""
-      this.userCover = ''
+      this.$refs.cover.value = "";
+      this.user.cover = "";
     },
     updateAvatar() {
-      this.$refs.avatar.click()
+      this.$refs.avatar.click();
     },
-    handleImage(target) {
-      const { files } = event.target
-      if(!files.length) return
-      
-      const imageURL = window.URL.createObjectURL(files[0])
-      switch(target) {
-        case 'cover':
-          this.userCover = imageURL
-          break
-        case 'avatar':
-          this.userAvatar = imageURL
+    handleImage(event, target) {
+      const { files } = event.target;
+      // console.log(456, files);
+
+      if (files.length === 0) {
+        // console.log(123);
+
+        switch (target) {
+          case "cover":
+            this.user.cover = "";
+            break;
+          case "avatar":
+            this.user.avatar = "";
+        }
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+
+        console.log(files[0]);
+        switch (target) {
+          case "cover":
+            this.user.cover = imageURL;
+            break;
+          case "avatar":
+            this.user.avatar = imageURL;
+        }
       }
-    }
+    },
+    async handleSubmit(e) {
+      try {
+        // if(!this.user.name) {
+        //   errorToast.f
+        // }
+        const form = e.target;
+        const formData = new FormData(form);
+        for (let [name, value] of formData.entries()) {
+          console.log(name + ": " + value);
+        }
+        this.$emit("update-profile", formData);
+        const response = await usersAPI.update({
+          userId: this.currentUser.id,
+          formData
+        })
+        console.log(response)
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

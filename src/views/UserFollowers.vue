@@ -13,7 +13,11 @@
         </div>
         <div class="user-follow">
           <FollowNavPills :userId="id" />
-          <FollowItems v-for="follower in followers" :key="follower.id"  :initial-follower="follower" />
+          <FollowItems 
+            v-for="follower in followers" 
+            :key="follower.id"  
+            :initial-follower="follower"
+            />
         </div>
       </div>
       <PopularUsersCard />
@@ -93,7 +97,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
   },
   
 }

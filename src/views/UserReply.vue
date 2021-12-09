@@ -149,31 +149,13 @@ export default {
       this.user.avatar = avatar;
       this.user.cover = cover;
     },
-    async addFollow(userId) {
-      try {
-        console.log(userId);
-        const response = await usersAPI.addFollow({ userId });
-        console.log(response);
-        this.user.isFollower = true;
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法追蹤此使用者",
-        });
-      }
+    addFollow() {
+      this.user.isFollower = true;
+      this.user.followersLength += 1
     },
-    async deleteFollow(userId) {
-      try {
-        console.log(userId);
-        const response = await usersAPI.deleteFollow({ userId });
-        console.log(response);
-        this.user.isFollower = false;
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法取消追蹤此使用者",
-        });
-      }
+    deleteFollow() {
+      this.user.isFollower = false;
+      this.user.followersLength -= 1
     },
   },
 };

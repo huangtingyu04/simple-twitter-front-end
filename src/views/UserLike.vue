@@ -7,6 +7,8 @@
           :current-user="currentUser"
           :user="user"
           :tweets-count="tweetsCount"
+          @add-follow="addFollow"
+          @delete-follow="deleteFollow"
         />
         <UserLikeItems
           :initial-tweets="tweets"
@@ -204,6 +206,14 @@ export default {
       this.user.introduction = introduction;
       this.user.avatar = avatar;
       this.user.cover = cover;
+    },
+    addFollow() {
+      this.user.isFollower = true;
+      this.user.followersLength += 1
+    },
+    deleteFollow() {
+      this.user.isFollower = false;
+      this.user.followersLength -= 1
     },
   },
 };

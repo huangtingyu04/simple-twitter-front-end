@@ -72,7 +72,7 @@ export default {
   name: "UserLikeItems",
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
-    Tweet: {
+    initialTweet: {
       type: Object,
       required: true,
     },
@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     fetchTweet() {
-      const { Tweet, isLike } = this.Tweet;
+      const { Tweet, isLike } = this.initialTweet;
       const { id, Likes, Replies, User, createdAt, description } = Tweet;
       this.tweet = {
         id,

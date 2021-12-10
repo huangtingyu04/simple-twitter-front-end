@@ -237,17 +237,11 @@ export default {
         }
       }
     },
-    async handleSubmit() {
+    async handleSubmit(e) {
       try {
-        // if(!this.user.name) {
-        //   errorToast.f
-        // }
-        const formData = {
-          name: this.user.id,
-          introduction: this.user.introduction,
-          cover: this.user.cover,
-          avatar: this.user.avatar
-        }
+        const form = e.target
+        const formData = new FormData(form)
+        
         this.$emit("update-profile", formData);
         const response = await usersAPI.update({
           userId: this.currentUser.id,

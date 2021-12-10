@@ -26,7 +26,7 @@
         </div>
         <div class="reply-content-target">
           回覆
-          <span class="reply-content-target-account">@{{ reply.Tweet.User.account }}</span>
+          <span class="reply-content-target-account">@{{ reply.Tweet ? reply.Tweet.account: ''  }}</span>
         </div>
         <div class="reply-content-comment">{{ reply.comment }}</div>
       </div>

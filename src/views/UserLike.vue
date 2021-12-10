@@ -13,7 +13,7 @@
         <UserLikeItems
           v-for="tweet in tweets"
           :key="tweet.id"
-          :tweet="tweet"
+          :initial-tweet="tweet"
           @toggle-tweet-reply="toggleTweetReply"
           @add-liked="addLiked"
           @delete-liked="deleteLiked"
@@ -85,6 +85,7 @@ export default {
     const { id: userId } = this.$route.params;
     this.fetchTweet({ userId });
     this.fetchLike({ userId });
+    this.toggleTweetReply()
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
@@ -125,7 +126,8 @@ export default {
           followersLength: Followers.length,
           followingsLength: Followings.length,
         };
-        this.tweets = tweets;
+        this.tweets = tweets.filter(tweet => tweet.Tweet !== null);
+        this.tweetItem = this.tweets[0]
       } catch (error) {
         console.log(error);
         errorToast.fire({
@@ -147,39 +149,39 @@ export default {
       this.tweetsCount += 1
     },
     toggleTweetReply(tweetId) {
-      this.tweetItem = this.tweets.filter(tweet => tweet.TweetId === tweetId)[0]
-      console.log(this.tweetItem)
+      this.tweetItem = this.tweets.find(tweet => tweet.TweetId === tweetId)
     },
     createNewReply(payload) {
       const { replyId, tweetId, text, User } = payload;
       console.log(replyId, tweetId, text, User);
       this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
+        if (tweet.Tweetid === tweetId) {
           return {
             ...tweet,
-            commentsLength: tweet.commentsLength + 1,
+            ...tweet.Tweet,
+            Replies: tweet.Tweet.Replies.push({})
           };
         } else {
           return { ...tweet };
         }
       });
     },
-    addLiked(tweetId) {
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
-          return {
-            ...tweet,
-            likesLength: tweet.likesLength + 1,
-            isLiked: true,
-          };
-        } else {
-          return tweet;
-        }
-      });
-    },
+    // addLiked(tweetId) {
+    //   this.tweets = this.tweets.map((tweet) => {
+    //     if (tweet.TweetId === tweetId) {
+    //       return {
+    //         ...tweet,
+    //         likesLength: tweet.likesLength + 1,
+    //         isLiked: true,
+    //       };
+    //     } else {
+    //       return tweet;
+    //     }
+    //   });
+    // },
     deleteLiked(tweetId) {
       this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
+        if (tweet.Tweetid === tweetId) {
           return {
             ...tweet,
             likesLength: tweet.likesLength - 1,

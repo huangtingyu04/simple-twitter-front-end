@@ -108,7 +108,14 @@ export default {
       required: true,
     },
   },
-
+  watch: {
+    tweetItem(newValue) {
+      this.tweet = {
+        ...this.tweetItem,
+        ...newValue
+      }
+    }
+  },
   data() {
     return {
       tweet: {},

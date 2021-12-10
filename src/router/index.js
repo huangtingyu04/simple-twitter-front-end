@@ -74,17 +74,17 @@ const router = new VueRouter({
     {
       path: '/admin/signin',
       name: 'admin-signin',
-      component: () => import('../views/AdminSignIn.vue')
+      component: () => import('../views/AdminSignIn.vue'),
     },
     {
       path: '/admin/tweets',
       name: 'admin-tweets',
-      component: () => import('../views/AdminTweets.vue')
+      component: () => import('../views/AdminTweets.vue'),
     },
     {
       path: '/admin/users',
       name: 'admin-users',
-      component: () => import('../views/AdminUsers.vue')
+      component: () => import('../views/AdminUsers.vue'),
     },
     {
       path: '*',
@@ -94,9 +94,50 @@ const router = new VueRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  // 使用 dispatch 呼叫 Vuex 內的 actions
-  store.dispatch('fetchCurrentUser')
+router.beforeEach(async (to, from, next) => {
+
+  if (from.name) {
+    if (
+      (to.name.includes('admin') && !from.name.includes('admin')) ||
+      (!to.name.includes('admin') && from.name.includes('admin'))
+    ) {
+      store.commit("revokeAuthentication");
+    }
+  }
+
+  const tokenInLocalStorage = localStorage.getItem('token')
+  const tokenInStore = store.state.token
+  let isAuthenticated = store.state.isAuthenticated
+
+  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  }
+
+  const pathsWithoutAllAuthentication = ['sign-up', 'sign-in', 'admin-signin']
+
+  if (!isAuthenticated && !pathsWithoutAllAuthentication.includes(to.name)) {
+
+    if (!to.name.includes('admin')) {
+      next('/signin')
+    } else {
+      next('/admin/signin')
+    }
+    return
+  }
+
+  if (isAuthenticated && pathsWithoutAllAuthentication.includes(to.name)) {
+
+    if (!to.name.includes('admin')) {
+      next('/tweets')
+
+    } else {
+      next('/admin/tweets')
+
+    }
+    return
+  }
+
+
   next()
 })
 

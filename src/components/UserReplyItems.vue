@@ -1,24 +1,24 @@
 <template>
   <div class="replies">
-    <div class="reply" v-for="reply in replies" :key="reply.id">
-      <router-link :to="{ name: 'user-tweet', params: { id: reply.User.id } }">
+    <div class="reply">
+      <router-link :to="{ name: 'user-tweet', params: { id: reply.id } }">
         <img
-          :src="reply.User ? reply.User.avatar : '' | emptyImage"
+          :src="reply.avatar | emptyImage"
           alt=""
-          class="reply-icon"
+          class="reply-icon" 
         />
       </router-link>
       <div class="reply-content">
         <div class="reply-content-title">
           <router-link 
-            :to="{ name: 'user-tweet', params: { id: reply.User.id } }"
+            :to="{ name: 'user-tweet', params: { id: reply.id } }"
             class="reply-content-title-name">
-            {{ reply.User ? reply.User.name : "" }}
+            {{ reply.name}}
           </router-link>
           <router-link 
-            :to="{ name: 'user-tweet', params: { id: reply.User.id } }"
+            :to="{ name: 'user-tweet', params: { id: reply.id } }"
             class="reply-content-title-account">
-            @{{ reply.User ? reply.User.account : "" }}<span>・</span>
+            @{{ reply.account }}<span>・</span>
           </router-link>
           <div class="reply-content-title-time">
             {{ reply.createdAt | fromNow }}
@@ -26,7 +26,7 @@
         </div>
         <div class="reply-content-target">
           回覆
-          <span class="reply-content-target-account">@{{ reply.Tweet ? reply.Tweet.account: ''  }}</span>
+          <span class="reply-content-target-account">@{{ reply.tweetAccount}}</span>
         </div>
         <div class="reply-content-comment">{{ reply.comment }}</div>
       </div>
@@ -41,11 +41,43 @@ export default {
   name: 'UserReplyItems',
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
-    replies: {
-      type: Array,
+    initialReply: {
+      type: Object,
       required: true,
     },
   },
+  data() {
+    return {
+      reply: {
+        
+      }
+    }
+  },
+  watch: {
+    initialReply(newValue) {
+      this.reply = {
+        ...this.initialReply,
+        ...newValue
+      }
+    }
+  },
+  created() {
+    this.fetchReply()
+  },
+  methods: {
+    fetchReply() {
+      const { Tweet, User, comment, createdAt } = this.initialReply
+      this.reply = {
+        id: User ? User.id: 0,
+        name: User ? User.name: '',
+        account: User ? User.account: '',
+        avatar: User ? User.avatar: '',
+        createdAt,
+        comment,
+        tweetAccount: Tweet ? (Tweet.User? Tweet.User.account: ''): ''
+      }
+    }
+  }
 };
 </script>
 

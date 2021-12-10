@@ -71,7 +71,10 @@ export default {
         followersLength: 0,
         isFollower: false,
       },
-      tweetItem: {},
+      tweetItem: {
+        Tweet:{},
+        User: {},
+      },
       tweetsCount: 0,
       tweets: [],
       

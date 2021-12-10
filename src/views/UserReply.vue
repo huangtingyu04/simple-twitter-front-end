@@ -9,7 +9,10 @@
           :tweets-count="tweetsCount"
           @add-follow="addFollow"
           @delete-follow="deleteFollow" />
-        <UserReplyItems :replies="replies" />
+        <UserReplyItems
+          v-for="reply in replies"
+          :key="reply.id"
+          :initial-reply="reply" />
         <UserEditModal :current-user="currentUser" />
         <TweetModal
           :current-user="currentUser"

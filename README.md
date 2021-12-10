@@ -12,6 +12,8 @@
 
 ## 安裝
 - npm install
+
+## 啟動專案
 - npm run serve
 
 ## 測試帳號

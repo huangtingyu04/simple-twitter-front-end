@@ -1,8 +1,6 @@
 # simple-twitter-front-end
 專案網址： https://huangtingyu04.github.io/simple-twitter-front-end/#/signin
 
-![screenshot]()
-
 ## 功能介紹
 - 可在首頁瀏覽全部推文
 - 可在任意頁面開啟新增推文之對話框，執行新增推文

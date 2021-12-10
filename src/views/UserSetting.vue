@@ -12,9 +12,9 @@
                 type="text"
                 name="account"
                 id="account"
-                placeholder="@wonderman"
                 v-model="user.account"
               />
+              <span class="symbol">@</span>
             </div>
             <div class="input-field">
               <label for="name">名稱</label>
@@ -154,9 +154,9 @@ export default {
         successToast.fire({
           title: "已成功更新使用者資訊",
         });
-        this.password = ''
-        this.checkPassword = ''
-        this.$router.push({name: 'user-tweet', params: {id: this.user.id}})
+        this.password = "";
+        this.checkPassword = "";
+        this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
       } catch (error) {
         console.log(error);
         errorToast.fire({

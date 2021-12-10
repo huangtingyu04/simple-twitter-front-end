@@ -6,7 +6,7 @@
     <div class="main-title">後台登入</div>
     <form action="" @submit.prevent.stop="handleSubmit">
       <div class="input-field">
-        <label for="account">名稱</label>
+        <label for="account">帳號</label>
         <input
           type="account"
           name="account"
@@ -16,6 +16,7 @@
           placeholder="Account"
           v-model="account"
         />
+        <span class="symbol">@</span>
       </div>
       <div class="input-field">
         <label for="password">密碼</label>

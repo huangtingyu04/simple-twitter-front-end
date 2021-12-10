@@ -241,9 +241,9 @@ export default {
       try {
         const form = e.target
         const formData = new FormData(form)
-        
+        console.log(formData)
         this.$emit("update-profile", formData);
-        const response = await usersAPI.update({
+        const response = await usersAPI.upload({
           userId: this.currentUser.id,
           formData
         })

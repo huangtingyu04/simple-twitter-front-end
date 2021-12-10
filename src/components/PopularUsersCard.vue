@@ -71,7 +71,7 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        this.popularUsers = data.users;
+        this.popularUsers = data.users.filter(user => user.id !== this.currentUser.id);
       } catch (error) {
         console.log(error);
         errorToast.fire({

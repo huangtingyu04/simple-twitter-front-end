@@ -55,7 +55,7 @@
             />
             <form
               action=""
-              @submit.stop.prevent="createNewReply(tweetItem.id)"
+              @submit.stop.prevent="createNewReply(tweetItem.TweetId)"
               class="modal-body-tweet-form"
             >
               <textarea
@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
@@ -100,7 +99,7 @@ export default {
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
     tweetItem: {
-      type: Object,
+      type: Object, 
       required: true,
     },
     currentUser: {
@@ -142,17 +141,12 @@ export default {
         }
         this.isProcessing = true;
         const { data } = await tweetsAPI.reply(tweetId, {
-          reply: this.newReply.trim(),
+          reply: this.newReply,
         });
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.$emit("create-new-reply", {
-          replyId: uuidv4(),
-          tweetId: tweetId,
-          comment: this.newReply,
-          User: this.currentUser,
-        });
+        this.$emit("create-new-reply", tweetId);
         successToast.fire({
           title: "已成功回復推文",
         });

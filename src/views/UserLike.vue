@@ -15,7 +15,6 @@
           :key="tweet.id"
           :initial-tweet="tweet"
           @toggle-tweet-reply="toggleTweetReply"
-          @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
         <UserEditModal :current-user="currentUser" />
@@ -72,10 +71,10 @@ export default {
         followersLength: 0,
         isFollower: false,
       },
+      tweetItem: {},
       tweetsCount: 0,
       tweets: [],
-      tweetItem: {},
-      likes: [],
+      
     };
   },
   computed: {

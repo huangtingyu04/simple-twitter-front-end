@@ -6,7 +6,7 @@
     <div class="main-title">登入 Alphitter</div>
     <form @submit.prevent.stop="handleSubmit">
       <div class="input-field">
-        <label for="account">名稱</label>
+        <label for="account">帳號</label>
         <input
           type="text"
           name="account"
@@ -16,6 +16,7 @@
           placeholder="Account"
           v-model="account"
         />
+        <span class="symbol">@</span>
       </div>
       <div class="input-field">
         <label for="password">密碼</label>

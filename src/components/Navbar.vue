@@ -50,15 +50,14 @@
       推文
     </button>
     <div class="logout">
-      <router-link to="/signin" class="link">
+      <button @click="logout" class="link">
         <img class="img" src="../../public/images/icon_logout.png" />
         <img
           class="img-hover"
           src="../../public/images/icon_logout_hover.png"
-          @click="logout"
         />
         登出
-      </router-link>
+      </button>
     </div>
   </nav>
 </template>
@@ -72,13 +71,6 @@ export default {
     ...mapState(["currentUser", "isAuthenticated"]),
   },
   methods: {
-    // fetchUser() {
-    //   this.currentUser = {
-    //     ...this.currentUser,
-    //     ...dummyUser.currentUser,
-    //   };
-    //   this.isAuthenticated = dummyUser.isAuthenticated;
-    // },
     logout() {
       this.$store.commit("revokeAuthentication");
       this.$router.push("/signin");

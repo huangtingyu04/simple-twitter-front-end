@@ -26,18 +26,34 @@
       </li>
     </ul>
     <div class="logout">
-      <router-link to="/admin/signin" class="link">
+      <button @click="logout" class="link">
         <img class="img" src="../../public/images/icon_logout.png" />
         <img
           class="img-hover"
           src="../../public/images/icon_logout_hover.png"
+          @click="logout"
         />
         登出
-      </router-link>
+      </button>
     </div>
   </nav>
 </template>
+<script>
+import { mapState } from "vuex";
 
+export default {
+  name: "Navbar",
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  methods: {
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/admin/signin");
+    },
+  },
+};
+</script>
 
 <style scoped lang="sass">
 @import '../styles/navbar'

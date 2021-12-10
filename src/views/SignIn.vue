@@ -54,15 +54,15 @@ import { successToast, errorToast } from "../utils/toast";
 export default {
   data() {
     return {
-      account: '',
-      password: '',
-      isProcessing: false
-    }
+      account: "",
+      password: "",
+      isProcessing: false,
+    };
   },
   methods: {
     async handleSubmit() {
       try {
-        if(!this.account || !this.password) {
+        if (!this.account || !this.password) {
           errorToast.fire({
             title: "account 或 password",
           });
@@ -71,12 +71,12 @@ export default {
         this.isProcessing = true;
         const response = await authorizationAPI.signIn({
           account: this.account,
-          password: this.password
-        })
-        console.log(response)
-        const {data, statusText} = response
-        if(data.status !== 'success' || statusText !== 'OK') {
-          throw new Error(data.message)
+          password: this.password,
+        });
+        console.log(response);
+        const { data, statusText } = response;
+        if (data.status !== "success" || statusText !== "OK") {
+          throw new Error(data.message);
         }
         if (data.user.role === "admin") {
           errorToast.fire({
@@ -87,7 +87,9 @@ export default {
         }
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
-        this.isProcessing = false;
+
+        // 透過 setCurrentUser 把使用者資料存到 Vuex 的 state 中
+        this.$store.commit("setCurrentUser", data.user);
         successToast.fire({
           title: "已成功登入",
         });

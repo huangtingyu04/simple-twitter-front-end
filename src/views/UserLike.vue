@@ -11,13 +11,15 @@
           @delete-follow="deleteFollow"
         />
         <UserLikeItems
-          :initial-tweets="tweets"
+          v-for="tweet in tweets"
+          :key="tweet.id"
+          :tweet="tweet"
           @toggle-tweet-reply="toggleTweetReply"
           @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
         <UserEditModal :current-user="currentUser" />
-        <TweetReplyModal
+        <TweetLikeReplyModal
           :current-user="currentUser"
           :tweet-item="tweetItem"
           @create-new-reply="createNewReply"
@@ -42,18 +44,18 @@ import UserProfile from "../components/UserProfile.vue";
 import UserLikeItems from "../components/UserLikeItems.vue";
 import UserEditModal from "../components/UserEditModal.vue";
 import TweetModal from "../components/TweetModal.vue";
-import TweetReplyModal from "../components/TweetReplyModal.vue";
+import TweetLikeReplyModal from "../components/TweetLikeReplyModal.vue";
 import PopularUsersCard from "./../components/PopularUsersCard";
 
 export default {
-  name: "User",
+  name: "UserLike",
   components: {
     Navbar,
     UserProfile,
     UserLikeItems,
     UserEditModal,
     TweetModal,
-    TweetReplyModal,
+    TweetLikeReplyModal,
     PopularUsersCard,
   },
   data() {
@@ -108,9 +110,9 @@ export default {
           avatar,
           cover,
           introduction,
-          FollowersCount,
-          FollowingsCount,
-          isFollower,
+          Followers,
+          Followings,
+          
         } = user;
         this.user = {
           id,
@@ -120,9 +122,8 @@ export default {
           avatar,
           cover,
           introduction,
-          followersLength: FollowersCount,
-          followingsLength: FollowingsCount,
-          isFollower,
+          followersLength: Followers.length,
+          followingsLength: Followings.length,
         };
         this.tweets = tweets;
       } catch (error) {
@@ -146,7 +147,8 @@ export default {
       this.tweetsCount += 1
     },
     toggleTweetReply(tweetId) {
-      this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
+      this.tweetItem = this.tweets.filter(tweet => tweet.TweetId === tweetId)[0]
+      console.log(this.tweetItem)
     },
     createNewReply(payload) {
       const { replyId, tweetId, text, User } = payload;

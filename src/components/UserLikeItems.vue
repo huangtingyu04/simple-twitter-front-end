@@ -1,19 +1,31 @@
 <template>
   <div class="tweets">
-    <div class="tweet" v-for="tweet in initialTweets" :key="tweet.id">
+    <div class="tweet">
       <div class="tweet-icon">
-        <img :src="tweet.Tweet.User ? tweet.Tweet.User.avatar : '' | emptyImage" alt="user-icon" class="tweet-icon-photo" />
+        <img
+          :src="tweet.User ? tweet.User.avatar : '' | emptyImage"
+          alt="user-icon"
+          class="tweet-icon-photo"
+        />
       </div>
       <div class="tweet-body">
         <div class="tweet-body-head">
-          <router-link 
+          <router-link
             class="tweet-body-head-name"
-            :to="{ name: 'user-tweet', params: { id: tweet.Tweet.User.id } }">{{tweet.Tweet.User.name}}</router-link>
-          <div class="tweet-body-head-account">@{{ tweet.Tweet.User.account }}</div>
+            :to="{ name: 'user-tweet', params: { id: tweet.User.id } }"
+            >{{ tweet.User.name }}</router-link
+          >
+          <div class="tweet-body-head-account">@{{ tweet.User.account }}</div>
           <span> · </span>
-          <div class="tweet-body-head-time">{{ tweet.createdAt | fromNow }}</div>
+          <div class="tweet-body-head-time">
+            {{ tweet.createdAt | fromNow }}
+          </div>
         </div>
-        <router-link :to="{ name: 'tweet', params: { id: tweet.Tweet.id } }" class="tweet-body-content">{{ tweet.Tweet.description }}</router-link>
+        <router-link
+          :to="{ name: 'tweet', params: { id: tweet.id } }"
+          class="tweet-body-content"
+          >{{ tweet.description }}</router-link
+        >
         <div class="tweet-body-foot">
           <div class="tweet-body-foot-comment">
             <img
@@ -24,7 +36,9 @@
               data-bs-target="#tweet-reply-modal"
               @click.prevent.stop="toggleTweetReply(tweet.id)"
             />
-            <span class="tweet-body-foot-comment-count">{{tweet.tweetReplyCount}}</span>
+            <span class="tweet-body-foot-comment-count">{{
+              tweet.replyCount
+            }}</span>
           </div>
           <div class="tweet-body-foot-liked">
             <img
@@ -41,7 +55,9 @@
               class="tweet-body-foot-liked-icon"
               @click.stop.prevent="deleteLiked(tweet.id)"
             />
-            <span class="tweet-body-foot-liked-count">{{tweet.tweetLikeCount}}</span>
+            <span class="tweet-body-foot-liked-count">{{
+              tweet.likeCount
+            }}</span>
           </div>
         </div>
       </div>
@@ -54,22 +70,51 @@ import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 
 export default {
   name: "UserLikeItems",
-  mixins: [ fromNowFilter, emptyImageFilter ],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
-    initialTweets: {
-      type: Array,
-      required: true
-    }
+    Tweet: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      tweet: {
+        id: 0,
+        User: [],
+        isLike: false,
+        replyCount: 0,
+        likeCount: 0,
+        createdAt: "",
+        description: "",
+      },
+    };
+  },
+  created() {
+    this.fetchTweet();
   },
   methods: {
+    fetchTweet() {
+      const { Tweet, isLike } = this.Tweet;
+      const { id, Likes, Replies, User, createdAt, description } = Tweet;
+      this.tweet = {
+        id,
+        User,
+        isLike,
+        replyCount: Replies.length,
+        likeCount: Likes.length,
+        createdAt,
+        description,
+      };
+    },
     toggleTweetReply(tweetId) {
-      this.$emit("toggle-tweet-reply", tweetId)
+      this.$emit("toggle-tweet-reply", tweetId);
     },
     addLiked(tweetId) {
-      this.$emit("add-liked", tweetId)
+      this.$emit("add-liked", tweetId);
     },
     deleteLiked(tweetId) {
-      this.$emit("delete-liked", tweetId)
+      this.$emit("delete-liked", tweetId);
     },
   },
 };

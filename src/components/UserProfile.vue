@@ -98,6 +98,7 @@
 import { emptyImageFilter } from '../utils/mixins'
 import usersAPI from '../apis/users'
 import { errorToast } from "../utils/toast";
+import { eventBus } from '../utils/eventbus'
 
 import UserNavPills from "../components/UserNavPills.vue";
 export default {
@@ -120,10 +121,10 @@ export default {
       required: true
     },
   },
-  // created() {
-  //   this.popularAddFollow()
-  //   this.popularDeleteFollow( )
-  // },
+  created() {
+    this.popularAddFollow()
+    this.popularDeleteFollow( )
+  },
   methods: {
     async addFollow(userId) {
       try {
@@ -137,6 +138,7 @@ export default {
         });
       }
       this.$emit("add-follow", userId)
+      this.$router.go(0);
     },
     async deleteFollow(userId) {
       try {
@@ -150,22 +152,23 @@ export default {
         });
       }
       this.$emit("delete-follow", userId)
+      this.$router.go(0);
     },
-    // popularAddFollow() {
-    //   eventBus.$on('add-follow-pop', userId => {
-    //     console.log(userId)
-    //     if(this.follower.id === userId) {
-    //       return this.isFollowing = true
-    //     } else return
-    //   })
-    // },
-    // popularDeleteFollow() {
-    //   eventBus.$on('delete-follow-pop', userId => {
-    //     if(this.follower.id === userId) {
-    //       return this.isFollowing = false
-    //     }
-    //   })
-    // }
+    popularAddFollow() {
+      eventBus.$on('add-follow-pop', userId => {
+        console.log(userId)
+        if(this.user.id === userId) {
+          return this.isFollower = true
+        } else return
+      })
+    },
+    popularDeleteFollow() {
+      eventBus.$on('delete-follow-pop', userId => {
+        if(this.user.id === userId) {
+          return this.isFollower = false
+        }
+      })
+    }
   }
 };
 </script>

@@ -106,6 +106,8 @@ export default {
         });
       }
       eventBus.$emit("add-follow-pop", userId);
+      this.$router.go(0);
+
     },
     async deleteFollowing(userId) {
       try {
@@ -132,6 +134,8 @@ export default {
         });
       }
       eventBus.$emit("delete-follow-pop", userId);
+      this.$router.go(0);
+
     },
     popularAddFollow() {
       eventBus.$on("add-follow-pop", (userId) => {

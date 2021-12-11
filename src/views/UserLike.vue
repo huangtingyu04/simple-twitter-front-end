@@ -15,7 +15,6 @@
           :key="tweet.id"
           :initial-tweet="tweet"
           @toggle-tweet-reply="toggleTweetReply"
-          @add-liked="addLiked"
           @delete-liked="deleteLiked"
         />
         <UserEditModal :current-user="currentUser" />
@@ -72,10 +71,13 @@ export default {
         followersLength: 0,
         isFollower: false,
       },
+      tweetItem: {
+        Tweet:{},
+        User: {},
+      },
       tweetsCount: 0,
       tweets: [],
-      tweetItem: {},
-      likes: [],
+      
     };
   },
   computed: {
@@ -151,11 +153,10 @@ export default {
     toggleTweetReply(tweetId) {
       this.tweetItem = this.tweets.find(tweet => tweet.TweetId === tweetId)
     },
-    createNewReply(payload) {
-      const { replyId, tweetId, text, User } = payload;
-      console.log(replyId, tweetId, text, User);
+    createNewReply(tweetId) {
+      console.log(tweetId)
       this.tweets = this.tweets.map((tweet) => {
-        if (tweet.Tweetid === tweetId) {
+        if (tweet.TweetId === tweetId) {
           return {
             ...tweet,
             ...tweet.Tweet,
@@ -165,32 +166,11 @@ export default {
           return { ...tweet };
         }
       });
+      // console.log(this.tweets)
     },
-    // addLiked(tweetId) {
-    //   this.tweets = this.tweets.map((tweet) => {
-    //     if (tweet.TweetId === tweetId) {
-    //       return {
-    //         ...tweet,
-    //         likesLength: tweet.likesLength + 1,
-    //         isLiked: true,
-    //       };
-    //     } else {
-    //       return tweet;
-    //     }
-    //   });
-    // },
     deleteLiked(tweetId) {
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.Tweetid === tweetId) {
-          return {
-            ...tweet,
-            likesLength: tweet.likesLength - 1,
-            isLiked: false,
-          };
-        } else {
-          return tweet;
-        }
-      });
+      console.log(tweetId)
+      this.tweets = this.tweets.filter(tweet => tweet.TweetId !== tweetId);
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;

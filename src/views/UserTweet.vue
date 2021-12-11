@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <div class="wide-container">
+    <div class="wide-container"> 
       <div class="main">
         <UserProfile
           :current-user="currentUser"

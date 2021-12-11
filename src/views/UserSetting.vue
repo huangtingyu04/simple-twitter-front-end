@@ -127,7 +127,7 @@ export default {
       }
       this.user = { id, name, email, account };
     },
-    async handleSubmit(e) {
+    async handleSubmit() {
       try {
         if (!this.password || !this.checkPassword) {
           errorToast.fire({
@@ -141,8 +141,16 @@ export default {
           });
           return;
         }
-        const form = e.target;
-        const formData = new FormData(form);
+        // const form = e.target;
+        // const formData = new FormData(form);
+        const formData = {
+          name: this.user.name,
+          email: this.user.email,
+          account: this.user.account,
+          password: this.password,
+          checkPassword: this.checkPassword
+        }
+        console.log(formData)
         const { data } = await usersAPI.update({
           userId: this.user.id,
           formData,

@@ -15,6 +15,26 @@
         </router-link>
       </li>
       <li>
+        <router-link to="/public" class="link">
+          <img class="img" src="../../public/images/message.png" />
+          <img
+            class="img-hover"
+            src="../../public/images/message_hover.png"
+          />
+          <span>公開聊天室</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/private" class="link">
+          <img class="img" src="../../public/images/message.png" />
+          <img
+            class="img-hover"
+            src="../../public/images/message_hover.png"
+          />
+          <span>私人訊息</span>
+        </router-link>
+      </li>
+      <li>
         <router-link
           :to="{ name: 'user-tweet', params: { id: currentUser.id } }"
           class="link"

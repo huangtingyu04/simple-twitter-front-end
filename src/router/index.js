@@ -67,6 +67,16 @@ const router = new VueRouter({
       component: () => import('../views/UserFollowers.vue')
     },
     {
+      path: '/public',
+      name: 'public',
+      component: () => import('../views/PublicChat.vue')
+    },
+    {
+      path: '/private',
+      name: 'private',
+      component: () => import('../views/PrivateChat.vue')
+    },
+    {
       path: '/admin',
       exact: true,
       redirect: '/admin/signin'

@@ -1,0 +1,48 @@
+.chatRoom-container
+  position: relative
+  display: flex
+  flex-direction: column
+  height: 100vh
+  &::before
+    content: ''
+    position: absolute
+    width: 1px
+    min-height: 100vh
+    background: $input-border
+    top: 0
+    left: 0
+  .chat-top
+    height: 55px
+    padding-left: 15px
+    border-bottom: 1px solid $input-border
+    .chat-top-title
+      line-height: 55px
+      font-size: 19px
+      font-weight: 700
+  .chat-content
+    flex: 1
+  .chat-send
+    height: 55px
+    width: 100%
+    padding: 12px 15px 11px 15px
+    border-top: 1px solid $input-border
+    display: flex
+    justify-content: space-between
+    .chat-send-input
+      flex: 1
+      
+      height: 32px
+      border-radius: 50px
+      font-size: 15px
+      line-height: 32px
+      padding-left: 15px
+      font-weight: 400
+      color: #000000 40%
+      border: none
+      background: $input-border
+      margin-right: 15px
+    .chat-send-btn
+      width: 24px
+      height: 24px
+      object-fit: cover
+    

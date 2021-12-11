@@ -18,8 +18,8 @@
         </div>
         <button
           class="isfollow"
-          v-show="!(follower.id === currentUser.id)"
           v-if="!follower.isFollowing"
+          v-show="!(follower.id === currentUser.id)"
           @click.prevent.stop="addFollow(follower.id)"
         >
           跟隨
@@ -27,12 +27,13 @@
         <button
           class="unfollow"
           v-else
+          v-show="!(follower.id === currentUser.id)"
           @click.prevent.stop="deleteFollow(follower.id)"
         >
           正在跟隨
         </button>
       </div>
-      <div class="follow-content-body">{{ follower.text }}</div>
+      <div class="follow-content-body">{{ follower.introduction }}</div>
     </div>
   </div>
 </template>
@@ -60,6 +61,7 @@ export default {
         account: "",
         avatar: "",
         introduction: "",
+        isFollowing: false,
         Followers: [],
       },
       // isFollowing: false,
@@ -85,10 +87,17 @@ export default {
     fetchUser() {
       const { id, name, account, avatar, introduction, Followers } =
         this.initialFollower;
-      this.follower = { id, name, account, avatar, introduction, Followers };
+      this.follower = {
+        id,
+        name,
+        account,
+        avatar,
+        introduction,
+        Followers,
+      };
 
-      if (!Followers) {
-        this.isFollowing = false;
+      if (Followers === []) {
+        this.follower.isFollowing = false;
       } else {
         Followers.find((follower) => {
           if (follower.id === this.currentUser.id) {
@@ -101,26 +110,28 @@ export default {
     },
     async addFollow(userId) {
       try {
+        this.follower.isFollowing = true;
         const { data } = await usersAPI.addFollow({ userId });
         console.log(data);
       } catch (error) {
         console.log(error);
       }
       eventBus.$emit("add-follow-pop", userId);
-      this.isFollowing = true;
+      this.$router.go(0);
+
     },
     async deleteFollow(userId) {
       try {
+        this.follower.isFollowing = false;
         const { data } = await usersAPI.deleteFollow({ userId });
         console.log(data);
-        if ((this.currentUser.id = this.$route.params)) {
-          this.$emit("remove-follow-item", userId);
-        }
+        console.log(userId);
       } catch (error) {
         console.log(error);
       }
       eventBus.$emit("delete-follow-pop", userId);
-      this.isFollowing = false;
+      this.$router.go(0);
+
     },
     popularAddFollow() {
       eventBus.$on("add-follow-pop", (userId) => {

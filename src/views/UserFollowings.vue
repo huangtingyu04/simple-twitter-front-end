@@ -24,7 +24,6 @@
             v-for="follower in followers"
             :key="follower.id"
             :initial-follower="follower"
-            @remove-follow-item="removeFollowItem"
           />
         </div>
       </div>
@@ -114,10 +113,6 @@ export default {
         isFollowing: true
       },)
     },
-    removeFollowItem(userId) {
-      console.log(userId)
-      this.followers = this.followers.filter(follower => follower.id !== userId)
-    }
   },
 };
 </script>

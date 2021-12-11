@@ -1,55 +1,108 @@
 <template>
   <div class="follow">
-    <img :src="following.image | emptyImage" class="follow-icon">
+    <img :src="follower.avatar | emptyImage" class="follow-icon" />
     <div class="follow-content">
       <div class="follow-content-head">
         <div class="follow-content-head-title">
-          <div class="follow-content-head-title-name">{{ following.name }}</div>
-          <div class="follow-content-head-title-account">@{{ following.account }}</div>
-          <div class="follow-content-head-title-intro">{{following.introduction}}</div>
+          <router-link
+            class="follow-content-head-title-name"
+            :to="{ name: 'user-tweet', params: { id: follower.id } }"
+            >{{ follower.name }}</router-link
+          >
+          <div class="follow-content-head-title-account">
+            @{{ follower.account }}
+          </div>
+          <div class="follow-content-head-title-intro">
+            {{ follower.introduction }}
+          </div>
         </div>
-        <button class="isfollow" v-if="!following.isFollowing" @click.prevent.stop="addFollowing(following.id)">跟隨</button>
-        <button class="unfollow" v-else @click.prevent.stop="deleteFollowing(following.id)">正在跟隨</button>
+        <button
+          class="unfollow"
+          @click.prevent.stop="deleteFollow(follower.id)"
+        >
+          正在跟隨
+        </button>
       </div>
-      <div class="follow-content-body">{{ following.text }}</div>
+      <div class="follow-content-body">{{ follower.introduction }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
+import { mapState } from "vuex";
+import { eventBus } from "../utils/eventbus";
+import usersAPI from "../apis/users";
 
 export default {
-  name: 'FollowingItems',
-  mixins: [ emptyImageFilter ],
+  name: "FollowItems",
+  mixins: [emptyImageFilter],
   props: {
-    initialFollowing: {
+    initialFollower: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
-      following: this.initialFollowing
-    }
+      follower: {
+        id: 0,
+        name: "",
+        account: "",
+        avatar: "",
+        introduction: "",
+        Followers: [],
+      },
+      // isFollowing: false,
+    };
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  watch: {
+    initialFollower(newValue) {
+      this.follower = {
+        ...this.follower,
+        ...newValue,
+      };
+    },
+  },
+  created() {
+    this.fetchUser();
   },
   methods: {
-    addFollowing(followingId) {
-      console.log(followingId)
-      this.following = {
-        ...this.following,
-        isFollowing: true
+    fetchUser() {
+      const { id, name, account, avatar, introduction, Followers } =
+        this.initialFollower;
+      this.follower = { id, name, account, avatar, introduction, Followers };
+
+      if (!Followers) {
+        this.isFollowing = false;
+      } else {
+        Followers.find((follower) => {
+          if (follower.id === this.currentUser.id) {
+            return (this.follower.isFollowing = true);
+          } else {
+            this.follower.isFollowing = false;
+          }
+        });
       }
     },
-    deleteFollowing(followingId) {
-      console.log(followingId)
-      this.following = {
-        ...this.following,
-        isFollowing: false
+    async deleteFollow(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollow({ userId });
+        console.log(data);
+        if ((this.currentUser.id = this.$route.params)) {
+          this.$emit("remove-follow-item", userId);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    }
-  }
-}
+      eventBus.$emit("delete-follow-pop", userId);
+      this.isFollowing = false;
+    },
+  },
+};
 </script>
 
 <style lang="sass" scoped>
@@ -70,6 +123,7 @@ export default {
       justify-content: space-between
       .follow-content-head-title
         .follow-content-head-title-name
+          text-decoration: none
           font-size: 15px
           font-weight: 700
           color: $text-content
@@ -94,5 +148,5 @@ export default {
     .follow-content-body
       padding-top: 5px
       font-size: 15px
-      font-weight: 500    
+      font-weight: 500
 </style>

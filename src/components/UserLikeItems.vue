@@ -67,6 +67,7 @@
 
 <script>
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
+import tweetsAPI from '../apis/tweets'
 
 export default {
   name: "UserLikeItems",
@@ -113,8 +114,15 @@ export default {
     addLiked(tweetId) {
       this.$emit("add-liked", tweetId);
     },
-    deleteLiked(tweetId) {
-      this.$emit("delete-liked", tweetId);
+    async deleteLiked(tweetId) {
+      try {
+        console.log(tweetId)
+        const response = await tweetsAPI.deleteLike({tweetId})
+        console.log(response)
+        this.$emit("delete-liked", tweetId)
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
 };

@@ -1,7 +1,5 @@
 .chatRoom-container
   position: relative
-  display: flex
-  flex-direction: column
   height: 100vh
   width: 100%
   &::before
@@ -28,13 +26,10 @@
       font-size: 13px
       color: $input-label
 
-  .chat-content-box
+  .chat-content
     max-height: calc( 100vh - 110px )
     overflow-y: auto
-
-  .chat-content
-    display: flex
-    flex-direction: column
+    height: 100%
     justify-content: end
     padding: 40px 15px
     .chat-message

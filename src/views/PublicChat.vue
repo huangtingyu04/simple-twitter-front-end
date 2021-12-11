@@ -7,15 +7,20 @@
           <div class="chat-top">
             <div class="chat-top-title">上線使用者 ()</div>
           </div>
-          <div class="chat-user">
-            <img 
-              src="../../public/images/Logo.png"
-              alt="user-avatar"
-              class="chat-user-avatar">
-            <router-link to="/users/2" class="chat-user-name">Apple</router-link>
-            <router-link 
-              to="/users/2" 
-              class="chat-user-account"><span class="symbol">@</span>apple</router-link>
+          <div class="chat-container">
+            <div class="chat-user" v-for="user in users" :key="user.id">
+              <img
+                src="../../public/images/Logo.png"
+                alt="user-avatar"
+                class="chat-user-avatar"
+              />
+              <router-link to="/users/2" class="chat-user-name"
+                >Apple</router-link
+              >
+              <router-link to="/users/2" class="chat-user-account"
+                ><span class="symbol">@</span>apple</router-link
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -33,6 +38,11 @@ export default {
     Navbar,
     PublicChatRoom,
   },
+  data() {
+    return {
+      users: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+    }
+  }
 };
 </script>
 

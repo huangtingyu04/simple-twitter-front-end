@@ -37,35 +37,5 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import '../styles/chatRoom'
-.chat
-  .chat-top
-    padding: 15px
-    height: 55px
-    border-bottom: 1px solid $input-border
-    .chat-top-title
-      font-size: 18px
-      font-weight: 700
-  .chat-user
-    padding: 10px 15px
-    display: flex
-    justify-content: start
-    align-items: center
-    border-bottom: 1px solid $input-border
-    font-size: 15px
-    text-decoration: none
-    .chat-user-avatar
-      width: 50px
-      height: 50px
-      border-radius: 50%
-      object-fit: cover
-      margin-right: 10px
-    .chat-user-name
-      font-weight: 700
-      margin-right: 5px
-      text-decoration: none
-      color: $text-content
-    .chat-user-account
-      color: $input-label
-      text-decoration: none
+@import '../styles/chat'
 </style>

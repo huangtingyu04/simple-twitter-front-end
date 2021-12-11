@@ -5,7 +5,7 @@
   height: 100vh
   width: 100%
   &::before
-    content: ''
+    content: '' 
     position: absolute
     width: 1px
     min-height: 100vh
@@ -20,6 +20,13 @@
       line-height: 55px
       font-size: 19px
       font-weight: 700
+    .chat-top-name
+      padding-top: 3px
+      font-size: 19px
+      font-weight: 900
+    .chat-top-account
+      font-size: 13px
+      color: $input-label
 
   .chat-content-box
     max-height: calc( 100vh - 110px )
@@ -92,29 +99,31 @@
           color: $input-label
           font-size: 13px
   .chat-send
+    margin-top: auto
     height: 55px
     width: 100%
     padding: 12px 15px 11px 15px
     border-top: 1px solid $input-border
-    display: flex
-    justify-content: space-between
-    align-items: center
-    margin-top: auto
-    .chat-send-input
-      flex: 1
-      height: 32px
-      border-radius: 50px
-      font-size: 15px
-      line-height: 32px
-      padding-left: 15px
-      font-weight: 400
-      color: #000000 40%
-      border: none
-      outline: none
-      background: $input-border
-      margin-right: 15px
-    .chat-send-btn
-      width: 24px
-      height: 24px
-      object-fit: cover
-      cursor: pointer
+    form
+      width: 100%
+      display: flex
+      justify-content: space-between
+      align-items: center
+      .chat-send-input
+        flex: 1
+        height: 32px
+        border-radius: 50px
+        font-size: 15px
+        line-height: 32px
+        padding-left: 15px
+        font-weight: 400
+        color: #000000 40%
+        border: none
+        outline: none
+        background: $input-border
+        margin-right: 15px
+      .chat-send-btn
+        width: 24px
+        height: 24px
+        object-fit: cover
+        cursor: pointer

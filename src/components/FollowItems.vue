@@ -32,7 +32,7 @@
           正在跟隨
         </button>
       </div>
-      <div class="follow-content-body">{{ follower.text }}</div>
+      <div class="follow-content-body">{{ follower.introduction }}</div>
     </div>
   </div>
 </template>

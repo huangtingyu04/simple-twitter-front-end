@@ -2,7 +2,9 @@
   <div>
     <Navbar />
     <div class="wide-container">
-      <div class="main"></div>
+      <div class="main">
+        
+      </div>
       <PublicChatRoom />
     </div>
   </div>

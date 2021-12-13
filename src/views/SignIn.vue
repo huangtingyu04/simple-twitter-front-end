@@ -16,7 +16,7 @@
           placeholder="Account"
           v-model="account"
         />
-        
+        <span class="symbol">@</span>
       </div>
       <div class="input-field">
         <label for="password">密碼</label>

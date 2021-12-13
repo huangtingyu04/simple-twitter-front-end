@@ -1,12 +1,11 @@
 <template>
   <div>
     <Navbar />
-    <div class="wide-container"> 
+    <div class="wide-container">
       <div class="main">
         <UserProfile
           :current-user="currentUser"
-          :user="user"
-          :tweets-count="tweetsCount"
+          :initial-user="user"
           @add-follow="addFollow"
           @delete-follow="deleteFollow"
         />
@@ -18,7 +17,7 @@
         />
         <UserEditModal
           :current-user="currentUser"
-          @update-profile="handleUpdateProfile" 
+          @update-profile="handleUpdateProfile"
         />
         <TweetReplyModal
           :tweet-item="tweetItem"
@@ -61,19 +60,7 @@ export default {
   },
   data() {
     return {
-      user: {
-        id: 0,
-        name: "",
-        account: "",
-        email: "",
-        introduction: "",
-        avatar: "",
-        cover: "",
-        followingsLength: 0,
-        followersLength: 0,
-        isFollower: false,
-      },
-      tweetsCount: 0,
+      user: {},
       tweets: [],
       tweetItem: {},
     };
@@ -84,12 +71,15 @@ export default {
   created() {
     const { id: userId } = this.$route.params;
     this.fetchTweet({ userId });
+    this.fetchUser({ userId });
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
     this.fetchTweet({ userId });
+    this.fetchUser({ userId });
     next();
   },
+
   methods: {
     async fetchTweet({ userId }) {
       try {
@@ -98,39 +88,25 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        const { tweets, user } = data;
-        const {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          FollowersCount,
-          FollowingsCount,
-          isFollower,
-        } = user;
-        this.user = {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          followersLength: FollowersCount,
-          followingsLength: FollowingsCount,
-          isFollower,
-        };
-        this.tweetsCount = tweets.length;
-        this.tweets = tweets;
-        console.log(response);
+        this.tweets = data;
       } catch (error) {
         console.log(error);
         errorToast.fire({
           title: "無法取得使用者推文資訊",
         });
+      }
+    },
+    async fetchUser({ userId }) {
+      try {
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        this.user = data;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
       }
     },
     async handleUpdateProfile(formData) {
@@ -155,39 +131,20 @@ export default {
         });
       }
     },
-    createNewTweet(payload) {
-      const { tweetId, text, User } = payload;
-      this.tweets.unshift({
-        id: tweetId,
-        description: text,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        User: User,
-        LikeUsers: [],
-        likesLength: 0,
-        Comments: [],
-        commentsLength: 0,
-        isLiked: false,
-      });
-      this.tweetsCount += 1
+    updated() {
+      const { id: userId } = this.$route.params;
+      this.fetchTweet({ userId });
+      this.fetchUser({ userId });
+    },
+    createNewTweet() {
+      this.updated()
     },
     toggleTweetReply(tweetId) {
       console.log(tweetId);
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
     },
-    createNewReply(payload) {
-      const { replyId, tweetId, text, User } = payload;
-      console.log(replyId, tweetId, text, User);
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
-          return {
-            ...tweet,
-            tweetReplyCount: tweet.tweetReplyCount + 1,
-          };
-        } else {
-          return { ...tweet };
-        }
-      });
+    createNewReply() {
+      this.updated()
     },
     addLiked(tweetId) {
       this.tweets = this.tweets.map((tweet) => {
@@ -224,11 +181,11 @@ export default {
     },
     addFollow() {
       this.user.isFollower = true;
-      this.user.followersLength += 1
+      this.user.followersLength += 1;
     },
     deleteFollow() {
       this.user.isFollower = false;
-      this.user.followersLength -= 1
+      this.user.followersLength -= 1;
     },
   },
 };

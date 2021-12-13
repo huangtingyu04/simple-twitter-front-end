@@ -121,9 +121,6 @@ export default {
           throw new Error(data.message);
         }
         console.log(this.user.id);
-        console.log(12345);
-
-        this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
       } catch (error) {
         console.log(error);
         errorToast.fire({

@@ -12,13 +12,13 @@ export default {
   },
   // 上傳大頭貼與名稱自介
   upload({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}/setting`, { formData })
+    return apiHelper.put(`/users/${userId}/revise`, { formData })
   },
   getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
   getUserReplies({ userId }) {
-    return apiHelper.get(`/users/${userId}/replies`)
+    return apiHelper.get(`/users/${userId}/replied_tweets`)
   },
   getUserLikes({ userId }) {
     return apiHelper.get(`/users/${userId}/likes`)

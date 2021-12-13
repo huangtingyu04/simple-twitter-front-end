@@ -4,8 +4,7 @@
     <div class="wide-container">
       <div class="main">
         <TweetContent 
-          :initial-tweet="tweet"
-          :is-like="isLike" />
+          :initial-tweet="tweet" />
         <ReplyItems 
           :replies="replies"
           :tweet-target="tweetTarget" />
@@ -54,10 +53,10 @@ export default {
         replyLength: 0,
         likeLength: 0,
         createdAt: "",
+        isLike: false
       },
       tweetItem: {},
       replies: [],
-      isLike: false,
       isLoading: true,
       tweetTarget: "",
     };
@@ -67,62 +66,37 @@ export default {
   },
   created() {
     const { id: tweetId } = this.$route.params;
-    this.fetchTweet({ tweetId });
+    this.fetchTweet( tweetId )
   },
   beforeRouteUpdate(to, from, next) {
     const { id: tweetId } = to.params;
-    this.fetchTweet({ tweetId });
+    this.fetchTweet( tweetId )
     next();
   },
   methods: {
-    async fetchTweet({ tweetId }) {
+    async fetchTweet( tweetId ) {
       try {
         this.isLoading = true;
-        const { data, statusText } = await tweetsAPI.getTweet({ tweetId });
+        const { data, statusText } = await tweetsAPI.getTweet( tweetId );
         if (statusText !== "OK") {
           throw new Error();
         }
         console.log(data);
-        const { tweet, tweetLikeCount, tweetReplyCount } = data;
-        const {
+        const { id, createdAt, description, isLike, tweetLikeCount, tweetReplyCount, User, Replies} = data
+        this.tweet= {
           id,
-          description,
-          createdAt,
-          Replies,
-          User,
-          Likes
-        } = tweet;
-        this.tweet = {
-          id,
-          name: User ? User.name : "匿名",
-          account: User ? User.account : "匿名",
-          avatar: User ? User.avatar : "",
+          name: User ? User.name: "",
+          account: User ? User.account: "",
+          avatar: User ? User.avatar: "",
           description,
           replyLength: tweetReplyCount,
           likeLength: tweetLikeCount,
-          createdAt,
-        };
-        this.tweetItem = {
-          id,
-          description,
-          createdAt,
-          User,
-        };
+          createdAt: createdAt,
+          isLike: isLike
+        },
+        this.tweetItem = {id, description, createdAt, User}
         this.replies = Replies, 
-        this.tweetTarget = tweet.User.account
-        // 判斷isLike
-        if(Likes === []) {
-          this.isLike = false
-        } else {
-          Likes.filter(like => {
-            if(like.UserId === this.currentUser.id) {
-              this.isLike = like.isLike
-            } else {
-              this.isLike = false
-            }
-          })
-        }
-
+        this.tweetTarget = data.User.account
         this.isLoading = false;
       } catch (error) {
         console.log(error);

@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script> 
 import Navbar from "./../components/Navbar";
 import TweetItems from "./../components/TweetItems";
 import PopularUsersCard from "./../components/PopularUsersCard";
@@ -71,7 +71,7 @@ export default {
         if(statusText !== 'OK') {
           throw new Error
         }
-        this.tweets = data.tweets
+        this.tweets = data
       } catch (error) {
         console.log(error)
         errorToast.fire({

@@ -108,8 +108,8 @@
                   <label for="intro">自我介紹</label>
                   <textarea
                     v-model="user.introduction"
-                    name="intro"
-                    id="intro"
+                    name="introduction"
+                    id="introduction"
                     cols="30"
                     rows="10"
                   ></textarea>
@@ -239,12 +239,20 @@ export default {
     },
     async handleSubmit(e) {
       try {
+        // const formData = {
+        //   name: this.user.name,
+        //   introduction: this.user.introduction,
+        //   avatar: this.user.avatar,
+        //   cover: this.user.cover
+        // }
         const form = e.target
         const formData = new FormData(form)
         console.log(formData)
+        const userId = this.currentUser.id
+        console.log(userId)
         this.$emit("update-profile", formData);
         const response = await usersAPI.upload({
-          userId: this.currentUser.id,
+          userId,
           formData
         })
         console.log(response)

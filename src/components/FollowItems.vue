@@ -41,7 +41,6 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { mapState } from "vuex";
-import { eventBus } from "../utils/eventbus";
 import usersAPI from "../apis/users";
 
 export default {
@@ -63,7 +62,6 @@ export default {
         introduction: "",
       },
       isFollowing: false
-      // isFollowing: false,
     };
   },
   computed: {
@@ -79,17 +77,9 @@ export default {
   },
   async created() {
     const response = await usersAPI.getUser({userId: this.initialFollower.id})
-    console.log(response)
     const { data } = response
     this.isFollowing = data.isFollower
     this.fetchData();
-    this.popularAddFollow();
-    this.popularDeleteFollow();
-  },
-  updated() {
-    const { id: userId} = this.initialFollower.id
-    this.fetchUser({userId})
-    console.log(userId)
   },
   methods: {
     fetchData() {
@@ -102,27 +92,16 @@ export default {
         avatar,
         introduction,
       };
-      
-
     },
-    async fetchUser({userId}) {
-      try {
-        const response = await usersAPI.getUser({userId})
-        console.log(response)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async addFollow(userId) {
+    async addFollow({userId}) {
       try {
         this.follower.isFollowing = true;
         const { data } = await usersAPI.addFollow({ userId });
         console.log(data);
+        this.$emit("toggle-follow")
       } catch (error) {
         console.log(error);
       }
-      eventBus.$emit("add-follow-pop", userId);
-      this.$router.go(0);
 
     },
     async deleteFollow(userId) {
@@ -131,26 +110,10 @@ export default {
         const { data } = await usersAPI.deleteFollow({ userId });
         console.log(data);
         console.log(userId);
+        this.$emit("toggle-follow")
       } catch (error) {
         console.log(error);
       }
-      eventBus.$emit("delete-follow-pop", userId);
-      this.$router.go(0);
-
-    },
-    popularAddFollow() {
-      eventBus.$on("add-follow-pop", (userId) => {
-        if (this.follower.id === userId) {
-          return (this.isFollowing = true);
-        } else return;
-      });
-    },
-    popularDeleteFollow() {
-      eventBus.$on("delete-follow-pop", (userId) => {
-        if (this.follower.id === userId) {
-          return (this.isFollowing = false);
-        } else return;
-      });
     },
   },
 };

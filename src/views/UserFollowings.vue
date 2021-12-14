@@ -24,10 +24,11 @@
             v-for="follower in followers"
             :key="follower.id"
             :initial-follower="follower"
+            @toggle-follow="toggleFollow"
           />
         </div>
       </div>
-      <PopularUsersCard @add-follow-item="addFollowItem"/>
+      <PopularUsersCard @toggle-follow="toggleFollow" />
     </div>
   </div>
 </template>
@@ -51,7 +52,7 @@ export default {
     PopularUsersCard,
   },
   computed: {
-    ...mapState(["currentUser", "isAuthenticated"])
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   data() {
     return {
@@ -73,44 +74,41 @@ export default {
     next();
   },
   methods: {
-    async fetchFollowings({userId}) {
+    async fetchFollowings({ userId }) {
       try {
-        const response = await usersAPI.getUser({userId})
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
         }
-        const {id, name, Followings, tweetsCount} = data
-        this.id = id
-        this.name = name
-        this.followers = Followings
-        this.tweetsNum = tweetsCount
+        const { id, name, Followings, tweetsCount } = data;
+        this.id = id;
+        this.name = name;
+        this.followers = Followings;
+        this.tweetsNum = tweetsCount;
       } catch (error) {
         errorToast.fire({
-          title: '無法取得追蹤者資訊'
-        })
-      }
-    }, 
-    async fetchUser({userId}) {
-      try {
-        const response = await usersAPI.getUserTweets({userId})
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
-        }
-        const {tweets} = data
-        this.tweetsNum = tweets.length
-      } catch (error) {
-        console.log(error)
+          title: "無法取得追蹤者資訊",
+        });
       }
     },
-    addFollowItem(form) {
-      this.followers.push({
-        id: form.id,
-        name: form.name,
-        account: form.account,
-        isFollowing: true
-      },)
+    async fetchUser({ userId }) {
+      try {
+        const response = await usersAPI.getUserTweets({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        const { tweets } = data;
+        this.tweetsNum = tweets.length;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    toggleFollow() {
+      const { id: userId } = this.$route.params;
+      this.fetchUser({ userId });
+      this.fetchFollowings({ userId });
     },
   },
 };

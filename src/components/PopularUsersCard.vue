@@ -45,7 +45,6 @@ import usersAPI from "../apis/users";
 import { errorToast } from "../utils/toast";
 import { mapState } from "vuex";
 import { emptyImageFilter } from "../utils/mixins";
-import { eventBus } from "../utils/eventbus";
 
 export default {
   name: "PopularUsersCards",
@@ -60,8 +59,6 @@ export default {
   },
   created() {
     this.fetchPopularUsers();
-    this.popularAddFollow();
-    this.popularDeleteFollow();
   },
   methods: {
     async fetchPopularUsers() {
@@ -95,19 +92,12 @@ export default {
             };
           }
         });
-        if ((this.currentUser.id = this.$route.params)) {
-          console.log(userId)
-          const form = this.popularUsers.filter(user => user.id === userId)[0]
-          this.$emit("add-follow-item", form);
-        }
+        this.$emit("toggle-follow")
       } catch (error) {
         errorToast.fire({
           title: "無法追蹤",
         });
       }
-      eventBus.$emit("add-follow-pop", userId);
-      this.$router.go(0);
-
     },
     async deleteFollowing(userId) {
       try {
@@ -125,45 +115,12 @@ export default {
             };
           }
         });
-        if ((this.currentUser.id = this.$route.params)) {
-          this.$emit("remove-follow-item", userId);
-        }
+        this.$emit("toggle-follow")
       } catch (error) {
         errorToast.fire({
           title: "無法取消追蹤",
         });
       }
-      eventBus.$emit("delete-follow-pop", userId);
-      this.$router.go(0);
-
-    },
-    popularAddFollow() {
-      eventBus.$on("add-follow-pop", (userId) => {
-        this.popularUsers = this.popularUsers.map((user) => {
-          if (user.id === userId) {
-            return {
-              ...user,
-              isFollowed: true,
-            };
-          } else {
-            return user;
-          }
-        });
-      });
-    },
-    popularDeleteFollow() {
-      eventBus.$on("delete-follow-pop", (userId) => {
-        this.popularUsers = this.popularUsers.map((user) => {
-          if (user.id === userId) {
-            return {
-              ...user,
-              isFollowed: false,
-            };
-          } else {
-            return user;
-          }
-        });
-      });
     },
   },
 };

@@ -8,11 +8,11 @@ export default {
     return apiHelper.get(`/users/${userId}`)
   },
   update({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}`, {formData})
+    return apiHelper.put(`/users/${userId}/revise`, formData)
   },
   // 上傳大頭貼與名稱自介
   upload({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}/revise`, { formData })
+    return apiHelper.put(`/users/${userId}`,  formData )
   },
   getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)

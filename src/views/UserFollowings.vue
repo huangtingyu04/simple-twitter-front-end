@@ -75,17 +75,16 @@ export default {
   methods: {
     async fetchFollowings({userId}) {
       try {
-        const response = await usersAPI.getUserFollowings({userId})
-        console.log(response)
+        const response = await usersAPI.getUser({userId})
         const {data, statusText} = response
         if(statusText !== 'OK') {
           throw new Error
         }
-        const {result} = data
-        const {id, name, Followings} = result
+        const {id, name, Followings, tweetsCount} = data
         this.id = id
         this.name = name
         this.followers = Followings
+        this.tweetsNum = tweetsCount
       } catch (error) {
         errorToast.fire({
           title: '無法取得追蹤者資訊'

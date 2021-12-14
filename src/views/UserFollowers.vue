@@ -57,45 +57,29 @@ export default {
   created() {
     const { id: userId } = this.$route.params
     this.fetchUser({userId})
-    this.fetchFollowers({userId})
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params
     this.fetchUser({userId})
-    this.fetchFollowers({userId})
     next()
   },
   methods: {
-    async fetchFollowers({userId}) {
+    async fetchUser({userId}) {
       try {
-        const response = await usersAPI.getUserFollowers({userId})
-        console.log(response)
+        const response = await usersAPI.getUser({userId})
         const {data, statusText} = response
         if(statusText !== 'OK') {
           throw new Error
         }
-        const {result} = data
-        const {id, name, Followers} = result
+        const {id, name, Followers, tweetsCount} = data
         this.id = id
         this.name = name
         this.followers = Followers
+        this.tweetsNum = tweetsCount
       } catch (error) {
         errorToast.fire({
           title: '無法取得追蹤者資訊'
         })
-      }
-    },
-    async fetchUser({userId}) {
-      try {
-        const response = await usersAPI.getUserTweets({userId})
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
-        }
-        const {tweets} = data
-        this.tweetsNum = tweets.length
-      } catch (error) {
-        console.log(error)
       }
     },
   },

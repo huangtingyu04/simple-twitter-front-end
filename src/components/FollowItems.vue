@@ -18,7 +18,7 @@
         </div>
         <button
           class="isfollow"
-          v-if="!follower.isFollowing"
+          v-if="!isFollowing"
           v-show="!(follower.id === currentUser.id)"
           @click.prevent.stop="addFollow(follower.id)"
         >
@@ -61,9 +61,8 @@ export default {
         account: "",
         avatar: "",
         introduction: "",
-        isFollowing: false,
-        Followers: [],
       },
+      isFollowing: false
       // isFollowing: false,
     };
   },
@@ -78,14 +77,23 @@ export default {
       };
     },
   },
-  created() {
-    this.fetchUser();
+  async created() {
+    const response = await usersAPI.getUser({userId: this.initialFollower.id})
+    console.log(response)
+    const { data } = response
+    this.isFollowing = data.isFollower
+    this.fetchData();
     this.popularAddFollow();
     this.popularDeleteFollow();
   },
+  updated() {
+    const { id: userId} = this.initialFollower.id
+    this.fetchUser({userId})
+    console.log(userId)
+  },
   methods: {
-    fetchUser() {
-      const { id, name, account, avatar, introduction, Followers } =
+    fetchData() {
+      const { id, name, account, avatar, introduction } =
         this.initialFollower;
       this.follower = {
         id,
@@ -93,19 +101,16 @@ export default {
         account,
         avatar,
         introduction,
-        Followers,
       };
+      
 
-      if (Followers === []) {
-        this.follower.isFollowing = false;
-      } else {
-        Followers.find((follower) => {
-          if (follower.id === this.currentUser.id) {
-            return (this.follower.isFollowing = true);
-          } else {
-            this.follower.isFollowing = false;
-          }
-        });
+    },
+    async fetchUser({userId}) {
+      try {
+        const response = await usersAPI.getUser({userId})
+        console.log(response)
+      } catch (error) {
+        console.log(error)
       }
     },
     async addFollow(userId) {

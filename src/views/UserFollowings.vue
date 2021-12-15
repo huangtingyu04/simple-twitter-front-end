@@ -24,11 +24,11 @@
             v-for="follower in followers"
             :key="follower.id"
             :initial-follower="follower"
-            @toggle-follow="toggleFollow"
+            @refresh="refresh"
           />
         </div>
       </div>
-      <PopularUsersCard @toggle-follow="toggleFollow" />
+      <PopularUsersCard @refresh="refresh" />
     </div>
   </div>
 </template>
@@ -64,12 +64,10 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchUser({ userId });
     this.fetchFollowings({ userId });
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    this.fetchUser({ userId });
     this.fetchFollowings({ userId });
     next();
   },
@@ -92,22 +90,8 @@ export default {
         });
       }
     },
-    async fetchUser({ userId }) {
-      try {
-        const response = await usersAPI.getUserTweets({ userId });
-        const { data, statusText } = response;
-        if (statusText !== "OK") {
-          throw new Error();
-        }
-        const { tweets } = data;
-        this.tweetsNum = tweets.length;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    toggleFollow() {
+    refresh() {
       const { id: userId } = this.$route.params;
-      this.fetchUser({ userId });
       this.fetchFollowings({ userId });
     },
   },

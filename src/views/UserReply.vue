@@ -3,22 +3,23 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile 
-          :current-user="currentUser" 
+        <UserProfile
+          :current-user="currentUser"
           :initial-user="user"
-          @add-follow="addFollow"
-          @delete-follow="deleteFollow" />
+          @refresh="refresh"
+        />
         <UserReplyItems
           v-for="reply in replies"
           :key="reply.id"
-          :initial-reply="reply" />
+          :initial-reply="reply"
+        />
         <UserEditModal :current-user="currentUser" />
         <TweetModal
           :current-user="currentUser"
           @create-new-tweet="createNewTweet"
         />
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @refresh="refresh" />
     </div>
   </div>
 </template>
@@ -56,31 +57,31 @@ export default {
     ...mapState(["currentUser", "isAuthenticated"]),
   },
   created() {
-    const { id: userId } = this.$route.params
-    this.fetchUser({userId})
-    this.fetchReplies({userId});
+    const { id: userId } = this.$route.params;
+    this.fetchUser({ userId });
+    this.fetchReplies({ userId });
   },
   beforeRouteUpdate(to, from, next) {
-    const { id: userId } = to.params
-    this.fetchUser({userId})
-    this.fetchReplies({userId});
-    next()
+    const { id: userId } = to.params;
+    this.fetchUser({ userId });
+    this.fetchReplies({ userId });
+    next();
   },
   methods: {
-    async fetchReplies({userId}) {
+    async fetchReplies({ userId }) {
       try {
-        const response = await usersAPI.getUserReplies({userId})
-        const { data, statusText } = response
-        if(statusText !== 'OK') {
-          throw new Error
+        const response = await usersAPI.getUserReplies({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
         }
-        console.log(data)
-        this.replies = data
+        console.log(data);
+        this.replies = data;
       } catch (error) {
-        console.log(error)
+        console.log(error);
         errorToast.fire({
-          title: '無法取得使用者回覆'
-        })
+          title: "無法取得使用者回覆",
+        });
       }
     },
     async fetchUser({ userId }) {
@@ -97,7 +98,7 @@ export default {
       }
     },
     createNewTweet() {
-      this.tweetsCount += 1
+      this.tweetsCount += 1;
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;
@@ -106,13 +107,10 @@ export default {
       this.user.avatar = avatar;
       this.user.cover = cover;
     },
-    addFollow() {
-      this.user.isFollower = true;
-      this.user.followersLength += 1
-    },
-    deleteFollow() {
-      this.user.isFollower = false;
-      this.user.followersLength -= 1
+    refresh() {
+      const { id: userId } = this.$route.params;
+      this.fetchUser({ userId });
+      this.fetchReplies({ userId });
     },
   },
 };

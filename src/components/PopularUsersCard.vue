@@ -45,6 +45,7 @@ import usersAPI from "../apis/users";
 import { errorToast } from "../utils/toast";
 import { mapState } from "vuex";
 import { emptyImageFilter } from "../utils/mixins";
+import { eventBus } from '../utils/eventbus'
 
 export default {
   name: "PopularUsersCards",
@@ -59,6 +60,7 @@ export default {
   },
   created() {
     this.fetchPopularUsers();
+    this.refresh()
   },
   methods: {
     async fetchPopularUsers() {
@@ -79,7 +81,8 @@ export default {
     async addFollowing(userId) {
       console.log(userId)
       try {
-        const { data } = await usersAPI.addFollow({userId});
+        const id = {id: userId}
+        const { data } = await usersAPI.addFollow({id});
         if (data.status !== "success") {
           throw new Error(data.message);
         }
@@ -95,7 +98,8 @@ export default {
             };
           }
         });
-        this.$emit("toggle-follow")
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         errorToast.fire({
           title: "無法追蹤",
@@ -118,13 +122,18 @@ export default {
             };
           }
         });
-        this.$emit("toggle-follow")
+        this.$emit("refresh")
       } catch (error) {
         errorToast.fire({
           title: "無法取消追蹤",
         });
       }
     },
+    refresh() {
+      eventBus.$on("refresh", () => {
+        this.fetchPopularUsers()
+      })
+    }
   },
 };
 </script>

@@ -132,8 +132,6 @@ export default {
   },
   created() {
     this.fetchUser()
-    this.popularAddFollow()
-    this.popularDeleteFollow( )
   },
   methods: {
     fetchUser() {
@@ -141,47 +139,33 @@ export default {
     },
     async addFollow(userId) {
       try {
+        const id = {id: userId}
         console.log(userId);
-        const response = await usersAPI.addFollow( {userId} );
+        const response = await usersAPI.addFollow( {id} );
         console.log(response);
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         console.log(error);
         errorToast.fire({
           title: "無法追蹤此使用者",
         });
       }
-      this.$emit("add-follow", userId)
-      this.$router.go(0);
     },
     async deleteFollow(userId) {
       try {
         console.log(userId);
         const response = await usersAPI.deleteFollow( {userId} );
         console.log(response);
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         console.log(error);
         errorToast.fire({
           title: "無法取消追蹤此使用者",
         });
       }
-      this.$emit("delete-follow", userId)
-      this.$router.go(0);
     },
-    popularAddFollow() {
-      eventBus.$on('add-follow-pop', userId => {
-        console.log(userId)
-        if(this.user.id === userId) {
-          return this.isFollower = true
-        } else return
-      })
-    },
-    popularDeleteFollow() {
-      eventBus.$on('delete-follow-pop', userId => {
-        if(this.user.id === userId) {
-          return this.isFollower = false
-        }
-      })
-    }
   }
 };
 </script>

@@ -41,6 +41,7 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { mapState } from "vuex";
+import { eventBus } from '../utils/eventbus'
 import usersAPI from "../apis/users";
 
 export default {
@@ -80,6 +81,7 @@ export default {
     const { data } = response
     this.isFollowing = data.isFollower
     this.fetchData();
+    this.handleFollow()
   },
   methods: {
     fetchData() {
@@ -93,12 +95,15 @@ export default {
         introduction,
       };
     },
-    async addFollow({userId}) {
+    async addFollow(userId) {
       try {
-        this.follower.isFollowing = true;
-        const { data } = await usersAPI.addFollow({ userId });
+        const id = {id: userId}
+        this.isFollowing = true;
+        const { data } = await usersAPI.addFollow({ id });
         console.log(data);
-        this.$emit("toggle-follow")
+        console.log(userId)
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         console.log(error);
       }
@@ -106,15 +111,21 @@ export default {
     },
     async deleteFollow(userId) {
       try {
-        this.follower.isFollowing = false;
+        this.isFollowing = false;
         const { data } = await usersAPI.deleteFollow({ userId });
         console.log(data);
         console.log(userId);
-        this.$emit("toggle-follow")
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         console.log(error);
       }
     },
+    handleFollow() {
+      eventBus.$on("refresh", () => {
+        this.fetchData()
+      })
+    }
   },
 };
 </script>

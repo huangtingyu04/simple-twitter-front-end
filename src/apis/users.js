@@ -32,8 +32,8 @@ export default {
   getPopularUsers() {
     return apiHelper.get('users/top')
   },
-  addFollow( {userId} ) {
-    return apiHelper.post(`/followships/`, userId)
+  addFollow( {id} ) {
+    return apiHelper.post(`/followships/`, id)
   },
   deleteFollow( {userId} ) {
     return apiHelper.delete(`/followships/${userId}`)

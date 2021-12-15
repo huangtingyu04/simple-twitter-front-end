@@ -6,8 +6,7 @@
         <UserProfile
           :current-user="currentUser"
           :initial-user="user"
-          @add-follow="addFollow"
-          @delete-follow="deleteFollow"
+          @refresh="refresh"
         />
         <TweetItems
           :initial-tweets="tweets"
@@ -29,7 +28,7 @@
           @create-new-tweet="createNewTweet"
         />
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @refresh="refresh"/>
     </div>
   </div>
 </template>
@@ -176,14 +175,11 @@ export default {
       this.user.avatar = avatar;
       this.user.cover = cover;
     },
-    addFollow() {
-      this.user.isFollower = true;
-      this.user.followersLength += 1;
-    },
-    deleteFollow() {
-      this.user.isFollower = false;
-      this.user.followersLength -= 1;
-    },
+    refresh() {
+      const { id: userId } = this.$route.params;
+      this.fetchTweet({ userId });
+      this.fetchUser({ userId });
+    }
   },
 };
 </script>

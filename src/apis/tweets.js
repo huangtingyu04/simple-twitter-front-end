@@ -14,7 +14,7 @@ export default {
     return apiHelper.post('/tweets', { description } )
   },
   reply({ tweetId, comment }) {
-    return apiHelper.post(`/tweets/${tweetId}/replies`, comment )
+    return apiHelper.post(`/tweets/${tweetId}/replies`, {comment} ) 
   },
   addLike({tweetId}) {
     return apiHelper.post(`/tweets/${tweetId}/like`, null)

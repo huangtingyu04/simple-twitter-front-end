@@ -94,16 +94,13 @@ import { v4 as uuidv4 } from "uuid";
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
+import { mapState } from 'vuex';
 
 export default {
   name: "TweetReplyModal",
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
     tweetItem: {
-      type: Object,
-      required: true,
-    },
-    currentUser: {
       type: Object,
       required: true,
     },
@@ -117,6 +114,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
     submitOK() {
       if (!this.newReply) {
         return "";

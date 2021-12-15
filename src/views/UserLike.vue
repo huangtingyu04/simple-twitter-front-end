@@ -5,8 +5,7 @@
       <div class="main">
         <UserProfile
           :current-user="currentUser"
-          :user="user"
-          :tweets-count="tweetsCount"
+          :initial-user="user"
           @add-follow="addFollow"
           @delete-follow="deleteFollow"
         />
@@ -59,23 +58,8 @@ export default {
   },
   data() {
     return {
-      user: {
-        id: 0,
-        name: "",
-        account: "",
-        email: "",
-        introduction: "",
-        avatar: "",
-        cover: "",
-        followingsLength: 0,
-        followersLength: 0,
-        isFollower: false,
-      },
-      tweetItem: {
-        Tweet:{},
-        User: {},
-      },
-      tweetsCount: 0,
+      user: {},
+      tweetItem: {},
       tweets: [],
       
     };
@@ -85,13 +69,13 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchTweet({ userId });
+    this.fetchUser({ userId });
     this.fetchLike({ userId });
     this.toggleTweetReply()
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    this.fetchTweet({ userId });
+    this.fetchUser({ userId });
     this.fetchLike({ userId });
     next();
   },
@@ -104,31 +88,7 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        const { user, tweets } = data;
-        const {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          Followers,
-          Followings,
-          
-        } = user;
-        this.user = {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          followersLength: Followers.length,
-          followingsLength: Followings.length,
-        };
-        this.tweets = tweets.filter(tweet => tweet.Tweet !== null);
+        this.tweets = data.tweets
         this.tweetItem = this.tweets[0]
       } catch (error) {
         console.log(error);
@@ -137,12 +97,15 @@ export default {
         });
       }
     },
-    async fetchTweet({ userId }) {
+    async fetchUser({ userId }) {
       try {
-        const response = await usersAPI.getUserTweets({ userId });
-        const { data } = response;
-        const { tweets } = data;
-        this.tweetsCount = tweets.length;
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        this.user = data;
+        console.log(data);
       } catch (error) {
         console.log(error);
       }

@@ -140,8 +140,8 @@ export default {
           return;
         }
         this.isProcessing = true;
-        const { data } = await tweetsAPI.reply(tweetId, {
-          reply: this.newReply,
+        const { data } = await tweetsAPI.reply({tweetId, 
+          comment: this.newReply,
         });
         if (data.status !== "success") {
           throw new Error(data.message);

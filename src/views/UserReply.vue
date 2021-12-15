@@ -5,8 +5,7 @@
       <div class="main">
         <UserProfile 
           :current-user="currentUser" 
-          :user="user"
-          :tweets-count="tweetsCount"
+          :initial-user="user"
           @add-follow="addFollow"
           @delete-follow="deleteFollow" />
         <UserReplyItems
@@ -48,18 +47,7 @@ export default {
   },
   data() {
     return {
-      user: {
-        id: 0,
-        name: "",
-        account: "",
-        email: "",
-        introduction: "",
-        avatar: "",
-        cover: "",
-        followingsLength: 0,
-        followersLength: 0,
-        isFollower: false,
-      },
+      user: {},
       tweetsCount: 0,
       replies: [],
     };
@@ -69,12 +57,12 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params
-    this.fetchTweet({userId})
+    this.fetchUser({userId})
     this.fetchReplies({userId});
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params
-    this.fetchTweet({userId})
+    this.fetchUser({userId})
     this.fetchReplies({userId});
     next()
   },
@@ -86,33 +74,8 @@ export default {
         if(statusText !== 'OK') {
           throw new Error
         }
-        const { tweets, user } = data
-        const {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          FollowersCount,
-          FollowingsCount,
-          isFollower,
-        } = user;
-        this.user = {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          followersLength: FollowersCount,
-          followingsLength: FollowingsCount,
-          isFollower,
-        };
-        this.replies = tweets
-        console.log(response)
+        console.log(data)
+        this.replies = data
       } catch (error) {
         console.log(error)
         errorToast.fire({
@@ -120,14 +83,17 @@ export default {
         })
       }
     },
-    async fetchTweet({userId}) {
+    async fetchUser({ userId }) {
       try {
-        const response = await usersAPI.getUserTweets({ userId });
-        const { data } = response;
-        const { tweets } = data;
-        this.tweetsCount = tweets.length
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        this.user = data;
+        console.log(data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     createNewTweet() {

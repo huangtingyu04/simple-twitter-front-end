@@ -19,14 +19,11 @@
         <TweetLikeReplyModal
           :current-user="currentUser"
           :tweet-item="tweetItem"
-          @create-new-reply="createNewReply"
+          @refresh="refresh"
         />
-        <TweetModal
-          :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
-        />
+        <TweetModal :current-user="currentUser" @refresh="refresh" />
       </div>
-      <PopularUsersCard @refresh="refresh"/>
+      <PopularUsersCard @refresh="refresh" />
     </div>
   </div>
 </template>
@@ -69,7 +66,6 @@ export default {
     const { id: userId } = this.$route.params;
     this.fetchUser({ userId });
     this.fetchLike({ userId });
-    this.toggleTweetReply();
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
@@ -108,26 +104,8 @@ export default {
         console.log(error);
       }
     },
-    createNewTweet() {
-      this.tweetsCount += 1;
-    },
     toggleTweetReply(tweetId) {
       this.tweetItem = this.tweets.find((tweet) => tweet.TweetId === tweetId);
-    },
-    createNewReply(tweetId) {
-      console.log(tweetId);
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.TweetId === tweetId) {
-          return {
-            ...tweet,
-            ...tweet.Tweet,
-            Replies: tweet.Tweet.Replies.push({}),
-          };
-        } else {
-          return { ...tweet };
-        }
-      });
-      // console.log(this.tweets)
     },
     deleteLiked(tweetId) {
       console.log(tweetId);

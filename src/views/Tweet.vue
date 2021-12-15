@@ -3,17 +3,10 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <TweetContent 
-          :initial-tweet="tweet" />
-        <ReplyItems 
-          :replies="replies"
-          :tweet-target="tweetTarget" />
-        <TweetReplyModal
-          :tweet-item="tweetItem"
-          :current-user="currentUser"
-          @create-new-reply="createNewReply"
-        />
-        <TweetModal :current-user="currentUser" />
+        <TweetContent :initial-tweet="tweet" />
+        <ReplyItems :replies="replies" :tweet-target="tweetTarget" />
+        <TweetReplyModal :tweet-item="tweetItem" @refresh="refresh" />
+        <TweetModal @refresh="refresh"/>
       </div>
       <PopularUsersCard />
     </div>
@@ -53,7 +46,7 @@ export default {
         replyLength: 0,
         likeLength: 0,
         createdAt: "",
-        isLike: false
+        isLike: false,
       },
       tweetItem: {},
       replies: [],
@@ -66,37 +59,45 @@ export default {
   },
   created() {
     const { id: tweetId } = this.$route.params;
-    this.fetchTweet( tweetId )
+    this.fetchTweet(tweetId);
   },
   beforeRouteUpdate(to, from, next) {
     const { id: tweetId } = to.params;
-    this.fetchTweet( tweetId )
+    this.fetchTweet(tweetId);
     next();
   },
   methods: {
-    async fetchTweet( tweetId ) {
+    async fetchTweet(tweetId) {
       try {
         this.isLoading = true;
-        const { data, statusText } = await tweetsAPI.getTweet( tweetId );
+        const { data, statusText } = await tweetsAPI.getTweet(tweetId);
         if (statusText !== "OK") {
           throw new Error();
         }
         console.log(data);
-        const { id, createdAt, description, isLike, tweetLikeCount, tweetReplyCount, User, Replies} = data
-        this.tweet= {
+        const {
           id,
-          name: User ? User.name: "",
-          account: User ? User.account: "",
-          avatar: User ? User.avatar: "",
+          createdAt,
+          description,
+          isLike,
+          tweetLikeCount,
+          tweetReplyCount,
+          User,
+          Replies,
+        } = data;
+        (this.tweet = {
+          id,
+          name: User ? User.name : "",
+          account: User ? User.account : "",
+          avatar: User ? User.avatar : "",
           description,
           replyLength: tweetReplyCount,
           likeLength: tweetLikeCount,
           createdAt: createdAt,
-          isLike: isLike
-        },
-        this.tweetItem = {id, description, createdAt, User}
-        this.replies = Replies, 
-        this.tweetTarget = data.User.account
+          isLike: isLike,
+        }),
+          (this.tweetItem = { id, description, createdAt, User });
+        (this.replies = Replies), (this.tweetTarget = data.User.account);
         this.isLoading = false;
       } catch (error) {
         console.log(error);
@@ -106,21 +107,9 @@ export default {
         });
       }
     },
-    createNewReply(payload) {
-      const { replyId, tweetId, comment, User } = payload;
-      this.tweet = {
-        ...this.tweet,
-        replyLength: this.tweet.replyLength + 1
-      }
-      this.replies.push({
-        id: replyId,
-        tweetId,
-        comment,
-        User,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-      
+    refresh() {
+      const { id: tweetId } = this.$route.params;
+      this.fetchTweet(tweetId);
     },
   },
 };

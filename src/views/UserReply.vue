@@ -16,7 +16,7 @@
         <UserEditModal :current-user="currentUser" />
         <TweetModal
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
+          @refresh="refresh"
         />
       </div>
       <PopularUsersCard @refresh="refresh" />
@@ -96,9 +96,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    createNewTweet() {
-      this.tweetsCount += 1;
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;

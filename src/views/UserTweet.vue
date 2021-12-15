@@ -21,11 +21,11 @@
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
-          @create-new-reply="createNewReply"
+          @refresh="refresh"
         />
         <TweetModal
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
+          @refresh="refresh"
         />
       </div>
       <PopularUsersCard @refresh="refresh"/>

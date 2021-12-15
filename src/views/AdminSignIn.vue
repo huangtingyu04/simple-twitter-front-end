@@ -77,7 +77,7 @@ export default {
         if (data.status !== "success" || statusText !== "OK") {
           throw new Error(data.message);
         }
-        if (!data.user.role) {
+        if (data.user.role === 'user') {
           errorToast.fire({
             title: "請至前台登入",
           });

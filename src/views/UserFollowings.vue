@@ -24,10 +24,11 @@
             v-for="follower in followers"
             :key="follower.id"
             :initial-follower="follower"
+            @refresh="refresh"
           />
         </div>
       </div>
-      <PopularUsersCard @add-follow-item="addFollowItem"/>
+      <PopularUsersCard @refresh="refresh" />
     </div>
   </div>
 </template>
@@ -51,7 +52,7 @@ export default {
     PopularUsersCard,
   },
   computed: {
-    ...mapState(["currentUser", "isAuthenticated"])
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   data() {
     return {
@@ -63,55 +64,35 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchUser({ userId });
     this.fetchFollowings({ userId });
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    this.fetchUser({ userId });
     this.fetchFollowings({ userId });
     next();
   },
   methods: {
-    async fetchFollowings({userId}) {
+    async fetchFollowings({ userId }) {
       try {
-        const response = await usersAPI.getUserFollowings({userId})
-        console.log(response)
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
         }
-        const {result} = data
-        const {id, name, Followings} = result
-        this.id = id
-        this.name = name
-        this.followers = Followings
+        const { id, name, Followings, tweetsCount } = data;
+        this.id = id;
+        this.name = name;
+        this.followers = Followings;
+        this.tweetsNum = tweetsCount;
       } catch (error) {
         errorToast.fire({
-          title: '無法取得追蹤者資訊'
-        })
-      }
-    }, 
-    async fetchUser({userId}) {
-      try {
-        const response = await usersAPI.getUserTweets({userId})
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
-        }
-        const {tweets} = data
-        this.tweetsNum = tweets.length
-      } catch (error) {
-        console.log(error)
+          title: "無法取得追蹤者資訊",
+        });
       }
     },
-    addFollowItem(form) {
-      this.followers.push({
-        id: form.id,
-        name: form.name,
-        account: form.account,
-        isFollowing: true
-      },)
+    refresh() {
+      const { id: userId } = this.$route.params;
+      this.fetchFollowings({ userId });
     },
   },
 };

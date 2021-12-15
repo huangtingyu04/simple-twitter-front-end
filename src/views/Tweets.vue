@@ -5,7 +5,7 @@
       <div class="main">
         <AddTweet
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
+          @refresh="refresh"
         />
         <TweetItems
           :initial-tweets="tweets"
@@ -16,11 +16,11 @@
         <TweetReplyModal
           :tweet-item="tweetItem"
           :current-user="currentUser"
-          @create-new-reply="createNewReply"
+          @refresh="refresh"
         />
         <TweetModal
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
+          @refresh="refresh"
         />
       </div>
       <PopularUsersCard />
@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script>
+<script> 
 import Navbar from "./../components/Navbar";
 import TweetItems from "./../components/TweetItems";
 import PopularUsersCard from "./../components/PopularUsersCard";
@@ -71,7 +71,7 @@ export default {
         if(statusText !== 'OK') {
           throw new Error
         }
-        this.tweets = data.tweets
+        this.tweets = data
       } catch (error) {
         console.log(error)
         errorToast.fire({
@@ -79,37 +79,11 @@ export default {
         })
       }
     },
-    createNewTweet(payload) {
-      const { tweetId, text, User } = payload;
-      this.tweets.unshift({
-        id: tweetId,
-        description: text,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        User: User,
-        Likes: [],
-        tweetLikeCount: 0,
-        Replies: [],
-        tweetReplyCount: 0,
-        isLiked: false,
-      });
+    refresh() {
+      this.fetchData();
     },
     toggleTweetReply(tweetId) {
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
-    },
-    createNewReply(payload) {
-      const { replyId, tweetId, text, User } = payload;
-      console.log(replyId, tweetId, text, User)
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.id === tweetId) {
-          return {
-            ...tweet,
-            tweetReplyCount: tweet.tweetReplyCount + 1
-          };
-        } else {
-          return {...tweet};
-        }
-      });
     },
     addLiked(tweetId) {
       this.tweets = this.tweets.map((tweet) => {

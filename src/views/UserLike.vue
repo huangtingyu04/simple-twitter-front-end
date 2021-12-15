@@ -5,10 +5,8 @@
       <div class="main">
         <UserProfile
           :current-user="currentUser"
-          :user="user"
-          :tweets-count="tweetsCount"
-          @add-follow="addFollow"
-          @delete-follow="deleteFollow"
+          :initial-user="user"
+          @refresh="refresh"
         />
         <UserLikeItems
           v-for="tweet in tweets"
@@ -21,14 +19,11 @@
         <TweetLikeReplyModal
           :current-user="currentUser"
           :tweet-item="tweetItem"
-          @create-new-reply="createNewReply"
+          @refresh="refresh"
         />
-        <TweetModal
-          :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
-        />
+        <TweetModal :current-user="currentUser" @refresh="refresh" />
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @refresh="refresh" />
     </div>
   </div>
 </template>
@@ -59,25 +54,9 @@ export default {
   },
   data() {
     return {
-      user: {
-        id: 0,
-        name: "",
-        account: "",
-        email: "",
-        introduction: "",
-        avatar: "",
-        cover: "",
-        followingsLength: 0,
-        followersLength: 0,
-        isFollower: false,
-      },
-      tweetItem: {
-        Tweet:{},
-        User: {},
-      },
-      tweetsCount: 0,
+      user: {},
+      tweetItem: {},
       tweets: [],
-      
     };
   },
   computed: {
@@ -85,13 +64,12 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchTweet({ userId });
+    this.fetchUser({ userId });
     this.fetchLike({ userId });
-    this.toggleTweetReply()
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
-    this.fetchTweet({ userId });
+    this.fetchUser({ userId });
     this.fetchLike({ userId });
     next();
   },
@@ -104,32 +82,8 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        const { user, tweets } = data;
-        const {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          Followers,
-          Followings,
-          
-        } = user;
-        this.user = {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          followersLength: Followers.length,
-          followingsLength: Followings.length,
-        };
-        this.tweets = tweets.filter(tweet => tweet.Tweet !== null);
-        this.tweetItem = this.tweets[0]
+        this.tweets = data.tweets;
+        this.tweetItem = this.tweets[0];
       } catch (error) {
         console.log(error);
         errorToast.fire({
@@ -137,40 +91,25 @@ export default {
         });
       }
     },
-    async fetchTweet({ userId }) {
+    async fetchUser({ userId }) {
       try {
-        const response = await usersAPI.getUserTweets({ userId });
-        const { data } = response;
-        const { tweets } = data;
-        this.tweetsCount = tweets.length;
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        this.user = data;
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
     },
-    createNewTweet() {
-      this.tweetsCount += 1
-    },
     toggleTweetReply(tweetId) {
-      this.tweetItem = this.tweets.find(tweet => tweet.TweetId === tweetId)
-    },
-    createNewReply(tweetId) {
-      console.log(tweetId)
-      this.tweets = this.tweets.map((tweet) => {
-        if (tweet.TweetId === tweetId) {
-          return {
-            ...tweet,
-            ...tweet.Tweet,
-            Replies: tweet.Tweet.Replies.push({})
-          };
-        } else {
-          return { ...tweet };
-        }
-      });
-      // console.log(this.tweets)
+      this.tweetItem = this.tweets.find((tweet) => tweet.TweetId === tweetId);
     },
     deleteLiked(tweetId) {
-      console.log(tweetId)
-      this.tweets = this.tweets.filter(tweet => tweet.TweetId !== tweetId);
+      console.log(tweetId);
+      this.tweets = this.tweets.filter((tweet) => tweet.TweetId !== tweetId);
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;
@@ -179,13 +118,10 @@ export default {
       this.user.avatar = avatar;
       this.user.cover = cover;
     },
-    addFollow() {
-      this.user.isFollower = true;
-      this.user.followersLength += 1
-    },
-    deleteFollow() {
-      this.user.isFollower = false;
-      this.user.followersLength -= 1
+    refresh() {
+      const { id: userId } = this.$route.params;
+      this.fetchUser({ userId });
+      this.fetchLike({ userId });
     },
   },
 };

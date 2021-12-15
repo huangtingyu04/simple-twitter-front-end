@@ -93,6 +93,7 @@
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
+import { mapState } from "vuex";
 
 export default {
   name: "TweetLikeReplyModal",
@@ -100,10 +101,6 @@ export default {
   props: {
     tweetItem: {
       type: Object, 
-      required: true,
-    },
-    currentUser: {
-      type: Object,
       required: true,
     },
   },
@@ -124,6 +121,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
     submitOK() {
       if (!this.newReply) {
         return "";
@@ -140,13 +138,13 @@ export default {
           return;
         }
         this.isProcessing = true;
-        const { data } = await tweetsAPI.reply(tweetId, {
-          reply: this.newReply,
+        const { data } = await tweetsAPI.reply({tweetId, 
+          comment: this.newReply,
         });
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.$emit("create-new-reply", tweetId);
+        this.$emit("refresh");
         successToast.fire({
           title: "已成功回復推文",
         });

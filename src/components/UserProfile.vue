@@ -10,7 +10,7 @@
       <div class="top-title">
         <div class="top-title-name">{{user.name}}</div>
         <div class="top-title-tweet">
-          {{tweetsCount}}<span class="top-title-tweet-count"> 推文</span>
+          {{user.tweetsCount}}<span class="top-title-tweet-count"> 推文</span>
         </div>
       </div>
     </div>
@@ -77,13 +77,13 @@
             :to="{ name: 'user-followings', params: 1 }"
             class="user-info-feat-following"
           >
-            {{user.followingsLength}} 個<span class="user-info-feat-unit">跟隨中</span>
+            {{user.FollowingsCount}} 個<span class="user-info-feat-unit">跟隨中</span>
           </router-link>
           <router-link
             :to="{ name: 'user-followers', params: 1 }"
             class="user-info-feat-follower"
           >
-            {{user.followersLength}} 位<span class="user-info-feat-unit">跟隨者</span>
+            {{user.FollowersCount}} 位<span class="user-info-feat-unit">跟隨者</span>
           </router-link>
         </div>
       </div>
@@ -112,63 +112,60 @@ export default {
       type: Object,
       required: true,
     },
-    user: {
+    initialUser: {
       type: Object,
       required: true,
     },
-    tweetsCount: {
-      type: Number,
-      required: true
-    },
+  },
+  data() {
+    return {
+      user: {}
+    }
+  },
+  watch: {
+    initialUser(newValue) {
+      this.user = {
+        ...this.initialUser,
+        ...newValue
+      }
+    }
   },
   created() {
-    this.popularAddFollow()
-    this.popularDeleteFollow( )
+    this.fetchUser()
   },
   methods: {
+    fetchUser() {
+      this.user = this.initialUser
+    },
     async addFollow(userId) {
       try {
+        const id = {id: userId}
         console.log(userId);
-        const response = await usersAPI.addFollow( {userId} );
+        const response = await usersAPI.addFollow( {id} );
         console.log(response);
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         console.log(error);
         errorToast.fire({
           title: "無法追蹤此使用者",
         });
       }
-      this.$emit("add-follow", userId)
-      this.$router.go(0);
     },
     async deleteFollow(userId) {
       try {
         console.log(userId);
         const response = await usersAPI.deleteFollow( {userId} );
         console.log(response);
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         console.log(error);
         errorToast.fire({
           title: "無法取消追蹤此使用者",
         });
       }
-      this.$emit("delete-follow", userId)
-      this.$router.go(0);
     },
-    popularAddFollow() {
-      eventBus.$on('add-follow-pop', userId => {
-        console.log(userId)
-        if(this.user.id === userId) {
-          return this.isFollower = true
-        } else return
-      })
-    },
-    popularDeleteFollow() {
-      eventBus.$on('delete-follow-pop', userId => {
-        if(this.user.id === userId) {
-          return this.isFollower = false
-        }
-      })
-    }
   }
 };
 </script>

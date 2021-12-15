@@ -1,0 +1,67 @@
+.chat
+  .chat-top
+    padding: 15px
+    height: 55px
+    border-bottom: 1px solid $input-border
+    display: flex
+    justify-content: space-between
+    align-items: center
+    .chat-top-title
+      font-size: 18px
+      font-weight: 700
+    .chat-top-icon
+      width: 24px
+      height: 24px
+      object-fit: cover
+  .chat-container
+    height: calc( 100vh - 55px )
+    overflow-y: auto
+  .chat-user
+    padding: 10px 15px
+    display: flex
+    justify-content: start
+    align-items: center
+    border-bottom: 1px solid $input-border
+    font-size: 15px
+    text-decoration: none
+    .chat-user-avatar
+      width: 50px
+      height: 50px
+      border-radius: 50%
+      object-fit: cover
+      margin-right: 10px
+    .chat-user-name
+      font-weight: 700
+      margin-right: 5px
+      text-decoration: none
+      color: $text-content
+    .chat-user-account
+      color: $input-label
+      text-decoration: none
+  .chat-item
+    padding: 13px 15px 15px 15px
+    display: flex
+    border-bottom: 1px solid $input-border
+    .chat-item-avatar
+      width: 50px
+      height: 50px
+      border-radius: 50%
+      object-fit: cover
+      margin-right: 10px
+    .chat-item-body
+      flex: 1
+      font-size: 15px
+      color: $input-label
+      font-weight: 500
+      .chat-item-top
+        display: flex
+        position: relative
+        .chat-item-name
+          font-weight: 700
+          color: $text-content
+          margin-right: 5px
+        .chat-item-created
+          position: absolute
+          top: 0
+          right: 0
+      .chat-item-message

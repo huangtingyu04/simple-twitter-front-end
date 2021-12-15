@@ -56,20 +56,14 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
 import { emptyImageFilter } from "../utils/mixins";
+import { mapState } from "vuex";
 
 export default {
   name: "TweetModal",
   mixins: [emptyImageFilter],
-  props: {
-    currentUser: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       newTweet: "",
@@ -78,6 +72,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
     submitOK() {
       if (!this.newTweet) {
         return "";
@@ -107,11 +102,7 @@ export default {
         this.isProcessing = true;
         const { data } = await tweetsAPI.create({ description: this.newTweet });
         console.log(data);
-        this.$emit("create-new-tweet", {
-          tweetId: uuidv4(),
-          text: this.newTweet,
-          User: this.currentUser,
-        });
+        this.$emit("refresh")
         successToast.fire({
           title: "已成功新增推文",
         });

@@ -45,7 +45,7 @@ import usersAPI from "../apis/users";
 import { errorToast } from "../utils/toast";
 import { mapState } from "vuex";
 import { emptyImageFilter } from "../utils/mixins";
-import { eventBus } from "../utils/eventbus";
+import { eventBus } from '../utils/eventbus'
 
 export default {
   name: "PopularUsersCards",
@@ -60,8 +60,7 @@ export default {
   },
   created() {
     this.fetchPopularUsers();
-    this.popularAddFollow();
-    this.popularDeleteFollow();
+    this.refresh()
   },
   methods: {
     async fetchPopularUsers() {
@@ -80,11 +79,15 @@ export default {
       }
     },
     async addFollowing(userId) {
+      console.log(userId)
       try {
-        const { data } = await usersAPI.addFollow({ userId });
+        const id = {id: userId}
+        const { data } = await usersAPI.addFollow({id});
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        console.log(data)
+        
         this.popularUsers = this.popularUsers.map((user) => {
           if (user.id !== userId) {
             return user;
@@ -95,19 +98,13 @@ export default {
             };
           }
         });
-        if ((this.currentUser.id = this.$route.params)) {
-          console.log(userId)
-          const form = this.popularUsers.filter(user => user.id === userId)[0]
-          this.$emit("add-follow-item", form);
-        }
+        this.$emit("refresh")
+        eventBus.$emit("refresh")
       } catch (error) {
         errorToast.fire({
           title: "無法追蹤",
         });
       }
-      eventBus.$emit("add-follow-pop", userId);
-      this.$router.go(0);
-
     },
     async deleteFollowing(userId) {
       try {
@@ -125,46 +122,18 @@ export default {
             };
           }
         });
-        if ((this.currentUser.id = this.$route.params)) {
-          this.$emit("remove-follow-item", userId);
-        }
+        this.$emit("refresh")
       } catch (error) {
         errorToast.fire({
           title: "無法取消追蹤",
         });
       }
-      eventBus.$emit("delete-follow-pop", userId);
-      this.$router.go(0);
-
     },
-    popularAddFollow() {
-      eventBus.$on("add-follow-pop", (userId) => {
-        this.popularUsers = this.popularUsers.map((user) => {
-          if (user.id === userId) {
-            return {
-              ...user,
-              isFollowed: true,
-            };
-          } else {
-            return user;
-          }
-        });
-      });
-    },
-    popularDeleteFollow() {
-      eventBus.$on("delete-follow-pop", (userId) => {
-        this.popularUsers = this.popularUsers.map((user) => {
-          if (user.id === userId) {
-            return {
-              ...user,
-              isFollowed: false,
-            };
-          } else {
-            return user;
-          }
-        });
-      });
-    },
+    refresh() {
+      eventBus.$on("refresh", () => {
+        this.fetchPopularUsers()
+      })
+    }
   },
 };
 </script>

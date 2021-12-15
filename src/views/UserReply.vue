@@ -3,23 +3,23 @@
     <Navbar />
     <div class="wide-container">
       <div class="main">
-        <UserProfile 
-          :current-user="currentUser" 
-          :user="user"
-          :tweets-count="tweetsCount"
-          @add-follow="addFollow"
-          @delete-follow="deleteFollow" />
+        <UserProfile
+          :current-user="currentUser"
+          :initial-user="user"
+          @refresh="refresh"
+        />
         <UserReplyItems
           v-for="reply in replies"
           :key="reply.id"
-          :initial-reply="reply" />
+          :initial-reply="reply"
+        />
         <UserEditModal :current-user="currentUser" />
         <TweetModal
           :current-user="currentUser"
-          @create-new-tweet="createNewTweet"
+          @refresh="refresh"
         />
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @refresh="refresh" />
     </div>
   </div>
 </template>
@@ -48,18 +48,7 @@ export default {
   },
   data() {
     return {
-      user: {
-        id: 0,
-        name: "",
-        account: "",
-        email: "",
-        introduction: "",
-        avatar: "",
-        cover: "",
-        followingsLength: 0,
-        followersLength: 0,
-        isFollower: false,
-      },
+      user: {},
       tweetsCount: 0,
       replies: [],
     };
@@ -68,70 +57,45 @@ export default {
     ...mapState(["currentUser", "isAuthenticated"]),
   },
   created() {
-    const { id: userId } = this.$route.params
-    this.fetchTweet({userId})
-    this.fetchReplies({userId});
+    const { id: userId } = this.$route.params;
+    this.fetchUser({ userId });
+    this.fetchReplies({ userId });
   },
   beforeRouteUpdate(to, from, next) {
-    const { id: userId } = to.params
-    this.fetchTweet({userId})
-    this.fetchReplies({userId});
-    next()
+    const { id: userId } = to.params;
+    this.fetchUser({ userId });
+    this.fetchReplies({ userId });
+    next();
   },
   methods: {
-    async fetchReplies({userId}) {
+    async fetchReplies({ userId }) {
       try {
-        const response = await usersAPI.getUserReplies({userId})
-        const { data, statusText } = response
-        if(statusText !== 'OK') {
-          throw new Error
+        const response = await usersAPI.getUserReplies({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
         }
-        const { tweets, user } = data
-        const {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          FollowersCount,
-          FollowingsCount,
-          isFollower,
-        } = user;
-        this.user = {
-          id,
-          name,
-          account,
-          email,
-          avatar,
-          cover,
-          introduction,
-          followersLength: FollowersCount,
-          followingsLength: FollowingsCount,
-          isFollower,
-        };
-        this.replies = tweets
-        console.log(response)
+        console.log(data);
+        this.replies = data;
       } catch (error) {
-        console.log(error)
+        console.log(error);
         errorToast.fire({
-          title: '無法取得使用者回覆'
-        })
+          title: "無法取得使用者回覆",
+        });
       }
     },
-    async fetchTweet({userId}) {
+    async fetchUser({ userId }) {
       try {
-        const response = await usersAPI.getUserTweets({ userId });
-        const { data } = response;
-        const { tweets } = data;
-        this.tweetsCount = tweets.length
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
+        }
+        this.user = data;
+        console.log(data);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    },
-    createNewTweet() {
-      this.tweetsCount += 1
     },
     userUpdate(payload) {
       const { name, introduction, avatar, cover } = payload;
@@ -140,13 +104,10 @@ export default {
       this.user.avatar = avatar;
       this.user.cover = cover;
     },
-    addFollow() {
-      this.user.isFollower = true;
-      this.user.followersLength += 1
-    },
-    deleteFollow() {
-      this.user.isFollower = false;
-      this.user.followersLength -= 1
+    refresh() {
+      const { id: userId } = this.$route.params;
+      this.fetchUser({ userId });
+      this.fetchReplies({ userId });
     },
   },
 };

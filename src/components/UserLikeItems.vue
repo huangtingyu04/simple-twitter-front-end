@@ -78,6 +78,11 @@ export default {
       required: true,
     },
   },
+  watch: {
+    initialTweet() {
+      this.fetchTweet();
+    }
+  },
   data() {
     return {
       tweet: {

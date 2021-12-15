@@ -5,102 +5,97 @@
       <div class="main">
         <!-- <UserFollow /> -->
         <div class="top">
-          <img src="../../public/images/icon_back.png" alt="" class="top-back" @click="$router.back()">
+          <img
+            src="../../public/images/icon_back.png"
+            alt=""
+            class="top-back"
+            @click="$router.back()"
+          />
           <div class="top-title">
             <div class="top-title-name">{{ name }}</div>
-            <div class="top-title-tweet">{{ tweetsNum }}<span class="top-title-tweet-count"> 推文</span></div>
+            <div class="top-title-tweet">
+              {{ tweetsNum }}<span class="top-title-tweet-count"> 推文</span>
+            </div>
           </div>
         </div>
         <div class="user-follow">
           <FollowNavPills :userId="id" />
-          <FollowItems 
-            v-for="follower in followers" 
-            :key="follower.id"  
+          <FollowItems
+            v-for="follower in followers"
+            :key="follower.id"
             :initial-follower="follower"
-            />
+            @refresh="refresh"
+          />
         </div>
       </div>
-      <PopularUsersCard />
+      <PopularUsersCard @refresh="refresh"/>
     </div>
   </div>
 </template>
 
 <script>
-import Navbar from './../components/Navbar'
-import FollowNavPills from '../components/FollowNavPills.vue'
-import FollowItems from '../components/FollowItems.vue'
-import PopularUsersCard from './../components/PopularUsersCard'
+import Navbar from "./../components/Navbar";
+import FollowNavPills from "../components/FollowNavPills.vue";
+import FollowItems from "../components/FollowItems.vue";
+import PopularUsersCard from "./../components/PopularUsersCard";
 
-import { mapState } from 'vuex'
-import usersAPI from '../apis/users'
-import { errorToast } from '../utils/toast'
+import { mapState } from "vuex";
+import usersAPI from "../apis/users";
+import { errorToast } from "../utils/toast";
 
 export default {
-  name: 'UserFollowers',
+  name: "UserFollowers",
   components: {
     Navbar,
     FollowNavPills,
     FollowItems,
-    PopularUsersCard
+    PopularUsersCard,
   },
   computed: {
-    ...mapState(["currentUser", "isAuthenticated"])
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   data() {
     return {
       id: -1,
-      name: '',
+      name: "",
       tweetsNum: 0,
-      followers: []
-    }
+      followers: [],
+    };
   },
   created() {
-    const { id: userId } = this.$route.params
-    this.fetchUser({userId})
-    this.fetchFollowers({userId})
+    const { id: userId } = this.$route.params;
+    this.fetchUser({ userId });
   },
   beforeRouteUpdate(to, from, next) {
-    const { id: userId } = to.params
-    this.fetchUser({userId})
-    this.fetchFollowers({userId})
-    next()
+    const { id: userId } = to.params;
+    this.fetchUser({ userId });
+    next();
   },
   methods: {
-    async fetchFollowers({userId}) {
+    async fetchUser({ userId }) {
       try {
-        const response = await usersAPI.getUserFollowers({userId})
-        console.log(response)
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
+        const response = await usersAPI.getUser({ userId });
+        const { data, statusText } = response;
+        if (statusText !== "OK") {
+          throw new Error();
         }
-        const {result} = data
-        const {id, name, Followers} = result
-        this.id = id
-        this.name = name
-        this.followers = Followers
+        const { id, name, Followers, tweetsCount } = data;
+        this.id = id;
+        this.name = name;
+        this.followers = Followers;
+        this.tweetsNum = tweetsCount;
       } catch (error) {
         errorToast.fire({
-          title: '無法取得追蹤者資訊'
-        })
+          title: "無法取得追蹤者資訊",
+        });
       }
     },
-    async fetchUser({userId}) {
-      try {
-        const response = await usersAPI.getUserTweets({userId})
-        const {data, statusText} = response
-        if(statusText !== 'OK') {
-          throw new Error
-        }
-        const {tweets} = data
-        this.tweetsNum = tweets.length
-      } catch (error) {
-        console.log(error)
-      }
+    refresh() {
+      const { id: userId } = this.$route.params;
+      this.fetchUser({ userId });
     },
   },
-  
-}
+};
 </script>
 
 <style lang="sass" scoped>
@@ -123,5 +118,4 @@ export default {
     .top-title-tweet
       font-size: 13px
       color: $input-label
-  
 </style>

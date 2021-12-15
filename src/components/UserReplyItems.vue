@@ -48,17 +48,12 @@ export default {
   },
   data() {
     return {
-      reply: {
-        
-      }
+      reply: {}
     }
   },
   watch: {
-    initialReply(newValue) {
-      this.reply = {
-        ...this.initialReply,
-        ...newValue
-      }
+    initialReply() {
+      this.fetchReply()
     }
   },
   created() {

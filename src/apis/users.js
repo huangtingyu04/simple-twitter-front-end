@@ -8,17 +8,17 @@ export default {
     return apiHelper.get(`/users/${userId}`)
   },
   update({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}`, {formData})
+    return apiHelper.put(`/users/${userId}/revise`, formData)
   },
   // 上傳大頭貼與名稱自介
   upload({ userId, formData }) {
-    return apiHelper.put(`/users/${userId}/setting`, { formData })
+    return apiHelper.put(`/users/${userId}`,  formData )
   },
   getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
   getUserReplies({ userId }) {
-    return apiHelper.get(`/users/${userId}/replies`)
+    return apiHelper.get(`/users/${userId}/replied_tweets`)
   },
   getUserLikes({ userId }) {
     return apiHelper.get(`/users/${userId}/likes`)
@@ -32,8 +32,8 @@ export default {
   getPopularUsers() {
     return apiHelper.get('users/top')
   },
-  addFollow( {userId} ) {
-    return apiHelper.post(`/followships/${userId}`, null)
+  addFollow( {id} ) {
+    return apiHelper.post(`/followships/`, id)
   },
   deleteFollow( {userId} ) {
     return apiHelper.delete(`/followships/${userId}`)

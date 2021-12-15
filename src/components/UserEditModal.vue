@@ -108,8 +108,8 @@
                   <label for="intro">自我介紹</label>
                   <textarea
                     v-model="user.introduction"
-                    name="intro"
-                    id="intro"
+                    name="introduction"
+                    id="introduction"
                     cols="30"
                     rows="10"
                   ></textarea>
@@ -169,7 +169,7 @@ export default {
   watch: {
     currentUser(newValue) {
       this.user = {
-        ...this.user,
+        ...this.currentUser,
         ...newValue,
         nameCached: newValue.name,
         introductionCached: newValue.introduction,
@@ -212,11 +212,8 @@ export default {
     },
     handleImage(event, target) {
       const { files } = event.target;
-      // console.log(456, files);
 
       if (files.length === 0) {
-        // console.log(123);
-
         switch (target) {
           case "cover":
             this.user.cover = "";
@@ -242,9 +239,11 @@ export default {
         const form = e.target
         const formData = new FormData(form)
         console.log(formData)
+        const userId = this.currentUser.id
+        console.log(userId)
         this.$emit("update-profile", formData);
         const response = await usersAPI.upload({
-          userId: this.currentUser.id,
+          userId,
           formData
         })
         console.log(response)

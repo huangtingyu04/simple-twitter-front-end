@@ -169,7 +169,7 @@ export default {
   watch: {
     currentUser(newValue) {
       this.user = {
-        ...this.user,
+        ...this.currentUser,
         ...newValue,
         nameCached: newValue.name,
         introductionCached: newValue.introduction,
@@ -212,11 +212,8 @@ export default {
     },
     handleImage(event, target) {
       const { files } = event.target;
-      // console.log(456, files);
 
       if (files.length === 0) {
-        // console.log(123);
-
         switch (target) {
           case "cover":
             this.user.cover = "";
@@ -239,12 +236,6 @@ export default {
     },
     async handleSubmit(e) {
       try {
-        // const formData = {
-        //   name: this.user.name,
-        //   introduction: this.user.introduction,
-        //   avatar: this.user.avatar,
-        //   cover: this.user.cover
-        // }
         const form = e.target
         const formData = new FormData(form)
         console.log(formData)

@@ -74,7 +74,7 @@
 <script>
 import Navbar from "./../components/Navbar";
 import TweetModal from "../components/TweetModal.vue";
-// import { successToast, errorToast } from "../utils/toast";
+import { successToast, errorToast } from "../utils/toast";
 import { mapState } from "vuex";
 import usersAPI from "../apis/users";
 
@@ -91,9 +91,9 @@ export default {
         name: "",
         account: "",
         email: "",
-        password: '',
-        checkPassword: '',
-        role: 'user'
+        password: "",
+        checkPassword: "",
+        role: "user",
       },
       password: "",
       checkPassword: "",
@@ -131,68 +131,52 @@ export default {
     },
     async handleSubmit() {
       try {
-        const userId = this.currentUser.id
+        if (!this.user.name || !this.user.account || !this.user.email) {
+          errorToast.fire({
+            title: "請填寫帳號/名稱/電子郵件後送出",
+          });
+          return;
+        }
+        if (!this.user.password || !this.user.checkPassword) {
+          errorToast.fire({
+            title: "請填寫密碼與密碼確認後送出",
+          });
+          return;
+        }
+        if (this.user.password !== this.user.checkPassword) {
+          errorToast.fire({
+            title: "兩次密碼輸入不一致",
+          });
+          return;
+        }
+        const userId = this.currentUser.id;
         const formData = {
           name: this.user.name,
           email: this.user.email,
           account: this.user.account,
           password: this.user.password,
-          checkPassword: this.user.checkPassword
-        }
-        console.log(userId)
-        console.log(formData)
-        const response = await usersAPI.update({
+          checkPassword: this.user.checkPassword,
+        };
+        console.log(userId);
+        console.log(formData);
+        const { data } = await usersAPI.update({
           userId,
-          formData
-        })
-        console.log(response)
+          formData,
+        });
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        successToast.fire({
+          title: "已成功更新使用者資訊",
+        });
+        console.log(data);
+        this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
       } catch (error) {
-        console.log(error)
+        console.log(error);
+        errorToast.fire({
+          title: "無法更新使用者資訊",
+        });
       }
-      // try {
-      //   if (!this.password || !this.checkPassword) {
-      //     errorToast.fire({
-      //       title: "請填寫密碼與密碼確認後送出",
-      //     });
-      //     return;
-      //   }
-      //   if (this.password !== this.checkPassword) {
-      //     errorToast.fire({
-      //       title: "兩次密碼輸入不一致",
-      //     });
-      //     return;
-      //   }
-      //   // const form = e.target;
-      //   // const formData = new FormData(form);
-      //   const formData = {
-      //     name: this.user.name,
-      //     email: this.user.email,
-      //     account: this.user.account,
-      //     password: this.password,
-      //     checkPassword: this.checkPassword
-      //   }
-      //   console.log(formData)
-      //   const { data } = await usersAPI.update({
-      //     userId: this.user.id,
-      //     formData,
-      //   });
-      //   if (data.status === "error") {
-      //     throw new Error(data.message);
-      //   }
-      //   console.log(data);
-      //   successToast.fire({
-      //     title: "已成功更新使用者資訊",
-      //   });
-      //   this.password = "";
-      //   this.checkPassword = "";
-      //   this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
-      // } catch (error) {
-      //   console.log(error);
-      //   errorToast.fire({
-      //     title: "無法更新使用者資訊",
-      //   });
-      // }
-      //
     },
   },
 };

@@ -12,9 +12,6 @@
           <div class="follow-content-head-title-account">
             @{{ follower.account }}
           </div>
-          <div class="follow-content-head-title-intro">
-            {{ follower.introduction }}
-          </div>
         </div>
         <button
           class="isfollow"

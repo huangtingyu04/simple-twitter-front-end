@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
 import { fromNowFilter, emptyImageFilter } from "../utils/mixins";
 import tweetsAPI from "../apis/tweets";
 import { successToast, errorToast } from "../utils/toast";
@@ -137,12 +136,13 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.$emit("create-new-reply", {
-          replyId: uuidv4(),
-          tweetId: tweetId,
-          comment: this.newReply,
-          User: this.currentUser,
-        });
+        this.$emit("refresh")
+        // this.$emit("create-new-reply", {
+        //   replyId: uuidv4(),
+        //   tweetId: tweetId,
+        //   comment: this.newReply,
+        //   User: this.currentUser,
+        // });
         successToast.fire({
           title: "已成功回復推文",
         });

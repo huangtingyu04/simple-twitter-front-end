@@ -33,7 +33,7 @@ export default {
     return apiHelper.get('users/top')
   },
   addFollow( {userId} ) {
-    return apiHelper.post(`/followships/`, { userId })
+    return apiHelper.post(`/followships/`, userId)
   },
   deleteFollow( {userId} ) {
     return apiHelper.delete(`/followships/${userId}`)

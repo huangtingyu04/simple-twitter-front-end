@@ -77,11 +77,14 @@ export default {
       }
     },
     async addFollowing(userId) {
+      console.log(userId)
       try {
-        const { data } = await usersAPI.addFollow({ userId });
+        const { data } = await usersAPI.addFollow({userId});
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+        console.log(data)
+        
         this.popularUsers = this.popularUsers.map((user) => {
           if (user.id !== userId) {
             return user;

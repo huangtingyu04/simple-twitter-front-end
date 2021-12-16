@@ -97,7 +97,6 @@ export default {
   methods: {
     async addLike(tweetId) {
       try {
-        console.log(tweetId)
         const response = await tweetsAPI.addLike({tweetId});
         const { data } = response;
         this.tweet.isLike = true;
@@ -121,7 +120,6 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        console.log(response);
       } catch (error) {
         console.log(error);
         errorToast.fire({

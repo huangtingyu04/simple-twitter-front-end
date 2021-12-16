@@ -218,8 +218,6 @@ export default {
         }
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
-
-        console.log(files[0]);
         switch (target) {
           case "cover":
             this.user.cover = imageURL;
@@ -233,7 +231,6 @@ export default {
       try {
         const form = e.target;
         const formData = new FormData(form);
-        console.log(formData);
         const userId = this.currentUser.id;
         const payload = {
           name: this.user.name,
@@ -253,6 +250,7 @@ export default {
         successToast.fire({
           title: "成功更新使用者資訊",
         });
+        this.$emit("refresh")
       } catch (error) {
         console.log(error);
         errorToast.fire({

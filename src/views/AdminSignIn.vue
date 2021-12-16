@@ -72,7 +72,6 @@ export default {
           account: this.account,
           password: this.password,
         });
-        console.log(response);
         const { data, statusText } = response;
         if (data.status !== "success" || statusText !== "OK") {
           throw new Error(data.message);

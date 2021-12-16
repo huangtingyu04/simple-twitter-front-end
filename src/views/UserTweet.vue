@@ -18,6 +18,7 @@
         />
         <UserEditModal
           :current-user="currentUser"
+          @refresh="refresh"
         />
         <TweetReplyModal
           :tweet-item="tweetItem"
@@ -114,7 +115,6 @@ export default {
       }
     },
     toggleTweetReply(tweetId) {
-      console.log(tweetId);
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
     },
     addLiked(tweetId) {

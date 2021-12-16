@@ -17,7 +17,9 @@
           @toggle-tweet-reply="toggleTweetReply"
           @refresh="refresh"
         />
-        <UserEditModal :current-user="currentUser" />
+        <UserEditModal 
+          :current-user="currentUser"
+          @refresh="refresh" />
         <TweetLikeReplyModal
           :current-user="currentUser"
           :tweet-item="tweetItem"
@@ -113,7 +115,6 @@ export default {
       this.tweetItem = this.tweets.find((tweet) => tweet.TweetId === tweetId);
     },
     deleteLiked(tweetId) {
-      console.log(tweetId);
       this.tweets = this.tweets.filter((tweet) => tweet.TweetId !== tweetId);
     },
     userUpdate(payload) {

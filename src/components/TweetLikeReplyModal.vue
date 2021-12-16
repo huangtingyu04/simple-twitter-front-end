@@ -151,7 +151,6 @@ export default {
         this.newReply = "";
         this.checkEmptyInput = false;
         this.isProcessing = false;
-        console.log(data);
       } catch (error) {
         console.log(error);
         this.isProcessing = false;

@@ -53,19 +53,14 @@ export default {
         }
         this.isProcessing = true;
         const { data } = await tweetsAPI.create({ description: this.newTweet });
-        console.log(data);
         this.$emit("refresh")
-        // this.$emit("create-new-tweet", {
-        //   tweetId: uuidv4(),
-        //   text: this.newTweet,
-        //   User: this.currentUser,
-        // });
         successToast.fire({
           title: "已成功新增推文",
         }); 
         this.newTweet = "";
         this.checkEmptyInput = false;
         this.isProcessing = false;
+        console.log(data)
       } catch (error) {
         console.log(error)
         this.isProcessing = false

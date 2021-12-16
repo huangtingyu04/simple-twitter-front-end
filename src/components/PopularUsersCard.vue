@@ -79,7 +79,6 @@ export default {
       }
     },
     async addFollowing(userId) {
-      console.log(userId)
       try {
         const id = {id: userId}
         const { data } = await usersAPI.addFollow({id});

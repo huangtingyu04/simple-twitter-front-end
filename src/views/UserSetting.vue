@@ -157,8 +157,6 @@ export default {
           password: this.user.password,
           checkPassword: this.user.checkPassword,
         };
-        console.log(userId);
-        console.log(formData);
         const { data } = await usersAPI.update({
           userId,
           formData,

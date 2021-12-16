@@ -17,7 +17,9 @@
           :key="reply.id"
           :initial-reply="reply"
         />
-        <UserEditModal :current-user="currentUser" />
+        <UserEditModal 
+          :current-user="currentUser"
+          @refresh="refresh" />
         <TweetModal :current-user="currentUser" @refresh="refresh" />
       </div>
       <PopularUsersCard @refresh="refresh" />
@@ -79,7 +81,6 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        console.log(data);
         this.replies = data;
         this.isLoading = false;
       } catch (error) {

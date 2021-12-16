@@ -93,7 +93,7 @@ export default {
     });
   },
   methods: {
-    async createNewTweet(id) {
+    async createNewTweet() {
       try {
         if (!this.newTweet) {
           this.checkEmptyInput = true;
@@ -116,7 +116,6 @@ export default {
           title: `無法新增推文-${error.message}`,
         });
       }
-      console.log(id);
     },
   },
 };

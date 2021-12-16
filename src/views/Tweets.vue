@@ -70,7 +70,6 @@ export default {
     async fetchData() {
       try {
         const response = await tweetsAPI.getTweets()
-        console.log(response)
         const { data, statusText } = response
         if(statusText !== 'OK') {
           throw new Error

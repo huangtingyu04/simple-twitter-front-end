@@ -98,7 +98,6 @@ export default {
         this.isFollowing = true;
         const { data } = await usersAPI.addFollow({ id });
         console.log(data);
-        console.log(userId)
         this.$emit("refresh")
         eventBus.$emit("refresh")
       } catch (error) {
@@ -111,7 +110,6 @@ export default {
         this.isFollowing = false;
         const { data } = await usersAPI.deleteFollow({ userId });
         console.log(data);
-        console.log(userId);
         this.$emit("refresh")
         eventBus.$emit("refresh")
       } catch (error) {

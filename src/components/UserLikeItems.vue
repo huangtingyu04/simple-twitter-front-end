@@ -128,7 +128,6 @@ export default {
     },
     async deleteLiked(tweetId) {
       try {
-        console.log(tweetId)
         const response = await tweetsAPI.deleteLike({tweetId})
         console.log(response)
         this.$emit("refresh", tweetId)

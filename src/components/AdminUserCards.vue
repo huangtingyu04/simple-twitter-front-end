@@ -67,8 +67,6 @@ export default {
       try {
         this.isLoading = true;
         const { data } = await adminAPI.users.get();
-
-        console.log(data);
         if (data.status === "error") {
           throw new Error(data.message);
         }

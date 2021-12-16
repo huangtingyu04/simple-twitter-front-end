@@ -69,7 +69,6 @@ export default {
     },
     async addLiked(tweetId) {
       try {
-        console.log(tweetId)
         const response = await tweetsAPI.addLike({tweetId})
         console.log(response)
         this.$emit("add-liked", tweetId)
@@ -83,7 +82,6 @@ export default {
     },
     async deleteLiked(tweetId) {
       try {
-        console.log(tweetId)
         const response = await tweetsAPI.deleteLike({tweetId})
         console.log(response)
         this.$emit("delete-liked", tweetId)

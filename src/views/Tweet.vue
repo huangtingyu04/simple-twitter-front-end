@@ -77,7 +77,6 @@ export default {
         if (statusText !== "OK") {
           throw new Error();
         }
-        console.log(data);
         const {
           id,
           createdAt,

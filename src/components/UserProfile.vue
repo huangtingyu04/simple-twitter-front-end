@@ -145,7 +145,6 @@ export default {
     async addFollow(userId) {
       try {
         const id = { id: userId };
-        console.log(userId);
         const response = await usersAPI.addFollow({ id });
         console.log(response);
         this.$emit("refresh");
@@ -159,7 +158,6 @@ export default {
     },
     async deleteFollow(userId) {
       try {
-        console.log(userId);
         const response = await usersAPI.deleteFollow({ userId });
         console.log(response);
         this.$emit("refresh");
@@ -174,7 +172,6 @@ export default {
     updateProfile() {
       eventBus.$on("update-profile", (payload) => {
         const { name, introduction, avatar, cover } = payload;
-        console.log(payload)
         this.user.name = name;
         this.user.introduction = introduction;
         this.user.avatar = avatar;

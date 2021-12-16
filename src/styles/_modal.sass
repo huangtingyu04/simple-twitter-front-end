@@ -1,0 +1,289 @@
+.modal
+  border-radius: 14px
+
+  +breakpoint(pad-landscape)
+    border-radius: 50px
+
+.modal-header
+  height: 54px
+  .modal-close
+    width: 24px
+    height: 24px
+    object-fit: cover
+    cursor: pointer
+  .modal-header-title
+    flex: 1
+    text-align: start
+    padding-left: 40px
+    font-size: 17px
+    font-weight: 500
+  button
+    width: 66px
+    height: 28px
+    font-size: 15px
+    font-weight: 500
+    border-radius: 100px
+    border: none
+    background: $mainColor
+    color: $light
+.modal-body
+  padding: 0
+  position: relative
+
+.modal-body-tweet-icon
+  width: 50px
+  height: 50px
+  border-radius: 50%
+  margin-right: 10px
+  object-fit: cover
+.modal-body-tweet
+  padding: 15px 15px 15px 15px
+  display: flex
+  height: 215px
+  form
+    flex: 1
+    padding-top: 12px
+    position: relative
+  textarea
+    width: 100%
+    height: 100%
+    border: none
+    resize: none
+    outline: none
+  .addReply-form
+    position: absolute
+    bottom: 0
+    right: 0
+    display: flex
+    align-content: center
+    font-size: 15px
+    font-weight: 500
+    color: $input-alert
+    .addReply-limit, .addReply-empty
+      margin: auto 20px
+    button
+      width: 66px
+      height: 38px
+      border: none
+      border-radius: 100px
+      background: $mainColor
+      color: $light
+      font-size: 18px
+      &:disabled
+        opacity: 60%
+
+.modal-body-post
+  margin-top: 15px
+  padding: 3px 15px 0 15px
+  display: flex
+  .modal-body-post-head
+    display: flex
+    flex-direction: column
+    .modal-body-post-head-icon
+      width: 50px
+      height: 50px
+      border-radius: 50%
+      border: none
+      object-fit: cover
+    .modal-body-post-head-connect
+      width: 2px
+      flex: 1
+      background: $modal-connect
+      margin-top: 5px
+      margin-left: 25px
+  .modal-body-post-body
+    flex: 1
+    margin-left: 10px
+    height: 100%
+    .modal-body-post-body-head
+      display: flex
+      .modal-body-post-body-head-name
+        font-size: 15px
+        font-weight: 700
+        color: $text-content
+        margin-right: 5px
+      .modal-body-post-body-head-account, .modal-body-post-body-head-time
+        font-size: 15px
+        font-weight: 500
+        color: $input-label
+    .modal-body-post-body-content
+      margin-top: 4px
+      font-size: 15px
+      font-weight: 500
+      color: $text-content
+      text-align: start
+    .modal-body-post-body-foot
+      margin-top: 10px
+      font-size: 13px
+      font-weight: 500
+      text-align: start
+      .modal-body-post-body-foot-reply
+        color: $input-label
+      .modal-body-post-body-foot-account
+        color: $mainColor
+    .modal-body-post-body-post
+
+.modal-body-bg
+  width: 100%
+  position: absolute
+  height: 200px
+  display: flex
+  justify-content: center
+  align-items: center
+  .modal-body-bg-photo
+    width: 100%
+    height: 200px
+    opacity: 60%
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 0
+    background: $input-label
+  .modal-body-bg-option
+    width: 78px
+    display: flex
+    justify-content: space-between
+    z-index: 1
+    input
+      display: none
+    .modal-body-bg-option-edit
+      cursor: pointer
+      width: 24px
+      height: 24px
+    .modal-body-bg-option-delete
+      cursor: pointer
+      width: 24px
+      height: 24px
+
+.modal-body-header
+  margin-top: 140px
+  text-align: start
+  position: relative
+  z-index: 1
+  padding-left: 14px
+  .modal-body-header-photo
+    position: absolute
+    width: 120px
+    height: 120px
+    border-radius: 50%
+    object-fit: cover
+    background: $light
+    border: 4px solid $light
+  .modal-body-header-edit
+    cursor: pointer
+    width: 120px
+    height: 120px
+    display: flex
+    justify-content: center
+    align-items: center
+    position: relative
+    z-index: 1
+    .modal-body-header-edit-photo
+      width: 24px
+      height: 24px
+    input
+      display: none
+
+.modal-body-form
+  padding: 20px 15px 20px 15px
+  form
+    .form-label-group
+      background: $input-bg
+      margin-bottom: 30px
+      border-radius: 4px
+      text-align: start
+      label
+        font-size: 15px
+        font-weight: 500
+        color: $input-label
+        margin-top: 5px
+        margin-left: 10px
+      input
+        width: 100%
+        border: none
+        border-bottom: 2px solid $input-label
+        outline: none
+        border-radius: 0
+        background: transparent
+        padding-left: 15px
+        font-size: 19px
+        font-weight: 500
+        &:hover, &:focus
+          border-bottom: 2px solid $input-active
+      textarea
+        width: 100%
+        height: 125px
+        border: none
+        outline: none
+        resize: none
+        background: transparent
+        border-bottom: 2px solid $input-label
+        padding: 0 0 0 15px
+        &:hover, &:focus
+          border-bottom: 2px solid $input-active
+      .modal-body-form-limit
+        display: flex
+        justify-content: end
+        background: $light
+        .modal-body-form-limit-alert
+          font-size: 15px
+          font-weight: 500
+          color: $input-alert
+        .modal-body-form-limit-count
+          flex: 1
+          text-align: end
+    #modal-intro
+      height: 150px
+
+.modal-body-form
+  .form
+    #modal-intro
+      height: 150px
+
+    .form-label-group
+      background: #F5F8FA
+      margin-bottom: 30px
+      border-radius: 4px
+      text-align: start
+
+      label
+        font-size: 15px
+        font-weight: 500
+        color: #657786
+        margin-top: 5px
+        margin-left: 10px
+
+      input
+        width: 100%
+        border: none
+        border-bottom: 2px solid #657786
+        outline: none
+        border-radius: 0
+        background: transparent
+        padding-left: 15px
+        font-size: 19px
+        font-weight: 500
+
+      textarea
+        width: 100%
+        height: 125px
+        border: none
+        outline: none
+        resize: none
+        background: transparent
+        border-bottom: 2px solid #657786
+        padding: 0 0 0 15px
+
+      .modal-body-form-limit
+        display: flex
+        justify-content: end
+        background: #FFFFFF
+
+        .modal-body-form-limit-alert
+          font-size: 15px
+          font-weight: 500
+          color: #FC5A5A
+
+        .modal-body-form-limit-count
+          flex: 1
+          text-align: end

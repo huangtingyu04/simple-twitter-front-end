@@ -1,10 +1,33 @@
 @import "./_reset"
 @import "./mixins/_rwd"
 @import "./_variables"
+@import "./sweetalert"
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto:wght@400;700&display=swap')
 
-.home
-    img
-        border: 5px solid $mainColor
+// 共用 classname
+*
+    font-family: Noto Sans TC
+    word-break: break-word
 
-        +breakpoint(pad-portrait)
-            border-color: red
+.wide-container
+    width: calc(100% - 378px)
+    margin-left: 378px
+    display: flex
+
+    +breakpoint(zone-nb)
+        width: calc(100% - 300px)
+        margin-left: 300px
+
+    .main
+        flex: 1
+
+    .popular-container
+        width: 462px
+
+        +breakpoint(zone-nb)
+            width: 43.5%
+    .chatRoom-container
+        width: 672px
+        
+        +breakpoint(zone-nb)
+            width: 58.5%

@@ -1,0 +1,24 @@
+ul
+  height: 100%
+  margin-top: 20px
+  font-size: 15px
+  font-weight: 700
+  border-bottom: 1px solid $input-border
+  +breakpoint(zone-nb)
+    margin-top: 15px
+    height: 40px
+    font-size: 12px
+    font-weight: 500
+  .nav-item
+    width: 130px
+    max-width: 33%
+    text-align: center
+    .nav-link
+      height: 100%
+      color: $input-label
+      border-radius: 0
+      border-bottom: 1px solid transparent  
+      &:hover, &.active
+        background: transparent
+        color: $mainColor
+        border-bottom: 2px solid $mainColor

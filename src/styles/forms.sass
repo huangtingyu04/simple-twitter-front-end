@@ -1,0 +1,68 @@
+.input-field
+    position: relative
+    margin-bottom: 30px
+
+    .symbol
+        position: absolute
+        left: 10px
+
+    input[name="account"]
+        padding-left: 26px
+
+    label
+        display: block
+        color: $text-note
+        font-weight: 500
+        font-size: 15px
+        line-height: 15px
+        padding: 5px 10px
+        background: $input-bg
+
+    input
+        width: 100%
+        padding-left: 10px
+        border: none
+        border-bottom: 1px solid #657786
+        background: $input-bg
+        transition: .4s ease-in-out
+
+        &:-internal-autofill-selected
+            box-shadow: inset 0 0 0 1px $input-bg, inset 0 0 0 100px $input-bg
+
+        &:hover,
+        &:focus
+            outline: none
+            border-bottom: 1px solid $input-active
+
+    &.input-alert
+        input
+            border-color: $input-alert
+
+        .alert
+            margin-top: 5px
+            padding: 0
+            font-weight: 500
+            font-size: 15px
+            line-height: 15px
+
+        .alert-text
+            color: $input-alert
+            float: left
+
+        .alert-limit
+            text-align: right
+            color: $text-note
+
+.btn-main
+    margin-top: 40px
+    background: $mainColor
+    border-radius: 50px
+    font-weight: bold
+    font-size: 18px
+    text-align: center
+    color: $light
+    border: 1px solid $mainColor
+
+    &:disabled
+        background: rgba($mainColor, 0.6)
+        border: 1px solid rgba($mainColor, 0.6)

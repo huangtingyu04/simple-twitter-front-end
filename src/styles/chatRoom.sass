@@ -1,0 +1,124 @@
+.chatRoom-container
+  position: relative
+  height: 100vh
+  width: 100%
+  &::before
+    content: '' 
+    position: absolute
+    width: 1px
+    min-height: 100vh
+    background: $input-border
+    top: 0
+    left: 0
+  .chat-top
+    height: 55px
+    padding-left: 15px
+    border-bottom: 1px solid $input-border
+    .chat-top-title
+      line-height: 55px
+      font-size: 19px
+      font-weight: 700
+    .chat-top-name
+      padding-top: 3px
+      font-size: 19px
+      font-weight: 900
+    .chat-top-account
+      font-size: 13px
+      color: $input-label
+
+  .chat-content
+    max-height: calc( 100vh - 110px )
+    overflow-y: auto
+    height: 100%
+    justify-content: end
+    padding: 40px 15px
+    .chat-message
+      font-size: 15px
+      .message-announce
+        display: flex
+        justify-content: center
+        margin-top: 15px
+        .message-announce-item
+          height: 29px
+          line-height: 29px
+          padding-right: 14px
+          padding-left: 14px
+          border-radius: 50px
+          color: $input-label
+          background: $message-announce
+      .message-other
+        margin-top: 15px
+        .message-other-head
+          display: flex
+          justify-content: start
+          align-items: end
+          .message-other-avatar
+            width: 40px
+            height: 40px
+            object-fit: cover
+            border-radius: 50%
+            margin-right: 10px
+          .message-other-message
+            max-width: 54.3%
+            border-radius: 25px 25px 25px 0px
+            background: $input-border
+            padding: 10px 15px
+            line-height: 20px
+        .message-other-bottom
+          display: flex
+          justify-content: start
+          align-items: start
+          font-size: 13px
+          .message-other-name
+            color: transparent
+            width: 40px
+            margin-right: 10px
+            font-size: 10px
+            &:hover
+              color: $input-label
+          .message-other-created
+            color: $input-label
+      .message-self
+        margin-top: 15px
+        display: flex
+        flex-direction: column
+        align-items: end
+        .message-self-message
+          border-radius: 25px 25px 0px 25px
+          max-width: 54.3%
+          background: $mainColor
+          color: $light
+          padding: 10px 15px
+          line-height: 20px
+        .message-self-created
+          color: $input-label
+          font-size: 13px
+  .chat-send
+    margin-top: auto
+    height: 55px
+    width: 100%
+    padding: 12px 15px 11px 15px
+    border-top: 1px solid $input-border
+    form
+      width: 100%
+      display: flex
+      justify-content: space-between
+      align-items: center
+      .chat-send-input
+        flex: 1
+        height: 32px
+        border-radius: 50px
+        font-size: 15px
+        line-height: 32px
+        padding-left: 15px
+        font-weight: 400
+        color: #000000 40%
+        border: none
+        outline: none
+        background: $input-border
+        margin-right: 15px
+      .chat-send-btn
+        width: 24px
+        height: 24px
+        object-fit: cover
+        cursor: pointer

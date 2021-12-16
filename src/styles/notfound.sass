@@ -1,2 +1,68 @@
-.test
-    color: blue
+$white: #EDEDED
+$gray: #BFC0C0
+$dark: #585959
+$light: #D3DEEA
+
+body
+    background: $light
+
+.top
+    margin-top: 30px
+
+.container
+    margin: 0 auto
+    position: relative
+    width: 250px
+    height: 250px
+    margin-top: -40px
+
+@keyframes scale
+    0%
+        transform: scale(1)
+    50%
+        transform: scale(1.1)
+    100%
+        transform: scale(1)
+
+@keyframes float
+    50%
+        transform: translateY(15px)
+
+.bottom
+    margin-top: 10px
+
+/*text styling*/
+h1
+    color: $white
+    text-align: center
+    font-size: 9em
+    margin: 0
+    text-shadow: -1px 0 $gray, 0 1px $gray, 1px 0 $gray, 0 -1px $gray
+
+h3
+    font-size: 2em
+    text-transform: uppercase
+    text-align: center
+    color: $gray
+    margin-top: -20px
+    font-weight: 900
+
+.buttons
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-top: 10px
+
+.btn
+    background: $white
+    padding: 15px 20px
+    margin: 5px
+    color: $dark
+    text-transform: uppercase
+    font-size: .6em
+    letter-spacing: 1px
+    border: 0
+
+    &:hover
+        background: $gray
+        transition: all .4s ease-out

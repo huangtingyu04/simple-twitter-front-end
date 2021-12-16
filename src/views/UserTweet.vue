@@ -8,6 +8,7 @@
           :initial-user="user"
           @refresh="refresh"
         />
+        <div v-if="tweets.length === 0" class="empty">使用者沒有任何推文</div>
         <TweetItems
           :initial-tweets="tweets"
           @toggle-tweet-reply="toggleTweetReply"
@@ -102,7 +103,6 @@ export default {
           throw new Error();
         }
         this.user = data;
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -145,3 +145,10 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.empty
+  margin: 20px 
+  font-size: 17px
+  color: $input-label
+</style>

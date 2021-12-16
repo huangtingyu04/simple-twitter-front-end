@@ -8,16 +8,16 @@
           :initial-user="user"
           @refresh="refresh"
         />
+        <div v-if="replies.length === 0" class="empty">
+          使用者沒有任何推文回復
+        </div>
         <UserReplyItems
           v-for="reply in replies"
           :key="reply.id"
           :initial-reply="reply"
         />
         <UserEditModal :current-user="currentUser" />
-        <TweetModal
-          :current-user="currentUser"
-          @refresh="refresh"
-        />
+        <TweetModal :current-user="currentUser" @refresh="refresh" />
       </div>
       <PopularUsersCard @refresh="refresh" />
     </div>
@@ -112,3 +112,10 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.empty
+  margin: 20px 
+  font-size: 17px
+  color: $input-label
+</style>

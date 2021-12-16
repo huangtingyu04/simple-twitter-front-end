@@ -8,6 +8,7 @@
           :initial-user="user"
           @refresh="refresh"
         />
+        <div v-if="tweets.length === 0" class="empty">使用者沒有任何喜歡的推文</div>
         <UserLikeItems
           v-for="tweet in tweets"
           :key="tweet.id"
@@ -77,12 +78,11 @@ export default {
     async fetchLike({ userId }) {
       try {
         const response = await usersAPI.getUserLikes({ userId });
-        console.log(response);
         const { data, statusText } = response;
         if (statusText !== "OK") {
           throw new Error();
         }
-        this.tweets = data.tweets;
+        this.tweets = data;
         this.tweetItem = this.tweets[0];
       } catch (error) {
         console.log(error);
@@ -99,7 +99,6 @@ export default {
           throw new Error();
         }
         this.user = data;
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -126,3 +125,10 @@ export default {
   },
 };
 </script>
+
+<style lang="sass" scoped>
+.empty
+  margin: 20px 
+  font-size: 17px
+  color: $input-label
+</style>

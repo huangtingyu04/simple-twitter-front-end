@@ -15,7 +15,7 @@
           :key="tweet.id"
           :initial-tweet="tweet"
           @toggle-tweet-reply="toggleTweetReply"
-          @delete-liked="deleteLiked"
+          @refresh="refresh"
         />
         <UserEditModal :current-user="currentUser" />
         <TweetLikeReplyModal

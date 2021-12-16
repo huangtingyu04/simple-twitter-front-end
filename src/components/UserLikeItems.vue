@@ -116,7 +116,14 @@ export default {
     toggleTweetReply(tweetId) {
       this.$emit("toggle-tweet-reply", tweetId);
     },
-    addLiked(tweetId) {
+    async addLiked(tweetId) {
+      try {
+        const response = await tweetsAPI.addLike({tweetId})
+        console.log(response)
+        this.$emit("refresh", tweetId)
+      } catch (error) {
+        console.log(error)
+      }
       this.$emit("add-liked", tweetId);
     },
     async deleteLiked(tweetId) {
@@ -124,7 +131,7 @@ export default {
         console.log(tweetId)
         const response = await tweetsAPI.deleteLike({tweetId})
         console.log(response)
-        this.$emit("delete-liked", tweetId)
+        this.$emit("refresh", tweetId)
       } catch (error) {
         console.log(error)
       }

@@ -137,19 +137,14 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
-import usersAPI from '../apis/users'
-// import { errorToast } from '../utils/toast';
-import { mapState } from 'vuex'
+import usersAPI from "../apis/users";
+import { successToast, errorToast } from '../utils/toast';
+import { mapState } from "vuex";
+import { eventBus } from "../utils/eventbus";
 
 export default {
   name: "UserEditModal",
   mixins: [emptyImageFilter],
-  // props: {
-  //   currentUser: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
   data() {
     return {
       user: {},
@@ -157,7 +152,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["currentUser" , "isAuthenticated"]),
+    ...mapState(["currentUser", "isAuthenticated"]),
     submitOK() {
       if (!this.savable) {
         return "modal";
@@ -236,19 +231,33 @@ export default {
     },
     async handleSubmit(e) {
       try {
-        const form = e.target
-        const formData = new FormData(form)
-        console.log(formData)
-        const userId = this.currentUser.id
-        console.log(userId)
-        this.$emit("update-profile", formData);
-        const response = await usersAPI.upload({
+        const form = e.target;
+        const formData = new FormData(form);
+        console.log(formData);
+        const userId = this.currentUser.id;
+        const payload = {
+          name: this.user.name,
+          introduction: this.user.introduction,
+          avatar: this.user.avatar,
+          cover: this.user.cover,
+        };
+        eventBus.$emit("update-profile", payload);
+        const { data } = await usersAPI.upload({
           userId,
-          formData
-        })
-        console.log(response)
+          formData,
+        });
+        console.log(data);
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        successToast.fire({
+          title: "成功更新使用者資訊",
+        });
       } catch (error) {
         console.log(error);
+        errorToast.fire({
+          title: '無法更新使用者資訊'
+        })
       }
     },
   },

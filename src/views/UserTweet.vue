@@ -16,7 +16,6 @@
         />
         <UserEditModal
           :current-user="currentUser"
-          @update-profile="handleUpdateProfile"
         />
         <TweetReplyModal
           :tweet-item="tweetItem"
@@ -108,39 +107,9 @@ export default {
         console.log(error);
       }
     },
-    async handleUpdateProfile(formData) {
-      try {
-        const { data } = await usersAPI.update(
-          { userId: this.user.id },
-          formData
-        );
-        console.log(data);
-
-        if (data.status !== "success") {
-          throw new Error(data.message);
-        }
-        console.log(this.user.id);
-      } catch (error) {
-        console.log(error);
-        errorToast.fire({
-          title: "無法編輯使用者個人資訊",
-        });
-      }
-    },
-    updated() {
-      const { id: userId } = this.$route.params;
-      this.fetchTweet({ userId });
-      this.fetchUser({ userId });
-    },
-    createNewTweet() {
-      this.updated()
-    },
     toggleTweetReply(tweetId) {
       console.log(tweetId);
       this.tweetItem = this.tweets.find((tweet) => tweet.id === tweetId);
-    },
-    createNewReply() {
-      this.updated()
     },
     addLiked(tweetId) {
       this.tweets = this.tweets.map((tweet) => {
@@ -167,13 +136,6 @@ export default {
           return tweet;
         }
       });
-    },
-    userUpdate(payload) {
-      const { name, introduction, avatar, cover } = payload;
-      this.user.name = name;
-      this.user.introduction = introduction;
-      this.user.avatar = avatar;
-      this.user.cover = cover;
     },
     refresh() {
       const { id: userId } = this.$route.params;

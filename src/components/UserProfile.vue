@@ -8,9 +8,9 @@
         @click="$router.back()"
       />
       <div class="top-title">
-        <div class="top-title-name">{{user.name}}</div>
+        <div class="top-title-name">{{ user.name }}</div>
         <div class="top-title-tweet">
-          {{user.tweetsCount}}<span class="top-title-tweet-count"> 推文</span>
+          {{ user.tweetsCount }}<span class="top-title-tweet-count"> 推文</span>
         </div>
       </div>
     </div>
@@ -65,25 +65,29 @@
         </div>
       </div>
       <div class="user-title">
-        <div class="user-title-name">{{user.name}}</div>
-        <div class="user-title-account">@{{user.account}}</div>
+        <div class="user-title-name">{{ user.name }}</div>
+        <div class="user-title-account">@{{ user.account }}</div>
       </div>
       <div class="user-info">
         <div class="user-info-content">
-          {{user.introduction}}
+          {{ user.introduction }}
         </div>
         <div class="user-info-feat">
           <router-link
             :to="{ name: 'user-followings', params: 1 }"
             class="user-info-feat-following"
           >
-            {{user.FollowingsCount}} 個<span class="user-info-feat-unit">跟隨中</span>
+            {{ user.FollowingsCount }} 個<span class="user-info-feat-unit"
+              >跟隨中</span
+            >
           </router-link>
           <router-link
             :to="{ name: 'user-followers', params: 1 }"
             class="user-info-feat-follower"
           >
-            {{user.FollowersCount}} 位<span class="user-info-feat-unit">跟隨者</span>
+            {{ user.FollowersCount }} 位<span class="user-info-feat-unit"
+              >跟隨者</span
+            >
           </router-link>
         </div>
       </div>
@@ -95,15 +99,15 @@
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
-import usersAPI from '../apis/users'
+import { emptyImageFilter } from "../utils/mixins";
+import usersAPI from "../apis/users";
 import { errorToast } from "../utils/toast";
-import { eventBus } from '../utils/eventbus'
+import { eventBus } from "../utils/eventbus";
 
 import UserNavPills from "../components/UserNavPills.vue";
 export default {
   name: "UserProfile",
-  mixins: [ emptyImageFilter ],
+  mixins: [emptyImageFilter],
   components: {
     UserNavPills,
   },
@@ -119,32 +123,33 @@ export default {
   },
   data() {
     return {
-      user: {}
-    }
+      user: {},
+    };
   },
   watch: {
     initialUser(newValue) {
       this.user = {
         ...this.initialUser,
-        ...newValue
-      }
-    }
+        ...newValue,
+      };
+    },
   },
   created() {
-    this.fetchUser()
+    this.fetchUser();
+    this.updateProfile();
   },
   methods: {
     fetchUser() {
-      this.user = this.initialUser
+      this.user = this.initialUser;
     },
     async addFollow(userId) {
       try {
-        const id = {id: userId}
+        const id = { id: userId };
         console.log(userId);
-        const response = await usersAPI.addFollow( {id} );
+        const response = await usersAPI.addFollow({ id });
         console.log(response);
-        this.$emit("refresh")
-        eventBus.$emit("refresh")
+        this.$emit("refresh");
+        eventBus.$emit("refresh");
       } catch (error) {
         console.log(error);
         errorToast.fire({
@@ -155,10 +160,10 @@ export default {
     async deleteFollow(userId) {
       try {
         console.log(userId);
-        const response = await usersAPI.deleteFollow( {userId} );
+        const response = await usersAPI.deleteFollow({ userId });
         console.log(response);
-        this.$emit("refresh")
-        eventBus.$emit("refresh")
+        this.$emit("refresh");
+        eventBus.$emit("refresh");
       } catch (error) {
         console.log(error);
         errorToast.fire({
@@ -166,7 +171,18 @@ export default {
         });
       }
     },
-  }
+    updateProfile() {
+      eventBus.$on("update-profile", (payload) => {
+        const { name, introduction, avatar, cover } = payload;
+        console.log(payload)
+        this.user.name = name;
+        this.user.introduction = introduction;
+        this.user.avatar = avatar;
+        this.user.cover = cover;
+      });
+      this.$emit("refresh");
+    },
+  },
 };
 </script>
 

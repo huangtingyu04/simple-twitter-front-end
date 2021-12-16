@@ -2,7 +2,8 @@
   <div>
     <Navbar />
     <div class="wide-container">
-      <div class="main">
+      <Spinner v-show="isLoading"/>
+      <div class="main" v-show="!isLoading">
         <UserProfile
           :current-user="currentUser"
           :initial-user="user"
@@ -34,6 +35,7 @@ import UserProfile from "../components/UserProfile.vue";
 import UserReplyItems from "../components/UserReplyItems.vue";
 import UserEditModal from "../components/UserEditModal.vue";
 import TweetModal from "../components/TweetModal.vue";
+import Spinner from '../components/Spinner.vue'
 import PopularUsersCard from "./../components/PopularUsersCard";
 
 export default {
@@ -44,6 +46,7 @@ export default {
     UserReplyItems,
     UserEditModal,
     TweetModal,
+    Spinner,
     PopularUsersCard,
   },
   data() {
@@ -51,6 +54,7 @@ export default {
       user: {},
       tweetsCount: 0,
       replies: [],
+      isLoading: true
     };
   },
   computed: {
@@ -77,6 +81,7 @@ export default {
         }
         console.log(data);
         this.replies = data;
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
         errorToast.fire({
@@ -92,7 +97,7 @@ export default {
           throw new Error();
         }
         this.user = data;
-        console.log(data);
+        this.isLoading = false;
       } catch (error) {
         console.log(error);
       }

@@ -2,7 +2,8 @@
   <div>
     <Navbar />
     <div class="wide-container">
-      <div class="main">
+      <Spinner v-show="isLoading"/>
+      <div class="main" v-show="!isLoading">
         <AddTweet
           :current-user="currentUser"
           @refresh="refresh"
@@ -35,6 +36,7 @@ import PopularUsersCard from "./../components/PopularUsersCard";
 import AddTweet from "./../components/AddTweet.vue";
 import TweetModal from "./../components/TweetModal.vue";
 import TweetReplyModal from "../components/TweetReplyModal.vue";
+import Spinner from '../components/Spinner.vue'
 
 import { mapState } from 'vuex'
 import tweetsAPI from '../apis/tweets'
@@ -48,12 +50,14 @@ export default {
     TweetItems,
     TweetReplyModal,
     TweetModal,
+    Spinner,
     PopularUsersCard,
   },
   data() {
     return {
       tweets: [],
       tweetItem: {},
+      isLoading: true
     };
   },
   computed: {
@@ -72,6 +76,7 @@ export default {
           throw new Error
         }
         this.tweets = data
+        this.isLoading = false;
       } catch (error) {
         console.log(error)
         errorToast.fire({

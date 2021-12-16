@@ -2,7 +2,8 @@
   <div>
     <Navbar />
     <div class="wide-container">
-      <div class="main">
+      <Spinner v-show="isLoading"/>
+      <div class="main" v-show="!isLoading">
         <TweetContent :initial-tweet="tweet" />
         <ReplyItems :replies="replies" :tweet-target="tweetTarget" />
         <TweetReplyModal :tweet-item="tweetItem" @refresh="refresh" />
@@ -20,6 +21,7 @@ import TweetContent from "./../components/TweetContent.vue";
 import ReplyItems from "./../components/ReplyItems.vue";
 import TweetReplyModal from "./../components/TweetReplyModal.vue";
 import TweetModal from "../components/TweetModal.vue";
+import Spinner from '../components/Spinner.vue'
 
 import tweetsAPI from "../apis/tweets";
 import { errorToast } from "../utils/toast";
@@ -33,6 +35,7 @@ export default {
     ReplyItems,
     TweetReplyModal,
     TweetModal,
+    Spinner,
     PopularUsersCard,
   },
   data() {

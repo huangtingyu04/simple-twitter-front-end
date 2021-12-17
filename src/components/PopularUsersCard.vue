@@ -85,8 +85,6 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        console.log(data)
-        
         this.popularUsers = this.popularUsers.map((user) => {
           if (user.id !== userId) {
             return user;

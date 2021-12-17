@@ -243,7 +243,6 @@ export default {
           userId,
           formData,
         });
-        console.log(data);
         if (data.status !== "success") {
           throw new Error(data.message);
         }

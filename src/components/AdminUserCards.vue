@@ -75,7 +75,6 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        console.log(response);
         this.users = data;
         this.isLoading = false;
       } catch (error) {

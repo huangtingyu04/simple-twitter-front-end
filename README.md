@@ -9,6 +9,7 @@
 
 ## 下載專案
 - git clone https://github.com/huangtingyu04/simple-twitter-front-end.git
+- cd simple-twitter-front-end
 
 ## 安裝
 - npm install

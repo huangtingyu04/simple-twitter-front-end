@@ -176,18 +176,18 @@ export default {
   created() {
     this.fetchUser();
   },
-  mounted() {
-    let self = this;
-    document.addEventListener("click", function (event) {
-      if (
-        event.target.matches(".modal") ||
-        event.target.matches(".modal-close")
-      ) {
-        self.user.avatar = self.user.avatarCached;
-        self.user.cover = self.user.coverCached;
-      }
-    });
-  },
+  // mounted() {
+  //   let self = this;
+  //   document.addEventListener("click", function (event) {
+  //     if (
+  //       event.target.matches(".modal") ||
+  //       event.target.matches(".modal-close")
+  //     ) {
+  //       self.user.avatar = self.user.avatarCached;
+  //       self.user.cover = self.user.coverCached;
+  //     }
+  //   });
+  // },
   methods: {
     checkIsNull(value) {
       return value === null ? "" : value;

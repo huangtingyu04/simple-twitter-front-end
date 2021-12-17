@@ -1,6 +1,6 @@
 <template>
   <nav class="navbox">
-    <div class="logo">
+    <div to="/tweets" class="logo">
       <img src="../../public/images/Logo.png" />
     </div>
     <ul>

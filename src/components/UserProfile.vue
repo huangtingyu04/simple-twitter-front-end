@@ -146,7 +146,9 @@ export default {
       try {
         const id = { id: userId };
         const response = await usersAPI.addFollow({ id });
-        console.log(response);
+        if(response.data.status !== 'success') {
+          throw new Error
+        }
         this.$emit("refresh");
         eventBus.$emit("refresh");
       } catch (error) {
@@ -159,7 +161,9 @@ export default {
     async deleteFollow(userId) {
       try {
         const response = await usersAPI.deleteFollow({ userId });
-        console.log(response);
+        if(response.data.status !== 'success') {
+          throw new Error
+        }
         this.$emit("refresh");
         eventBus.$emit("refresh");
       } catch (error) {

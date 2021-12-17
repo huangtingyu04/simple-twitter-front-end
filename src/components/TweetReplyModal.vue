@@ -137,19 +137,12 @@ export default {
           throw new Error(data.message);
         }
         this.$emit("refresh")
-        // this.$emit("create-new-reply", {
-        //   replyId: uuidv4(),
-        //   tweetId: tweetId,
-        //   comment: this.newReply,
-        //   User: this.currentUser,
-        // });
         successToast.fire({
           title: "已成功回復推文",
         });
         this.newReply = "";
         this.checkEmptyInput = false;
         this.isProcessing = false;
-        console.log(data);
       } catch (error) {
         console.log(error);
         this.isProcessing = false;

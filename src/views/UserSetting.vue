@@ -167,7 +167,6 @@ export default {
         successToast.fire({
           title: "已成功更新使用者資訊",
         });
-        console.log(data);
         this.$router.push({ name: "user-tweet", params: { id: this.user.id } });
       } catch (error) {
         console.log(error);

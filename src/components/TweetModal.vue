@@ -101,7 +101,9 @@ export default {
         }
         this.isProcessing = true;
         const { data } = await tweetsAPI.create({ description: this.newTweet });
-        console.log(data);
+        if(data.status !== 'success') {
+          throw new Error
+        }
         this.$emit("refresh")
         successToast.fire({
           title: "已成功新增推文",

@@ -14,7 +14,7 @@
           <span>首頁</span>
         </router-link>
       </li>
-      <li>
+      <!-- <li>
         <router-link to="/public" class="link">
           <img class="img" src="../../public/images/message.png" />
           <img
@@ -33,7 +33,7 @@
           />
           <span>私人訊息</span>
         </router-link>
-      </li>
+      </li> -->
       <li>
         <router-link
           :to="{ name: 'user-tweet', params: { id: currentUser.id } }"
@@ -48,7 +48,7 @@
         </router-link>
       </li>
       <li>
-        <router-link
+        <router-li
           class="link"
           :to="{ name: 'user-setting', params: { id: currentUser.id } }"
         >
@@ -58,7 +58,7 @@
             src="../../public/images/icon_setting_hover.png"
           />
           <span>設定</span>
-        </router-link>
+        </router-li>
       </li>
     </ul>
     <button

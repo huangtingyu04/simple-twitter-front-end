@@ -14,7 +14,7 @@
           <span>首頁</span>
         </router-link>
       </li>
-      <li>
+      <!-- <li>
         <router-link to="/public" class="link">
           <img class="img" src="../../public/images/message.png" />
           <img
@@ -33,7 +33,7 @@
           />
           <span>私人訊息</span>
         </router-link>
-      </li>
+      </li> -->
       <li>
         <router-link
           :to="{ name: 'user-tweet', params: { id: currentUser.id } }"

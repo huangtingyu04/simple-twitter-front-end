@@ -47,7 +47,7 @@
           <span>個人資料</span>
         </router-link>
       </li>
-      <li>
+      <!-- <li>
         <router-link
           class="link"
           :to="{ name: 'user-setting', params: { id: currentUser.id } }"
@@ -59,7 +59,7 @@
           />
           <span>設定</span>
         </router-link>
-      </li>
+      </li> -->
     </ul>
     <button
       type="button"
